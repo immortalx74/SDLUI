@@ -1,0 +1,10 @@
+.vscode
+build
+include
+lib
+res
+*.pdb
+*.dll
+*.ttf
+*.txt
+*.ttf
