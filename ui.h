@@ -40,7 +40,9 @@ enum SDLUI_MOUSEBUTTON
 enum SDLUI_CONTROL_TYPE
 {
     SDLUI_CONTROL_TYPE_BUTTON,
-    SDLUI_CONTROL_TYPE_SLIDER_INT
+    SDLUI_CONTROL_TYPE_SLIDER_INT,
+    SDLUI_CONTROL_TYPE_CHECKBOX,
+    SDLUI_CONTROL_TYPE_TOGGLEBUTTON
 };
 
 
@@ -55,6 +57,7 @@ struct SDLUI_Theme
     SDL_Color col_highlight = {65, 105, 225, 255};
     SDL_Color col_test = {255, 0, 225, 255};
     SDL_Color col_thumb = {66, 66, 66, 255};
+    SDL_Color col_white = {255, 255, 255, 255};
 };
 
 struct SDLUI_Control_Button
@@ -85,6 +88,26 @@ struct SDLUI_Control_SliderInt
     bool ischanging;
 };
 
+struct SDLUI_Control_CheckBox
+{
+    i32 x;
+    i32 y;
+    i32 w;
+    i32 h;
+    bool render;
+    bool checked;
+};
+
+struct SDLUI_Control_ToggleButton
+{
+    i32 x;
+    i32 y;
+    i32 w;
+    i32 h;
+    bool render;
+    bool checked;
+};
+
 struct SDLUI_Control
 {
     SDLUI_CONTROL_TYPE type;
@@ -93,6 +116,8 @@ struct SDLUI_Control
     {
         SDLUI_Control_Button button;
         SDLUI_Control_SliderInt slider_int;
+        SDLUI_Control_CheckBox checkbox;
+        SDLUI_Control_ToggleButton toggle_button;
     };
 };
 
@@ -227,80 +252,160 @@ void SDLUI_SetColor(SDL_Color c)
     SDL_SetRenderDrawColor(SDLUI_Base.renderer, c.r, c.g, c.b, c.a);
 }
 
+void SDLUI_Render_Button(SDLUI_Control_Button *btn)
+{
+    if(btn->render)
+    {
+        SDL_Rect r = {btn->x+1, btn->y+1, btn->w-2, btn->h-2};
+        SDL_RenderCopy(SDLUI_Base.renderer, btn->t_back, NULL, &r);
+        
+        r = {btn->x, btn->y, btn->w, btn->h};
+        SDLUI_SetColor(SDLUI_Base.theme.col_border);
+        SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        
+        i32 w = SDLUI_Base.font.width * strlen(btn->caption);
+        i32 diffx = btn->w - w;
+        i32 diffy = (btn->h - SDLUI_Base.font.height)/2 + 1;
+        
+        r = {btn->x + btn->align * diffx/2, btn->y + diffy, w, SDLUI_Base.font.height};
+        SDL_RenderCopy(SDLUI_Base.renderer, btn->t_text, NULL, &r);
+    }
+}
+
+void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
+{
+    if(si->render)
+    {
+        if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
+        {
+            i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->w, si->value);
+            i32 empty = si->w - fill;
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
+            SDL_Rect r = {si->x, si->y, fill, si->h};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            r = {si->x + fill, si->y, empty, si->h};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
+            r = {si->x + fill, si->y, si->thumb_size, si->h};
+            r.x = SDLUI_Clamp(r.x, si->x, si->x + si->w - si->thumb_size);
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        }
+        else
+        {
+            i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->h, si->value);
+            i32 empty = si->h - fill;
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_Rect r = {si->x, si->y, si->w, empty};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
+            r = {si->x, si->y + empty, si->w, fill};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
+            r = {si->x, si->y + empty, si->w, si->thumb_size};
+            r.y = SDLUI_Clamp(r.y, si->y, si->y + si->h - si->thumb_size);
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        }
+    }
+}
+
+void SDLUI_Render_CheckBox(SDLUI_Control_CheckBox *chk)
+{
+    if(chk->render)
+    {
+        if(chk->checked)
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
+            SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            r.x += 4; r.y += 4; r.w -= 8; r.h -= 8;
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        }
+        else
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        }
+    }
+}
+
+void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
+{
+    if(tb->render)
+    {
+        if(tb->checked)
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
+            SDL_Rect r = {tb->x, tb->y, tb->w, tb->h};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            r.x += (r.w/2) + 3; r.y += 3; r.w = (r.w/2) - 6; r.h -= 6;
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        }
+        else
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_Rect r = {tb->x, tb->y, tb->w, tb->h};
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+            
+            r.x += 3; r.y += 3; r.w = (r.w/2) - 6; r.h -= 6;
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        }
+    }
+}
+
 void SDLUI_Render()
 {
     for (int i = 0; i < SDLUI_Base.count; ++i)
     {
-        if(SDLUI_Base.pool[i].type == SDLUI_CONTROL_TYPE_BUTTON)
+        switch (SDLUI_Base.pool[i].type)
         {
-            SDLUI_Control_Button *btn = &SDLUI_Base.pool[i].button;
-            
-            if(btn->render)
+            case SDLUI_CONTROL_TYPE_BUTTON:
             {
-                SDL_Rect r = {btn->x+1, btn->y+1, btn->w-2, btn->h-2};
-                SDL_RenderCopy(SDLUI_Base.renderer, btn->t_back, NULL, &r);
-                
-                r = {btn->x, btn->y, btn->w, btn->h};
-                SDLUI_SetColor(SDLUI_Base.theme.col_border);
-                SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-                
-                i32 w = SDLUI_Base.font.width * strlen(btn->caption);
-                i32 diffx = btn->w - w;
-                i32 diffy = (btn->h - SDLUI_Base.font.height)/2 + 1;
-                
-                r = {btn->x + btn->align * diffx/2, btn->y + diffy, w, SDLUI_Base.font.height};
-                SDL_RenderCopy(SDLUI_Base.renderer, btn->t_text, NULL, &r);
+                SDLUI_Control_Button *btn = &SDLUI_Base.pool[i].button;
+                SDLUI_Render_Button(btn);
             }
-        }
-        else if(SDLUI_Base.pool[i].type == SDLUI_CONTROL_TYPE_SLIDER_INT)
-        {
-            SDLUI_Control_SliderInt *si = &SDLUI_Base.pool[i].slider_int;
+            break;
             
-            if(si->render)
+            case SDLUI_CONTROL_TYPE_SLIDER_INT:
             {
-                if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
-                {
-                    i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->w, si->value);
-                    i32 empty = si->w - fill;
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-                    SDL_Rect r = {si->x, si->y, fill, si->h};
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_border);
-                    r = {si->x + fill, si->y, empty, si->h};
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
-                    r = {si->x + fill, si->y, si->thumb_size, si->h};
-                    r.x = SDLUI_Clamp(r.x, si->x, si->x + si->w - si->thumb_size);
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_border);
-                    SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-                }
-                else
-                {
-                    i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->h, si->value);
-                    i32 empty = si->h - fill;
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_border);
-                    SDL_Rect r = {si->x, si->y, si->w, empty};
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-                    r = {si->x, si->y + empty, si->w, fill};
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
-                    r = {si->x, si->y + empty, si->w, si->thumb_size};
-                    r.y = SDLUI_Clamp(r.y, si->y, si->y + si->h - si->thumb_size);
-                    SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-                    
-                    SDLUI_SetColor(SDLUI_Base.theme.col_border);
-                    SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-                }
+                SDLUI_Control_SliderInt *si = &SDLUI_Base.pool[i].slider_int;
+                SDLUI_Render_SliderInt(si);
             }
+            break;
+            
+            case SDLUI_CONTROL_TYPE_CHECKBOX:
+            {
+                SDLUI_Control_CheckBox *chk = &SDLUI_Base.pool[i].checkbox;
+                SDLUI_Render_CheckBox(chk);
+            }
+            break;
+            
+            case SDLUI_CONTROL_TYPE_TOGGLEBUTTON:
+            {
+                SDLUI_Control_ToggleButton *tb = &SDLUI_Base.pool[i].toggle_button;
+                SDLUI_Render_ToggleButton(tb);
+            }
+            break;
         }
     }
     
@@ -316,7 +421,7 @@ SDLUI_Control_Button *SDLUI_CreateButton(char * caption, i32 x, i32 y)
         SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
         SDLUI_Base.count++;
         
-        ctrl->type = SDLUI_CONTROL_TYPE::SDLUI_CONTROL_TYPE_BUTTON;
+        ctrl->type = SDLUI_CONTROL_TYPE_BUTTON;
         ctrl->button.caption = caption;
         ctrl->button.x = x;
         ctrl->button.y = y;
@@ -424,7 +529,6 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
             }
             
             si->ischanging = true;
-            return true;
         }
     }
     
@@ -440,14 +544,94 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
             si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
             si->value = SDLUI_Clamp(si->value, si->min, si->max);
         }
-        
+    }
+    
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && si->ischanging)
+    {
+        si->ischanging = false;
+        // NOTE: Returns true only on release. Is this the right way to do it?
         return true;
     }
     
-    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED)
+    return false;
+}
+
+SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(i32 x, i32 y, bool checked)
+{
+    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
     {
-        si->ischanging = false;
-        return false;
+        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
+        SDLUI_Base.count++;
+        
+        ctrl->type = SDLUI_CONTROL_TYPE_CHECKBOX;
+        ctrl->checkbox.x = x;
+        ctrl->checkbox.y = y;
+        ctrl->checkbox.w = 20;
+        ctrl->checkbox.h = 20;
+        ctrl->checkbox.render = false;
+        ctrl->checkbox.checked = false;
+        
+        return &ctrl->checkbox;
+    }
+    
+    return NULL;
+}
+
+bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
+{
+    chk->render = true;
+    
+    i32 mx, my;
+    SDL_GetMouseState(&mx, &my);
+    
+    SDL_Rect r = {chk->x,chk->y,chk->w,chk->h};
+    if(SDLUI_PointCollision(r, mx, my))
+    {
+        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+        {
+            chk->checked = !chk->checked;
+            return true;
+        }
+    }
+    return false;
+}
+
+SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(i32 x, i32 y, bool checked)
+{
+    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
+    {
+        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
+        SDLUI_Base.count++;
+        
+        ctrl->type = SDLUI_CONTROL_TYPE_TOGGLEBUTTON;
+        ctrl->toggle_button.x = x;
+        ctrl->toggle_button.y = y;
+        ctrl->toggle_button.w = 40;
+        ctrl->toggle_button.h = 20;
+        ctrl->toggle_button.render = false;
+        ctrl->toggle_button.checked = false;
+        
+        return &ctrl->toggle_button;
+    }
+    
+    return NULL;
+}
+
+bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
+{
+    tb->render = true;
+    
+    i32 mx, my;
+    SDL_GetMouseState(&mx, &my);
+    
+    SDL_Rect r = {tb->x,tb->y,tb->w,tb->h};
+    if(SDLUI_PointCollision(r, mx, my))
+    {
+        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+        {
+            tb->checked = !tb->checked;
+            return true;
+        }
     }
     
     return false;

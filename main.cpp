@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
     SDLUI_Control_Button *btn = SDLUI_CreateButton("PushButton", 20, 200);
     SDLUI_Control_SliderInt *sl1 = SDLUI_CreateSliderInt(20, 20, 0, 100, 50, SDLUI_ORIENTATION_VERTICAL);
     SDLUI_Control_SliderInt *sl2 = SDLUI_CreateSliderInt(80, 20, 0, 100, 50);
+    SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(200, 100, true);
+    SDLUI_Control_ToggleButton *tb = SDLUI_CreateToggleButton(200, 150, true);
     
     SDL_Event e;
     
@@ -40,6 +42,16 @@ int main(int argc, char *argv[])
         }
         
         if(SDLUI_SliderInt(sl2))
+        {
+            
+        }
+        
+        if(SDLUI_CheckBox(chk1))
+        {
+            std::cout << "changed!!" << std::endl;
+        }
+        
+        if(SDLUI_ToggleButton(tb))
         {
             
         }
