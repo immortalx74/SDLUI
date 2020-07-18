@@ -3,7 +3,7 @@
 set path=D:\dev\ui;%path%
 
 set SOURCES=main.cpp
-set LINK=opengl32.lib winmm.lib gdi32.lib shell32.lib lib\SDL2.lib lib\SDL2main.lib lib\SDL2_ttf.lib
+set LINK=opengl32.lib winmm.lib gdi32.lib shell32.lib lib\SDL2.lib lib\SDL2main.lib lib\SDL2_ttf.lib lib\SDL2_image.lib
 
 REM DEBUG
 set CFLAGS=/MP /MTd /EHsc /Zi /FC /nologo /W1 /Od
