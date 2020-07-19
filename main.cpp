@@ -32,9 +32,11 @@ int main(int argc, char *argv[])
     SDLUI_CreateTab(tbc, "second");
     SDLUI_CreateTab(tbc, "third");
     
-    //SDLUI_Control *arr[4];
-    //arr[0] = (SDLUI_Control*)sl1;
-    //arr[1] = (SDLUI_Control*)btn;
+    
+    //SDLUI_Control **ch = (SDLUI_Control**)malloc(2 * sizeof(SDLUI_Control*));
+    //ch[0] = (SDLUI_Control*)sl1;
+    //ch[1] = (SDLUI_Control*)sl2;
+    
     SDL_Event e;
     
     while (!quit)

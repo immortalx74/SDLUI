@@ -60,6 +60,8 @@ enum SDLUI_CONTROL_TYPE
 };
 
 // Structs --------------------------------------------
+struct SDLUI_Control;
+
 struct SDLUI_String
 {
     i32 capacity = 0;
@@ -187,6 +189,8 @@ struct SDLUI_Control_TabContainer
     i32 active_tab;
     bool visible;
     SDLUI_Control_Tab *tabs;
+    i32 num_children;
+    SDLUI_Control **children;
 };
 
 struct SDLUI_Control_Label
@@ -371,7 +375,7 @@ void SDLUI_SetColor(SDL_Color c)
     SDL_SetRenderDrawColor(SDLUI_Base.renderer, c.r, c.g, c.b, c.a);
 }
 
-float max(float a, float b)
+float SDLUI_Max(float a, float b)
 {
     if(a > b)
     {
@@ -767,7 +771,8 @@ SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(i32 x, i32 y, i32 min, i32 max, i
         ctrl->slider_int.max = max;
         ctrl->slider_int.value = value;
         ctrl->slider_int.thumb_size = 12;
-        ctrl->slider_int.visible = false;
+        //ctrl->slider_int.visible = false;
+        ctrl->slider_int.visible = true;
         ctrl->slider_int.ischanging = false;
         ctrl->slider_int.orientation = orientation;
         
@@ -845,6 +850,7 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(i32 x, i32 y, i32 w, i32 h)
         ctrl->tab_container.h = 200;
         ctrl->tab_container.bar_height = 30;
         ctrl->tab_container.num_tabs = 0;
+        ctrl->tab_container.num_children = 0;
         ctrl->tab_container.active_tab = 0;
         ctrl->tab_container.visible = false;
         
@@ -883,6 +889,21 @@ void SDLUI_CreateTab(SDLUI_Control_TabContainer *tbc, char *caption)
         SDL_FreeSurface(s);
     }
     
+}
+
+void SDLUI_Add_TabContainer_Child(SDLUI_Control_TabContainer *tbc, void *ctrl)
+{
+    if(tbc->num_children == 0)
+    {
+        tbc->children = (SDLUI_Control**)malloc(1 * sizeof(SDLUI_Control*));
+        
+        SDLUI_CONTROL_TYPE type = ((SDLUI_Control*)ctrl)->type;
+        //tbc->children[0] = ctrl;
+    }
+    else
+    {
+        
+    }
 }
 
 SDLUI_Control_Label *SDLUI_CreateLabel(i32 x, i32 y, char *caption)
@@ -1001,7 +1022,7 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 
 bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 {
-    si->visible = true;
+    //si->visible = true;
     i32 mx, my;
     SDL_GetMouseState(&mx, &my);
     
