@@ -3,6 +3,7 @@
 #include <iostream>
 #include "SDL_ttf.h"
 #include "SDL_image.h"
+#include <stdlib.h>
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -13,7 +14,7 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
-#define SDLUI_MAX_CONTROLS 50
+#define SDLUI_COLLECTION_CHUNK 10
 #define SDLUI_STRING_CAPACITY 20
 #define SDLUI_MARGIN 8
 
@@ -60,21 +61,21 @@ enum SDLUI_CONTROL_TYPE
 };
 
 // Structs --------------------------------------------
-struct SDLUI_Control;
 
 struct SDLUI_String
 {
     i32 capacity = 0;
     i32 length = 0;
-    bool changed = false;
+    bool modified = false;
     char *data;
     
     void create(char *str)
     {
-        length = strlen(str);
+        length = strlen(str) + 1;
         capacity = ((length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
-        data = (char*)calloc(1, capacity);
-        memcpy(data, str, length);
+        data = (char*)malloc(length);
+        memcpy(data, str, length - 1);
+        data[length - 1] = 0;
     }
     
     void destroy()
@@ -85,25 +86,24 @@ struct SDLUI_String
     
     void modify(char *str)
     {
-        i32 new_length = strlen(str);
+        i32 new_length = strlen(str) + 1;
         if(new_length >= capacity)
         {
             capacity = ((new_length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
             data = (char*)realloc(data, capacity);
-            memcpy(data, str, new_length);
-            memset(data + new_length, 0, capacity - new_length);
-            length = new_length;
+            memcpy(data, str, new_length - 1);
+            memset(data + new_length - 1, 0, capacity - new_length);
+            length = new_length - 1;
         }
         else
         {
-            memcpy(data, str, new_length);
-            memset(data + new_length, 0, capacity - new_length);
-            length = new_length;
+            memcpy(data, str, new_length - 1);
+            memset(data + new_length - 1, 0, capacity - new_length);
+            length = new_length - 1;
         }
         
-        changed = true;
+        modified = true;
     }
-    
 };
 
 struct SDLUI_Theme
@@ -119,26 +119,75 @@ struct SDLUI_Theme
     SDL_Color col_grey = {127, 127, 127, 255};
 };
 
-struct SDLUI_Control_Button
+struct SDLUI_Control
 {
+    SDLUI_CONTROL_TYPE type;
     i32 x;
     i32 y;
-    i32 w;
-    i32 h;
-    char *caption;
     bool visible;
-    SDLUI_ALIGN align;
-    SDLUI_BUTTON_STATE state;
-    SDL_Texture *t_text;
-    SDL_Texture *t_back_normal;
-    SDL_Texture *t_back_hover;
-    SDL_Texture *t_back_click;
 };
 
-struct SDLUI_Control_SliderInt
+struct __SDLUI_Collection
 {
-    i32 x;
-    i32 y;
+    i32 capacity = 0;
+    i32 used = 0;
+    SDLUI_Control **elements;
+    
+    void create()
+    {
+        capacity = SDLUI_COLLECTION_CHUNK * sizeof(SDLUI_Control*);
+        elements = (SDLUI_Control**)malloc(capacity);
+    }
+    
+    void ensure_capacity()
+    {
+        if(used + 1 >= capacity)
+        {
+            capacity += SDLUI_COLLECTION_CHUNK;
+            elements = (SDLUI_Control**)realloc(elements, capacity);
+        }
+    }
+    
+    void push(SDLUI_Control *elem)
+    {
+        ensure_capacity();
+        elements[used] = elem;
+        used++;
+    }
+    
+    bool pop(SDLUI_Control *elem)
+    {
+        for (int i = 0; i < used; ++i)
+        {
+            if(elem == elements[i])
+            {
+                i32 num_elements = used - i - 1;
+                memcpy(elements[i], elements[i + 1], num_elements);
+                used--;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+}SDLUI_Collection;
+
+struct SDLUI_Control_Button : SDLUI_Control
+{
+    i32 w;
+    i32 h;
+    SDLUI_String text;
+    SDLUI_ALIGN align;
+    SDLUI_BUTTON_STATE state;
+    SDL_Texture *tex_text;
+    SDL_Texture *tex_back_normal;
+    SDL_Texture *tex_back_hover;
+    SDL_Texture *tex_back_click;
+};
+
+struct SDLUI_Control_SliderInt : SDLUI_Control
+{
     i32 w;
     i32 h;
     i32 min;
@@ -146,85 +195,66 @@ struct SDLUI_Control_SliderInt
     i32 value;
     SDLUI_ORIENTATION orientation;
     i32 thumb_size;
-    bool visible;
     bool ischanging;
 };
 
-struct SDLUI_Control_CheckBox
+struct SDLUI_Control_CheckBox : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
-    bool visible;
     bool checked;
 };
 
-struct SDLUI_Control_ToggleButton
+struct SDLUI_Control_ToggleButton : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
-    bool visible;
     bool checked;
 };
 
-struct SDLUI_Control_Tab
+struct SDLUI_Control_Tab : SDLUI_Control
 {
     i32 width;
     i32 index;
-    SDLUI_String string;
-    SDL_Texture *t_text;
+    SDLUI_String text;
+    SDL_Texture *tex_text;
 };
 
-struct SDLUI_Control_TabContainer
+struct SDLUI_Control_TabContainer : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
     i32 bar_height;
     i32 num_tabs;
     i32 active_tab;
-    bool visible;
     SDLUI_Control_Tab *tabs;
     i32 num_children;
     SDLUI_Control **children;
 };
 
-struct SDLUI_Control_Label
+struct SDLUI_Control_Label : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
-    bool visible;
-    SDL_Texture *t_text;
+    SDL_Texture *tex_text;
 };
 
-struct SDLUI_Control_Text
+struct SDLUI_Control_Text : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
-    SDLUI_String string;
+    SDLUI_String text;
     bool modified;
-    bool visible;
-    SDL_Texture *t_text;
+    SDL_Texture *tex_text;
 };
 
-struct SDLUI_Control_RadioButton
+struct SDLUI_Control_RadioButton : SDLUI_Control
 {
-    i32 x;
-    i32 y;
     i32 w;
     i32 h;
     i32 group;
-    bool visible;
     bool checked;
-    SDL_Texture *t_img;
+    SDL_Texture *tex_img;
 };
 
 struct __SDLUI_RadioButtonGroups
@@ -234,30 +264,13 @@ struct __SDLUI_RadioButtonGroups
     SDLUI_Control_RadioButton *collection;
 }SDLUI_RadioButtonGroups;
 
-struct SDLUI_Control
-{
-    union
-    {
-        SDLUI_Control_Button button;
-        SDLUI_Control_SliderInt slider_int;
-        SDLUI_Control_CheckBox checkbox;
-        SDLUI_Control_ToggleButton toggle_button;
-        SDLUI_Control_TabContainer tab_container;
-        SDLUI_Control_Label label;
-        SDLUI_Control_Text text;
-        SDLUI_Control_RadioButton radio_button;
-    };
-    
-    SDLUI_CONTROL_TYPE type;
-};
-
-struct SDLUI_Font
+struct __SDLUI_Font
 {
     TTF_Font *handle;
     i32 size = 13;
     i32 width;
     i32 height;
-};
+}SDLUI_Font;
 
 struct __SDLUI_Base
 {
@@ -265,15 +278,9 @@ struct __SDLUI_Base
     SDL_Renderer *renderer;
     i32 window_width;
     i32 window_height;
-    
-    i32 count = 0;
-    SDLUI_Control *pool;
-    
     u8 mouse_current_frame[5] = {0};
     u8 mouse_last_frame[5] = {0};
     SDLUI_Theme theme;
-    SDLUI_Font font;
-    
 }SDLUI_Base;
 
 
@@ -306,15 +313,15 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 {
     IMG_Init(IMG_INIT_PNG);
     TTF_Init();
-    SDLUI_Base.font.handle = TTF_OpenFont("liberation-mono.ttf", SDLUI_Base.font.size);
-    SDLUI_Base.font.height = TTF_FontHeight(SDLUI_Base.font.handle);
-    TTF_SizeText(SDLUI_Base.font.handle, "0", &SDLUI_Base.font.width, &SDLUI_Base.font.height);
-    
+    SDLUI_Font.handle = TTF_OpenFont("liberation-mono.ttf", SDLUI_Font.size);
+    SDLUI_Font.height = TTF_FontHeight(SDLUI_Font.handle);
+    TTF_SizeText(SDLUI_Font.handle, "0", &SDLUI_Font.width, &SDLUI_Font.height);
     
     SDLUI_Base.renderer = r;
     SDLUI_Base.window = w;
     SDL_GetWindowSize(SDLUI_Base.window, &SDLUI_Base.window_width, &SDLUI_Base.window_height);
-    SDLUI_Base.pool = (SDLUI_Control*)malloc(SDLUI_MAX_CONTROLS * sizeof(SDLUI_Control));
+    
+    SDLUI_Collection.create();
 }
 
 void SDLUI_MouseStateReset()
@@ -385,64 +392,6 @@ float SDLUI_Max(float a, float b)
     return b;
 }
 
-//void draw_point(i32 offsetx, i32 offsety, i32 x, i32 y)
-//{
-//SDL_RenderDrawPoint(SDLUI_Base.renderer, offsetx - x, offsety + y);
-//SDL_RenderDrawPoint(SDLUI_Base.renderer, offsetx + x, offsety + y);
-//SDL_RenderDrawPoint(SDLUI_Base.renderer, offsetx - x, offsety - y);
-//SDL_RenderDrawPoint(SDLUI_Base.renderer, offsetx + x, offsety + y);
-//}
-//
-//void draw_circle(i32 posx, i32 posy, i32 radius)
-//{
-//i32 i = 0;
-//i32 j = radius;
-//i32 d = 0;
-//i32 T = 0;
-//
-//SDL_SetRenderDrawColor(SDLUI_Base.renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-//draw_point(posx, posy, i, j);
-//
-//while(i < j + 1)
-//{
-//i += 1;
-//double s = sqrt(max(radius * radius - i * i, 0.0f));
-//d = floor(SDL_ALPHA_OPAQUE * ceil(s) - s) + 0.5f;
-//
-//if(d < T)
-//{
-//j -= 1;
-//}
-//
-//T = d;
-//i32 alpha;
-//
-//if(d > 0)
-//{
-//alpha = d;
-//SDL_SetRenderDrawColor(SDLUI_Base.renderer, 255, 255, 255, alpha);
-//draw_point(posx, posy, i, j);
-//
-//if(i != j)
-//{
-//draw_point(posx, posy, j, i);
-//}
-//}
-//
-//if(SDL_ALPHA_OPAQUE - d > 0)
-//{
-//alpha = SDL_ALPHA_OPAQUE - d;
-//SDL_SetRenderDrawColor(SDLUI_Base.renderer, 255, 255, 255, alpha);
-//draw_point(posx, posy, i, j + 1);
-//
-//if(i != j + 1)
-//{
-//draw_point(posx, posy, j + 1, i);
-//}
-//}
-//}
-//}
-
 // Render ---------------------------------------------------
 void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 {
@@ -453,15 +402,15 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
         switch (btn->state)
         {
             case SDLUI_BUTTON_STATE_NORMAL:
-            SDL_RenderCopy(SDLUI_Base.renderer, btn->t_back_normal, NULL, &r);
+            SDL_RenderCopy(SDLUI_Base.renderer, btn->tex_back_normal, NULL, &r);
             break;
             
             case SDLUI_BUTTON_STATE_HOVER:
-            SDL_RenderCopy(SDLUI_Base.renderer, btn->t_back_hover, NULL, &r);
+            SDL_RenderCopy(SDLUI_Base.renderer, btn->tex_back_hover, NULL, &r);
             break;
             
             case SDLUI_BUTTON_STATE_CLICK:
-            SDL_RenderCopy(SDLUI_Base.renderer, btn->t_back_click, NULL, &r);
+            SDL_RenderCopy(SDLUI_Base.renderer, btn->tex_back_click, NULL, &r);
             break;
         }
         
@@ -469,12 +418,12 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
         SDLUI_SetColor(SDLUI_Base.theme.col_border);
         SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
         
-        i32 w = SDLUI_Base.font.width * strlen(btn->caption);
+        i32 w = SDLUI_Font.width * btn->text.length;
         i32 diffx = btn->w - w;
-        i32 diffy = (btn->h - SDLUI_Base.font.height)/2 + 1;
+        i32 diffy = (btn->h - SDLUI_Font.height)/2 + 1;
         
-        r = {btn->x + btn->align * diffx/2, btn->y + diffy, w, SDLUI_Base.font.height};
-        SDL_RenderCopy(SDLUI_Base.renderer, btn->t_text, NULL, &r);
+        r = {btn->x + btn->align * diffx/2, btn->y + diffy, w, SDLUI_Font.height};
+        SDL_RenderCopy(SDLUI_Base.renderer, btn->tex_text, NULL, &r);
     }
 }
 
@@ -602,9 +551,9 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
             SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
             
             i32 tex_w, tex_h;
-            SDL_QueryTexture(tbc->tabs[i].t_text, NULL, NULL, &tex_w, &tex_h);
+            SDL_QueryTexture(tbc->tabs[i].tex_text, NULL, NULL, &tex_w, &tex_h);
             SDL_Rect dst = {r.x + SDLUI_MARGIN, r.y + SDLUI_MARGIN, tex_w, tex_h};
-            SDL_RenderCopy(SDLUI_Base.renderer, tbc->tabs[i].t_text, NULL, &dst);
+            SDL_RenderCopy(SDLUI_Base.renderer, tbc->tabs[i].tex_text, NULL, &dst);
             r.x += r.w;
         }
         
@@ -620,7 +569,7 @@ void SDLUI_Render_Label(SDLUI_Control_Label *lbl)
     {
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect r = {lbl->x, lbl->y, lbl->w, lbl->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, lbl->t_text, NULL, &r);
+        SDL_RenderCopy(SDLUI_Base.renderer, lbl->tex_text, NULL, &r);
     }
 }
 
@@ -630,7 +579,7 @@ void SDLUI_Render_Text(SDLUI_Control_Text *txt)
     {
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect r = {txt->x, txt->y, txt->w, txt->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, txt->t_text, NULL, &r);
+        SDL_RenderCopy(SDLUI_Base.renderer, txt->tex_text, NULL, &r);
     }
 }
 
@@ -641,69 +590,31 @@ void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rdb)
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect src = {rdb->checked * 48, 0, 48, 48};
         SDL_Rect r = {rdb->x, rdb->y, rdb->w, rdb->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, rdb->t_img, &src, &r);
+        SDL_RenderCopy(SDLUI_Base.renderer, rdb->tex_img, &src, &r);
     }
 }
 
 void SDLUI_Render()
 {
-    for (int i = 0; i < SDLUI_Base.count; ++i)
+    SDLUI_CONTROL_TYPE type;
+    SDLUI_Control *ptr;
+    
+    for (int i = 0; i < SDLUI_Collection.used; ++i)
     {
-        switch (SDLUI_Base.pool[i].type)
+        type = SDLUI_Collection.elements[i]->type;
+        ptr = SDLUI_Collection.elements[i];
+        
+        switch (type)
         {
             case SDLUI_CONTROL_TYPE_BUTTON:
             {
-                SDLUI_Control_Button *btn = &SDLUI_Base.pool[i].button;
-                SDLUI_Render_Button(btn);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_SLIDER_INT:
-            {
-                SDLUI_Control_SliderInt *si = &SDLUI_Base.pool[i].slider_int;
-                SDLUI_Render_SliderInt(si);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_CHECKBOX:
-            {
-                SDLUI_Control_CheckBox *chk = &SDLUI_Base.pool[i].checkbox;
-                SDLUI_Render_CheckBox(chk);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_TOGGLE_BUTTON:
-            {
-                SDLUI_Control_ToggleButton *tb = &SDLUI_Base.pool[i].toggle_button;
-                SDLUI_Render_ToggleButton(tb);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_TAB_CONTAINER:
-            {
-                SDLUI_Control_TabContainer *tbc = &SDLUI_Base.pool[i].tab_container;
-                SDLUI_Render_Tabcontainer(tbc);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_LABEL:
-            {
-                SDLUI_Control_Label *lbl = &SDLUI_Base.pool[i].label;
-                SDLUI_Render_Label(lbl);
+                SDLUI_Render_Button((SDLUI_Control_Button*)ptr);
             }
             break;
             
             case SDLUI_CONTROL_TYPE_TEXT:
             {
-                SDLUI_Control_Text *txt = &SDLUI_Base.pool[i].text;
-                SDLUI_Render_Text(txt);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_RADIO_BUTTON:
-            {
-                SDLUI_Control_RadioButton *rdb = &SDLUI_Base.pool[i].radio_button;
-                SDLUI_Render_RadioButton(rdb);
+                SDLUI_Render_Text((SDLUI_Control_Text*)ptr);
             }
             break;
         }
@@ -712,284 +623,60 @@ void SDLUI_Render()
     SDLUI_MouseStateReset();
 }
 
-void SDLUI_Destroy_Control(void  *ctrl)
-{
-    i32 offset = (u8*)ctrl - (u8*)SDLUI_Base.pool;
-    i32 index = offset / sizeof(SDLUI_Control);
-    
-    std::cout << offset << std::endl;
-}
-
 // Create ---------------------------------------------------
 
-SDLUI_Control_Button *SDLUI_CreateButton(char * caption, i32 x, i32 y)
+SDLUI_Control_Button *SDLUI_CreateButton(i32 x, i32 y, char *text)
 {
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_BUTTON;
-        ctrl->button.caption = caption;
-        ctrl->button.x = x;
-        ctrl->button.y = y;
-        ctrl->button.w = 100;
-        ctrl->button.h = 30;
-        ctrl->button.visible = false;
-        ctrl->button.align = SDLUI_ALIGN_CENTER;
-        ctrl->button.state = SDLUI_BUTTON_STATE_NORMAL;
-        
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,caption, c);
-        ctrl->button.t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        ctrl->button.t_back_normal = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, ctrl->button.w - 2, ctrl->button.h - 2);
-        ctrl->button.t_back_hover = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, ctrl->button.w - 2, ctrl->button.h - 2);
-        ctrl->button.t_back_click = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, ctrl->button.w - 2, ctrl->button.h - 2);
-        
-        SDLUI_GradientToTexture(ctrl->button.t_back_normal, SDLUI_Base.theme.col_base, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
-        SDLUI_GradientToTexture(ctrl->button.t_back_hover, SDLUI_Base.theme.col_highlight, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
-        SDLUI_GradientToTexture(ctrl->button.t_back_click, SDLUI_Base.theme.col_border, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
-        
-        return &ctrl->button;
-    }
+    SDLUI_Control_Button *btn = (SDLUI_Control_Button*)malloc(sizeof(SDLUI_Control_Button));
     
-    return NULL;
-}
-
-SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(i32 x, i32 y, i32 min, i32 max, i32 value, SDLUI_ORIENTATION orientation = SDLUI_ORIENTATION_HORIZONTAL)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_SLIDER_INT;
-        ctrl->slider_int.x = x;
-        ctrl->slider_int.y = y;
-        ctrl->slider_int.min = min;
-        ctrl->slider_int.max = max;
-        ctrl->slider_int.value = value;
-        ctrl->slider_int.thumb_size = 12;
-        //ctrl->slider_int.visible = false;
-        ctrl->slider_int.visible = true;
-        ctrl->slider_int.ischanging = false;
-        ctrl->slider_int.orientation = orientation;
-        
-        if(ctrl->slider_int.orientation == SDLUI_ORIENTATION_HORIZONTAL)
-        {
-            ctrl->slider_int.w = 100;
-            ctrl->slider_int.h = 12;
-        }
-        else
-        {
-            ctrl->slider_int.w = 12;
-            ctrl->slider_int.h = 100;
-        }
-        
-        return &ctrl->slider_int;
-    }
+    btn->text.create(text);
+    btn->type = SDLUI_CONTROL_TYPE_BUTTON;
+    btn->x = x;
+    btn->y = y;
+    btn->w = 100;
+    btn->h = 30;
+    btn->visible = false;
+    btn->align = SDLUI_ALIGN_CENTER;
+    btn->state = SDLUI_BUTTON_STATE_NORMAL;
     
-    return NULL;
-}
-
-
-SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(i32 x, i32 y, bool checked)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_CHECKBOX;
-        ctrl->checkbox.x = x;
-        ctrl->checkbox.y = y;
-        ctrl->checkbox.w = 20;
-        ctrl->checkbox.h = 20;
-        ctrl->checkbox.visible = false;
-        ctrl->checkbox.checked = false;
-        
-        return &ctrl->checkbox;
-    }
+    SDL_Color c = {255, 255, 255, 255};
+    SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, c);
+    btn->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    SDL_FreeSurface(s);
+    btn->tex_back_normal = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
+    btn->tex_back_hover = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
+    btn->tex_back_click = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
     
-    return NULL;
-}
-
-SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(i32 x, i32 y, bool checked)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_TOGGLE_BUTTON;
-        ctrl->toggle_button.x = x;
-        ctrl->toggle_button.y = y;
-        ctrl->toggle_button.w = 40;
-        ctrl->toggle_button.h = 20;
-        ctrl->toggle_button.visible = false;
-        ctrl->toggle_button.checked = false;
-        
-        return &ctrl->toggle_button;
-    }
+    SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Base.theme.col_base, btn->w-2, btn->h-2, (btn->h-2)/12);
+    SDLUI_GradientToTexture(btn->tex_back_hover, SDLUI_Base.theme.col_highlight, btn->w-2, btn->h-2, (btn->h-2)/12);
+    SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Base.theme.col_border, btn->w-2, btn->h-2, (btn->h-2)/12);
     
-    return NULL;
+    SDLUI_Collection.push(btn);
+    return btn;
 }
 
-SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(i32 x, i32 y, i32 w, i32 h)
+SDLUI_Control_Text *SDLUI_CreateText(i32 x, i32 y, char *text)
 {
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_TAB_CONTAINER;
-        ctrl->tab_container.x = x;
-        ctrl->tab_container.y = y;
-        ctrl->tab_container.w = 300;
-        ctrl->tab_container.h = 200;
-        ctrl->tab_container.bar_height = 30;
-        ctrl->tab_container.num_tabs = 0;
-        ctrl->tab_container.num_children = 0;
-        ctrl->tab_container.active_tab = 0;
-        ctrl->tab_container.visible = false;
-        
-        return &ctrl->tab_container;
-    }
+    SDLUI_Control_Text *txt = (SDLUI_Control_Text*)malloc(sizeof(SDLUI_Control_Text));
     
-    return NULL;
-}
-
-void SDLUI_CreateTab(SDLUI_Control_TabContainer *tbc, char *caption)
-{
-    if(tbc->num_tabs == 0)
-    {
-        tbc->tabs = (SDLUI_Control_Tab*)malloc(1 * sizeof(SDLUI_Control_Tab));
-        tbc->tabs[0].string.create(caption);
-        tbc->tabs[0].index = 0;
-        tbc->tabs[0].width = (tbc->tabs[0].string.length * SDLUI_Base.font.width) + (2 * SDLUI_MARGIN);
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,caption, c);
-        tbc->tabs[0].t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        
-        tbc->num_tabs++;
-    }
-    else
-    {
-        tbc->num_tabs++;
-        tbc->tabs = (SDLUI_Control_Tab*)realloc(tbc->tabs, tbc->num_tabs * sizeof(SDLUI_Control_Tab));
-        tbc->tabs[tbc->num_tabs - 1].string.create(caption);
-        tbc->tabs[tbc->num_tabs - 1].index = tbc->num_tabs - 1;
-        tbc->tabs[tbc->num_tabs - 1].width = (tbc->tabs[tbc->num_tabs - 1].string.length * SDLUI_Base.font.width) + (2 * SDLUI_MARGIN);
-        
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,caption, c);
-        tbc->tabs[tbc->num_tabs - 1].t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-    }
+    txt->text.create(text);
+    txt->type = SDLUI_CONTROL_TYPE_TEXT;
+    txt->x = x;
+    txt->y = y;
+    txt->w = txt->text.length * SDLUI_Font.width;
+    txt->h = SDLUI_Font.height;
+    txt->visible = false;
     
-}
-
-void SDLUI_Add_TabContainer_Child(SDLUI_Control_TabContainer *tbc, void *ctrl)
-{
-    if(tbc->num_children == 0)
-    {
-        tbc->children = (SDLUI_Control**)malloc(1 * sizeof(SDLUI_Control*));
-        
-        SDLUI_CONTROL_TYPE type = ((SDLUI_Control*)ctrl)->type;
-        //tbc->children[0] = ctrl;
-    }
-    else
-    {
-        
-    }
-}
-
-SDLUI_Control_Label *SDLUI_CreateLabel(i32 x, i32 y, char *caption)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_LABEL;
-        ctrl->label.visible = false;
-        ctrl->label.x = x;
-        ctrl->label.y = y;
-        i32 len = strlen(caption);
-        ctrl->label.w = len * SDLUI_Base.font.width;
-        ctrl->label.h = SDLUI_Base.font.height;
-        
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,caption, c);
-        ctrl->label.t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        
-        return &ctrl->label;
-    }
+    SDL_Color c = {255, 255, 255, 255};
+    SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, c);
+    txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    SDL_FreeSurface(s);
     
-    return NULL;
+    SDLUI_Collection.push(txt);
+    return txt;
 }
 
-SDLUI_Control_Text *SDLUI_CreateText(i32 x, i32 y, char *caption)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_TEXT;
-        ctrl->text.visible = false;
-        ctrl->text.x = x;
-        ctrl->text.y = y;
-        i32 len = strlen(caption);
-        
-        SDLUI_String str;
-        str.create(caption);
-        ctrl->text.string = str;
-        
-        ctrl->text.w = len * SDLUI_Base.font.width;
-        ctrl->text.h = SDLUI_Base.font.height;
-        
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,ctrl->text.string.data, c);
-        ctrl->text.t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        
-        return &ctrl->text;
-    }
-    
-    return NULL;
-}
-
-SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(i32 x, i32 y, i32 group)
-{
-    if(SDLUI_Base.count < SDLUI_MAX_CONTROLS)
-    {
-        SDLUI_Control *ctrl = &SDLUI_Base.pool[SDLUI_Base.count];
-        SDLUI_Base.count++;
-        
-        ctrl->type = SDLUI_CONTROL_TYPE_RADIO_BUTTON;
-        ctrl->radio_button.x = x;
-        ctrl->radio_button.y = y;
-        ctrl->radio_button.w = 20;
-        ctrl->radio_button.h = 20;
-        ctrl->radio_button.checked = false;
-        ctrl->radio_button.group = group;
-        
-        SDL_Surface *s = IMG_Load("radio.png");
-        
-        ctrl->radio_button.t_img = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        
-        return &ctrl->radio_button;
-    }
-    
-    return NULL;
-}
-
-// Usage -----------------------------------------------------
+// Usage
 bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
     btn->visible = true;
@@ -1017,174 +704,5 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
     }
     
     btn->state = SDLUI_BUTTON_STATE_NORMAL;
-    return false;
-}
-
-bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
-{
-    //si->visible = true;
-    i32 mx, my;
-    SDL_GetMouseState(&mx, &my);
-    
-    SDL_Rect r = {si->x,si->y,si->w,si->h};
-    if(SDLUI_PointCollision(r, mx, my))
-    {
-        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
-        {
-            if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
-            {
-                si->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);
-            }
-            else
-            {
-                si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
-            }
-            
-            si->ischanging = true;
-        }
-    }
-    
-    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && si->ischanging)
-    {
-        if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
-        {
-            si->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);
-            si->value = SDLUI_Clamp(si->value, si->min, si->max);
-        }
-        else
-        {
-            si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
-            si->value = SDLUI_Clamp(si->value, si->min, si->max);
-        }
-    }
-    
-    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && si->ischanging)
-    {
-        si->ischanging = false;
-        // NOTE: Returns true only on release. Is this the right way to do it?
-        return true;
-    }
-    
-    return false;
-}
-
-bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
-{
-    chk->visible = true;
-    
-    i32 mx, my;
-    SDL_GetMouseState(&mx, &my);
-    
-    SDL_Rect r = {chk->x,chk->y,chk->w,chk->h};
-    if(SDLUI_PointCollision(r, mx, my))
-    {
-        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
-        {
-            chk->checked = !chk->checked;
-            return true;
-        }
-    }
-    return false;
-}
-
-bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
-{
-    tb->visible = true;
-    
-    i32 mx, my;
-    SDL_GetMouseState(&mx, &my);
-    
-    SDL_Rect r = {tb->x,tb->y,tb->w,tb->h};
-    if(SDLUI_PointCollision(r, mx, my))
-    {
-        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
-        {
-            tb->checked = !tb->checked;
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
-{
-    if(tbc->num_tabs == 0)
-    {
-        return false;
-    }
-    
-    tbc->visible = true;
-    
-    i32 mx, my;
-    SDL_GetMouseState(&mx, &my);
-    
-    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
-    {
-        SDL_Rect r;
-        i32 tab_width = 0;
-        i32 offset = 0;
-        
-        for (int i = 0; i < tbc->num_tabs; ++i)
-        {
-            tab_width = tbc->tabs[i].width;
-            r = {tbc->x + offset, tbc->y, tab_width, tbc->bar_height};
-            
-            if(SDLUI_PointCollision(r, mx, my))
-            {
-                tbc->active_tab = i;
-                return true;
-            }
-            
-            offset += tab_width;
-        }
-    }
-    
-    return false;
-}
-
-bool SDLUI_Label(SDLUI_Control_Label *lbl)
-{
-    lbl->visible = true;
-    return true;
-}
-
-bool SDLUI_Text(SDLUI_Control_Text *txt)
-{
-    txt->visible = true;
-    
-    if(txt->string.changed)
-    {
-        i32 len = strlen(txt->string.data);
-        txt->w = len * SDLUI_Base.font.width;
-        
-        SDL_Color c = {255, 255, 255, 255};
-        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Base.font.handle,txt->string.data, c);
-        txt->t_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-        SDL_FreeSurface(s);
-        
-        txt->string.changed = false;
-    }
-    
-    return true;
-}
-
-bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rdb)
-{
-    rdb->visible = true;
-    
-    //i32 mx, my;
-    //SDL_GetMouseState(&mx, &my);
-    //
-    //SDL_Rect r = {rdb->x,rdb->y,rdb->w,rdb->h};
-    //if(SDLUI_PointCollision(r, mx, my))
-    //{
-    //if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
-    //{
-    //rdb->checked = !rdb->checked;
-    //return true;
-    //}
-    //}
-    
     return false;
 }
