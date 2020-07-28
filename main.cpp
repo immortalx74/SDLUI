@@ -13,8 +13,10 @@ int main(int argc, char *argv[])
 	bool quit = false;
     SDL_Event e;
     
-    SDLUI_Control_Text *txt = SDLUI_CreateText(20, 20, "some text");
-    SDLUI_Control_Button *btn = SDLUI_CreateButton(20, 60, "PushButton");
+    SDLUI_Control_Button *btn = SDLUI_CreateButton(20, 10, "PushButton");
+    SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(20, 60, 0, 100, 50);
+    SDLUI_Control_CheckBox *chk = SDLUI_CreateCheckBox(20, 90, true);
+    SDLUI_Control_ToggleButton *tb = SDLUI_CreateToggleButton(20, 120, true);
     
     while (!quit)
     {
@@ -32,6 +34,18 @@ int main(int argc, char *argv[])
         }
         
         if(SDLUI_Button(btn))
+        {
+            
+        }
+        if(SDLUI_SliderInt(si))
+        {
+            
+        }
+        if(SDLUI_CheckBox(chk))
+        {
+            
+        }
+        if(SDLUI_ToggleButton(tb))
         {
             
         }
