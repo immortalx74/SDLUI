@@ -1,4 +1,42 @@
 // Render ---------------------------------------------------
+void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
+{
+    if(wnd->visible != wnd->visible_last_frame)
+    {
+        for (int i = 0; i < wnd->num_children; ++i)
+        {
+            wnd->children[i]->visible = wnd->visible;
+            wnd->visible_last_frame = wnd->visible;
+        }
+    }
+    
+    if(wnd->enabled != wnd->enabled_last_frame)
+    {
+        for (int i = 0; i < wnd->num_children; ++i)
+        {
+            wnd->children[i]->enabled = wnd->enabled;
+            wnd->enabled_last_frame = wnd->enabled;
+        }
+    }
+    
+    if(wnd->visible)
+    {
+        SDL_Rect r = {wnd->x, wnd->y, wnd->w, 30};
+        SDLUI_SetColor(SDLUI_Base.theme.col_border);
+        SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        
+        SDLUI_SetColor(SDLUI_Base.theme.col_white);
+        i32 tex_w, tex_h;
+        SDL_QueryTexture(wnd->tex_title, NULL, NULL, &tex_w, &tex_h);
+        r = {wnd->x + SDLUI_MARGIN, wnd->y + SDLUI_MARGIN, tex_w, tex_h};
+        SDL_RenderCopy(SDLUI_Base.renderer, wnd->tex_title, NULL, &r);
+        
+        SDLUI_SetColor(SDLUI_Base.theme.col_base);
+        r = {wnd->x, wnd->y + 30, wnd->w, wnd->h - 30};
+        SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+    }
+}
+
 void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 {
     if(btn->visible)
@@ -24,11 +62,22 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
         SDLUI_SetColor(SDLUI_Base.theme.col_border);
         SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
         
-        i32 w = SDLUI_Font.width * btn->text.length;
-        i32 diffx = btn->w - w;
-        i32 diffy = (btn->h - SDLUI_Font.height)/2 + 1;
+        i32 tex_w, tex_h;
+        SDL_QueryTexture(btn->tex_text, NULL, NULL, &tex_w, &tex_h);
         
-        r = {btn->x + btn->align * diffx/2, btn->y + diffy, w, SDLUI_Font.height};
+        i32 diff = btn->w - tex_w;
+        i32 offset = diff * btn->align / 2;
+        
+        if(btn->align == SDLUI_ALIGN_LEFT)
+        {
+            offset += SDLUI_MARGIN;
+        }
+        else if(btn->align == SDLUI_ALIGN_RIGHT)
+        {
+            offset -= SDLUI_MARGIN;
+        }
+        
+        r = {btn->x + offset, btn->y + SDLUI_MARGIN, tex_w, tex_h};
         SDL_RenderCopy(SDLUI_Base.renderer, btn->tex_text, NULL, &r);
     }
 }
@@ -43,20 +92,17 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
             i32 empty = si->w - fill;
             
             SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-            SDL_Rect r = {si->x, si->y, fill, si->h};
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            SDL_RenderDrawLine(SDLUI_Base.renderer, si->x, si->y+8, si->x + fill, si->y+8);
             
             SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            r = {si->x + fill, si->y, empty, si->h};
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            SDL_RenderDrawLine(SDLUI_Base.renderer, si->x + fill, si->y+8, si->x + si->w, si->y+8);
             
-            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
-            r = {si->x + fill, si->y, si->thumb_size, si->h};
-            r.x = SDLUI_Clamp(r.x, si->x, si->x + si->w - si->thumb_size);
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-            
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+            SDL_Rect r = {si->x + fill-8, si->y, 16, 16};
+            r.x = SDLUI_Clamp(r.x, si->x, si->x + si->w - 14);
+            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_1, SDLUI_Base.theme.col_thumb);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_1, NULL, &r);
+            SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle, NULL, &r);
         }
         else
         {
@@ -86,21 +132,13 @@ void SDLUI_Render_CheckBox(SDLUI_Control_CheckBox *chk)
 {
     if(chk->visible)
     {
+        SDLUI_SetColor(SDLUI_Base.theme.col_border);
+        SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
+        SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        
         if(chk->checked)
         {
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
-            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-            r.x += 5; r.y += 5; r.w -= 10; r.h -= 10;
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-        }
-        else
-        {
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_tick, NULL, &r);
         }
     }
 }
@@ -109,24 +147,36 @@ void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
 {
     if(tb->visible)
     {
+        SDL_Rect r = {tb->x, tb->y, tb->w, tb->h};
+        SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_toggle, NULL, &r);
+        
         if(tb->checked)
         {
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_Rect r = {tb->x, tb->y, tb->w, tb->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
-            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-            r.x += (r.w/2) + 3; r.y += 3; r.w = (r.w/2) - 6; r.h -= 6;
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            r = {tb->x + 16, tb->y, tb->w - 16, tb->h};
+            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_highlight);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
         }
         else
         {
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_Rect r = {tb->x, tb->y, tb->w, tb->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
-            r.x += 3; r.y += 3; r.w = (r.w/2) - 6; r.h -= 6;
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+            r = {tb->x, tb->y, tb->w - 16, tb->h};
+            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
+        }
+    }
+}
+
+void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rb)
+{
+    if(rb->visible)
+    {
+        SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
+        SDL_Rect r = {rb->x, rb->y, rb->w, rb->h};
+        SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle, NULL, &r);
+        
+        if(rb->checked)
+        {
+            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
         }
     }
 }
@@ -189,17 +239,6 @@ void SDLUI_Render_Text(SDLUI_Control_Text *txt)
     }
 }
 
-void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rdb)
-{
-    if(rdb->visible)
-    {
-        SDLUI_SetColor(SDLUI_Base.theme.col_white);
-        SDL_Rect src = {rdb->checked * 48, 0, 48, 48};
-        SDL_Rect r = {rdb->x, rdb->y, rdb->w, rdb->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, rdb->tex_img, &src, &r);
-    }
-}
-
 void SDLUI_Render()
 {
     SDLUI_CONTROL_TYPE type;
@@ -212,6 +251,12 @@ void SDLUI_Render()
         
         switch (type)
         {
+            case SDLUI_CONTROL_TYPE_WINDOW:
+            {
+                SDLUI_Render_Window((SDLUI_Control_Window*)ptr);
+            }
+            break;
+            
             case SDLUI_CONTROL_TYPE_BUTTON:
             {
                 SDLUI_Render_Button((SDLUI_Control_Button*)ptr);
@@ -239,6 +284,12 @@ void SDLUI_Render()
             case SDLUI_CONTROL_TYPE_TOGGLE_BUTTON:
             {
                 SDLUI_Render_ToggleButton((SDLUI_Control_ToggleButton*)ptr);
+            }
+            break;
+            
+            case SDLUI_CONTROL_TYPE_RADIO_BUTTON:
+            {
+                SDLUI_Render_RadioButton((SDLUI_Control_RadioButton*)ptr);
             }
             break;
         }

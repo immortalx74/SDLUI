@@ -1,4 +1,43 @@
 // Usage
+bool SDLUI_Window(SDLUI_Control_Window *wnd)
+{
+    i32 mx, my;
+    SDL_GetMouseState(&mx, &my);
+    
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED || SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_NONE)
+    {
+        wnd->is_dragged = false;
+    }
+    
+    SDL_Rect r = {wnd->x,wnd->y,wnd->w,30};
+    
+    if(SDLUI_PointCollision(r, mx, my))
+    {
+        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && !wnd->is_dragged)
+        {
+            wnd->is_dragged = true;
+            wnd->drag_x = mx - wnd->x;
+            wnd->drag_y = my - wnd->y;
+        }
+    }
+    
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && wnd->is_dragged)
+    {
+        i32 old_x = wnd->x;
+        i32 old_y = wnd->y;
+        wnd->x = mx - wnd->drag_x;
+        wnd->y = my - wnd->drag_y;
+        
+        for (int i = 0; i < wnd->num_children; ++i)
+        {
+            wnd->children[i]->x += wnd->x - old_x;
+            wnd->children[i]->y += wnd->y - old_y;
+        }
+    }
+    
+    return false;
+}
+
 bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
     i32 mx, my;
@@ -104,6 +143,36 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
         if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
         {
             tb->checked = !tb->checked;
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
+{
+    i32 mx, my;
+    SDL_GetMouseState(&mx, &my);
+    
+    SDL_Rect r = {rb->x,rb->y,rb->w,rb->h};
+    if(SDLUI_PointCollision(r, mx, my))
+    {
+        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+        {
+            rb->checked = true;
+            
+            for (int i = 0; i < SDLUI_Collection.used; ++i)
+            {
+                SDLUI_CONTROL_TYPE type = SDLUI_Collection.elements[i]->type;
+                SDLUI_Control_RadioButton *current = (SDLUI_Control_RadioButton*)SDLUI_Collection.elements[i];
+                
+                if(type == SDLUI_CONTROL_TYPE_RADIO_BUTTON && current != rb &&  current->group == rb->group)
+                {
+                    current->checked = false;
+                }
+            }
+            
             return true;
         }
     }

@@ -64,6 +64,27 @@ struct SDLUI_Control
     i32 y;
     bool visible = true;
     bool enabled = true;
+    SDLUI_Control **children;
+    SDLUI_Control *parent;
+    i32 num_children = 0;
+    
+    void parent_to(SDLUI_Control *dst)
+    {
+        if(dst->num_children == 0)
+        {
+            dst->children = (SDLUI_Control**)malloc(1 * sizeof(SDLUI_Control*));
+            dst->children[0] = this;
+            dst->num_children++;
+            this->parent = dst;
+        }
+        else
+        {
+            dst->num_children++;
+            dst->children = (SDLUI_Control**)realloc(dst->children, dst->num_children * sizeof(SDLUI_Control*));
+            dst->children[dst->num_children - 1] = this;
+            this->parent = dst;
+        }
+    }
 };
 
 struct __SDLUI_Collection
@@ -112,6 +133,19 @@ struct __SDLUI_Collection
     
 }SDLUI_Collection;
 
+struct SDLUI_Control_Window : SDLUI_Control
+{
+    i32 w;
+    i32 h;
+    i32 drag_x;
+    i32 drag_y;
+    bool is_dragged = false;
+    bool visible_last_frame = false;
+    bool enabled_last_frame = false;
+    SDLUI_String title;
+    SDL_Texture *tex_title;
+};
+
 struct SDLUI_Control_Button : SDLUI_Control
 {
     i32 w;
@@ -151,6 +185,15 @@ struct SDLUI_Control_ToggleButton : SDLUI_Control
     bool checked;
 };
 
+struct SDLUI_Control_RadioButton : SDLUI_Control
+{
+    i32 w;
+    i32 h;
+    i32 group;
+    bool checked;
+    bool checked_changed;
+};
+
 struct SDLUI_Control_Tab : SDLUI_Control
 {
     i32 width;
@@ -187,15 +230,6 @@ struct SDLUI_Control_Text : SDLUI_Control
     SDL_Texture *tex_text;
 };
 
-struct SDLUI_Control_RadioButton : SDLUI_Control
-{
-    i32 w;
-    i32 h;
-    i32 group;
-    bool checked;
-    SDL_Texture *tex_img;
-};
-
 struct __SDLUI_RadioButtonGroups
 {
     i32 num_elements = 0;
@@ -220,4 +254,10 @@ struct __SDLUI_Base
     u8 mouse_current_frame[5] = {0};
     u8 mouse_last_frame[5] = {0};
     SDLUI_Theme theme;
+    
+    SDL_Texture *tex_tick;
+    SDL_Texture *tex_circle;
+    SDL_Texture *tex_circle_fill_1;
+    SDL_Texture *tex_circle_fill_2;
+    SDL_Texture *tex_toggle;
 }SDLUI_Base;

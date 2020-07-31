@@ -36,6 +36,23 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     SDL_GetWindowSize(SDLUI_Base.window, &SDLUI_Base.window_width, &SDLUI_Base.window_height);
     
     SDLUI_Collection.create();
+    
+    SDL_Surface *s = IMG_Load("res/tick.png");
+    SDLUI_Base.tex_tick = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    s = IMG_Load("res/circle.png");
+    SDLUI_Base.tex_circle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    s = IMG_Load("res/circle_fill_1.png");
+    SDLUI_Base.tex_circle_fill_1 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    s = IMG_Load("res/circle_fill_2.png");
+    SDLUI_Base.tex_circle_fill_2 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    s = IMG_Load("res/toggle.png");
+    SDLUI_Base.tex_toggle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    SDL_FreeSurface(s);
 }
 
 void SDLUI_MouseStateReset()
@@ -104,4 +121,25 @@ float SDLUI_Max(float a, float b)
     }
     
     return b;
+}
+
+void SDLUI_ParentTo(SDLUI_Control *src, SDLUI_Control *dst)
+{
+    if(dst->num_children == 0)
+    {
+        dst->children = (SDLUI_Control**)malloc(1);
+        dst->children[0] = (SDLUI_Control*)src;
+        dst->num_children++;
+    }
+    else
+    {
+        dst->num_children++;
+        dst->children = (SDLUI_Control**)realloc(dst->children, dst->num_children);
+        dst->children[dst->num_children - 1] = (SDLUI_Control*)src;
+    }
+}
+
+void SDLUI_Colorize(SDL_Texture *t, SDL_Color c)
+{
+    SDL_SetTextureColorMod(t, c.r, c.g, c.b);
 }
