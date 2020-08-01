@@ -1,5 +1,28 @@
 // Create ---------------------------------------------------
 
+SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title)
+{
+    SDLUI_Control_Window *wnd = (SDLUI_Control_Window*)malloc(sizeof(SDLUI_Control_Window));
+    
+    wnd->type = SDLUI_CONTROL_TYPE_WINDOW;
+    wnd->num_children = 0;
+    wnd->title.create(title);
+    wnd->x = x;
+    wnd->y = y;
+    wnd->drag_x = 0;
+    wnd->drag_y = 0;
+    wnd->w = w;
+    wnd->h = h;
+    
+    SDL_Color c = {255, 255, 255, 255};
+    SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
+    wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    SDL_FreeSurface(s);
+    
+    SDLUI_Collection.push(wnd);
+    return wnd;
+}
+
 SDLUI_Control_Button *SDLUI_CreateButton(i32 x, i32 y, char *text)
 {
     SDLUI_Control_Button *btn = (SDLUI_Control_Button*)malloc(sizeof(SDLUI_Control_Button));
@@ -28,29 +51,6 @@ SDLUI_Control_Button *SDLUI_CreateButton(i32 x, i32 y, char *text)
     
     SDLUI_Collection.push(btn);
     return btn;
-}
-
-SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title)
-{
-    SDLUI_Control_Window *wnd = (SDLUI_Control_Window*)malloc(sizeof(SDLUI_Control_Window));
-    
-    wnd->type = SDLUI_CONTROL_TYPE_WINDOW;
-    wnd->num_children = 0;
-    wnd->title.create(title);
-    wnd->x = x;
-    wnd->y = y;
-    wnd->drag_x = 0;
-    wnd->drag_y = 0;
-    wnd->w = w;
-    wnd->h = h;
-    
-    SDL_Color c = {255, 255, 255, 255};
-    SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
-    wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-    SDL_FreeSurface(s);
-    
-    SDLUI_Collection.push(wnd);
-    return wnd;
 }
 
 SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(i32 x, i32 y, i32 min, i32 max, i32 value, SDLUI_ORIENTATION orientation = SDLUI_ORIENTATION_HORIZONTAL)

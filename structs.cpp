@@ -87,7 +87,7 @@ struct SDLUI_Control
     }
 };
 
-struct __SDLUI_Collection
+struct __SDLUI_ControlArray
 {
     i32 capacity = 0;
     i32 used = 0;
@@ -95,16 +95,16 @@ struct __SDLUI_Collection
     
     void create()
     {
-        capacity = SDLUI_COLLECTION_CHUNK * sizeof(SDLUI_Control*);
-        elements = (SDLUI_Control**)malloc(capacity);
+        capacity = SDLUI_COLLECTION_CHUNK;
+        elements = (SDLUI_Control**)malloc(capacity * sizeof(SDLUI_Control*));
     }
     
     void ensure_capacity()
     {
-        if(used + 1 >= capacity)
+        if(used >= capacity)
         {
             capacity += SDLUI_COLLECTION_CHUNK;
-            elements = (SDLUI_Control**)realloc(elements, capacity);
+            elements = (SDLUI_Control**)realloc(elements, capacity * sizeof(SDLUI_Control*));
         }
     }
     

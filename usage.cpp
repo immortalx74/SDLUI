@@ -33,6 +33,7 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
             wnd->children[i]->x += wnd->x - old_x;
             wnd->children[i]->y += wnd->y - old_y;
         }
+        
     }
     
     return false;

@@ -8,6 +8,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             wnd->children[i]->visible = wnd->visible;
             wnd->visible_last_frame = wnd->visible;
         }
+        
     }
     
     if(wnd->enabled != wnd->enabled_last_frame)
@@ -17,6 +18,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             wnd->children[i]->enabled = wnd->enabled;
             wnd->enabled_last_frame = wnd->enabled;
         }
+        
     }
     
     if(wnd->visible)
