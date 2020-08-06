@@ -3,9 +3,9 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 {
     if(wnd->visible != wnd->visible_last_frame)
     {
-        for (int i = 0; i < wnd->num_children; ++i)
+        for (int i = 0; i < wnd->children.size; ++i)
         {
-            wnd->children[i]->visible = wnd->visible;
+            wnd->children.data[i]->visible = wnd->visible;
             wnd->visible_last_frame = wnd->visible;
         }
         
@@ -13,9 +13,9 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
     
     if(wnd->enabled != wnd->enabled_last_frame)
     {
-        for (int i = 0; i < wnd->num_children; ++i)
+        for (int i = 0; i < wnd->children.size; ++i)
         {
-            wnd->children[i]->enabled = wnd->enabled;
+            wnd->children.data[i]->enabled = wnd->enabled;
             wnd->enabled_last_frame = wnd->enabled;
         }
         
@@ -24,7 +24,15 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
     if(wnd->visible)
     {
         SDL_Rect r = {wnd->x, wnd->y, wnd->w, 30};
-        SDLUI_SetColor(SDLUI_Base.theme.col_border);
+        if(wnd == SDLUI_Base.active_window)
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_active_window_bar);
+        }
+        else
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_inactive_window_bar);
+        }
+        
         SDL_RenderFillRect(SDLUI_Base.renderer, &r);
         
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
@@ -36,6 +44,24 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
         SDLUI_SetColor(SDLUI_Base.theme.col_base);
         r = {wnd->x, wnd->y + 30, wnd->w, wnd->h - 30};
         SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        
+        SDLUI_SetColor(SDLUI_Base.theme.col_grey);
+        r = {wnd->x, wnd->y, wnd->w, wnd->h};
+        SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        
+        
+        i32 mx, my;
+        SDL_GetMouseState(&mx, &my);
+        r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
+        
+        if(SDLUI_PointCollision(r, mx, my))
+        {
+            SDLUI_SetColor(SDLUI_Base.theme.col_red);
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        }
+        
+        r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
+        SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_close, NULL, &r);
     }
 }
 
@@ -243,57 +269,58 @@ void SDLUI_Render_Text(SDLUI_Control_Text *txt)
 
 void SDLUI_Render()
 {
+    SDLUI_Control_Window *wnd;
     SDLUI_CONTROL_TYPE type;
-    SDLUI_Control *ptr;
+    SDLUI_Control *ctrl;
     
-    for (int i = 0; i < SDLUI_Collection.used; ++i)
+    for (int i = 0; i < SDLUI_Window_Collection.size; ++i)
     {
-        type = SDLUI_Collection.elements[i]->type;
-        ptr = SDLUI_Collection.elements[i];
+        wnd = (SDLUI_Control_Window*)SDLUI_Window_Collection.data[i];
+        SDLUI_Render_Window(wnd);
         
-        switch (type)
+        for (int j = 0; j < wnd->children.size; ++j)
         {
-            case SDLUI_CONTROL_TYPE_WINDOW:
-            {
-                SDLUI_Render_Window((SDLUI_Control_Window*)ptr);
-            }
-            break;
+            type = wnd->children.data[j]->type;
+            ctrl = wnd->children.data[j];
             
-            case SDLUI_CONTROL_TYPE_BUTTON:
+            switch (type)
             {
-                SDLUI_Render_Button((SDLUI_Control_Button*)ptr);
+                case SDLUI_CONTROL_TYPE_BUTTON:
+                {
+                    SDLUI_Render_Button((SDLUI_Control_Button*)ctrl);
+                }
+                break;
+                
+                case SDLUI_CONTROL_TYPE_TEXT:
+                {
+                    SDLUI_Render_Text((SDLUI_Control_Text*)ctrl);
+                }
+                break;
+                
+                case SDLUI_CONTROL_TYPE_SLIDER_INT:
+                {
+                    SDLUI_Render_SliderInt((SDLUI_Control_SliderInt*)ctrl);
+                }
+                break;
+                
+                case SDLUI_CONTROL_TYPE_CHECKBOX:
+                {
+                    SDLUI_Render_CheckBox((SDLUI_Control_CheckBox*)ctrl);
+                }
+                break;
+                
+                case SDLUI_CONTROL_TYPE_TOGGLE_BUTTON:
+                {
+                    SDLUI_Render_ToggleButton((SDLUI_Control_ToggleButton*)ctrl);
+                }
+                break;
+                
+                case SDLUI_CONTROL_TYPE_RADIO_BUTTON:
+                {
+                    SDLUI_Render_RadioButton((SDLUI_Control_RadioButton*)ctrl);
+                }
+                break;
             }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_TEXT:
-            {
-                SDLUI_Render_Text((SDLUI_Control_Text*)ptr);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_SLIDER_INT:
-            {
-                SDLUI_Render_SliderInt((SDLUI_Control_SliderInt*)ptr);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_CHECKBOX:
-            {
-                SDLUI_Render_CheckBox((SDLUI_Control_CheckBox*)ptr);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_TOGGLE_BUTTON:
-            {
-                SDLUI_Render_ToggleButton((SDLUI_Control_ToggleButton*)ptr);
-            }
-            break;
-            
-            case SDLUI_CONTROL_TYPE_RADIO_BUTTON:
-            {
-                SDLUI_Render_RadioButton((SDLUI_Control_RadioButton*)ptr);
-            }
-            break;
         }
     }
     

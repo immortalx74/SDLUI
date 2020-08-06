@@ -48,6 +48,8 @@ struct SDLUI_Theme
 {
     SDL_Color col_base = {75, 75, 75, 255};
     SDL_Color col_border = {38, 38, 38, 255};
+    SDL_Color col_active_window_bar = {20, 20, 20, 255};
+    SDL_Color col_inactive_window_bar = {60, 60, 60, 255};
     SDL_Color col_hover = {80, 80, 80, 255};
     SDL_Color col_click = {40, 40, 40, 255};
     SDL_Color col_highlight = {65, 105, 225, 255};
@@ -55,6 +57,7 @@ struct SDLUI_Theme
     SDL_Color col_thumb = {66, 66, 66, 255};
     SDL_Color col_white = {255, 255, 255, 255};
     SDL_Color col_grey = {127, 127, 127, 255};
+    SDL_Color col_red = {222, 17, 35, 255};
 };
 
 struct SDLUI_Control
@@ -64,74 +67,96 @@ struct SDLUI_Control
     i32 y;
     bool visible = true;
     bool enabled = true;
-    SDLUI_Control **children;
     SDLUI_Control *parent;
-    i32 num_children = 0;
-    
-    void parent_to(SDLUI_Control *dst)
-    {
-        if(dst->num_children == 0)
-        {
-            dst->children = (SDLUI_Control**)malloc(1 * sizeof(SDLUI_Control*));
-            dst->children[0] = this;
-            dst->num_children++;
-            this->parent = dst;
-        }
-        else
-        {
-            dst->num_children++;
-            dst->children = (SDLUI_Control**)realloc(dst->children, dst->num_children * sizeof(SDLUI_Control*));
-            dst->children[dst->num_children - 1] = this;
-            this->parent = dst;
-        }
-    }
 };
 
-struct __SDLUI_ControlArray
+struct __SDLUI_Font
 {
-    i32 capacity = 0;
-    i32 used = 0;
-    SDLUI_Control **elements;
+    TTF_Font *handle;
+    i32 size = 13;
+    i32 width;
+    i32 height;
+}SDLUI_Font;
+
+struct __SDLUI_Base
+{
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    i32 window_width;
+    i32 window_height;
+    u8 mouse_current_frame[5] = {0};
+    u8 mouse_last_frame[5] = {0};
+    SDLUI_Theme theme;
+    SDLUI_Control *active_window;
+    
+    SDL_Texture *tex_tick;
+    SDL_Texture *tex_circle;
+    SDL_Texture *tex_circle_fill_1;
+    SDL_Texture *tex_circle_fill_2;
+    SDL_Texture *tex_toggle;
+    SDL_Texture *tex_close;
+}SDLUI_Base;
+
+struct SDLUI_Array
+{
+    i32 capacity;
+    i32 size;
+    SDLUI_Control **data;
     
     void create()
     {
         capacity = SDLUI_COLLECTION_CHUNK;
-        elements = (SDLUI_Control**)malloc(capacity * sizeof(SDLUI_Control*));
+        data = (SDLUI_Control**)malloc(capacity * sizeof(SDLUI_Control*));
+        size = 0;
     }
     
     void ensure_capacity()
     {
-        if(used >= capacity)
+        if(size >= capacity)
         {
             capacity += SDLUI_COLLECTION_CHUNK;
-            elements = (SDLUI_Control**)realloc(elements, capacity * sizeof(SDLUI_Control*));
+            data = (SDLUI_Control**)realloc(data, capacity * sizeof(SDLUI_Control*));
         }
     }
     
     void push(SDLUI_Control *elem)
     {
         ensure_capacity();
-        elements[used] = elem;
-        used++;
+        data[size] = elem;
+        size++;
     }
     
-    bool pop(SDLUI_Control *elem)
+    void pop(SDLUI_Control *elem)
     {
-        for (int i = 0; i < used; ++i)
+        for (int i = 0; i < size; ++i)
         {
-            if(elem == elements[i])
+            if(elem == data[i] && (i < size - 1))
             {
-                i32 num_elements = used - i - 1;
-                memcpy(elements[i], elements[i + 1], num_elements);
-                used--;
-                return true;
+                i32 num_elements = size - i - 1;
+                memmove(data + i, data + i + 1, num_elements * sizeof(data));
+                size--;
+                return;
             }
         }
-        
-        return false;
     }
     
-}SDLUI_Collection;
+    void to_back(SDLUI_Control *elem)
+    {
+        for (int i = 0; i < size; ++i)
+        {
+            if(elem == data[i] && (i < size - 1))
+            {
+                i32 num_elements = size - i - 1;
+                memmove(data + i, data + i + 1, num_elements * sizeof(data));
+                data[size - 1] = elem;
+                return;
+            }
+        }
+    }
+};
+
+SDLUI_Array SDLUI_Window_Collection;
+
 
 struct SDLUI_Control_Window : SDLUI_Control
 {
@@ -144,6 +169,8 @@ struct SDLUI_Control_Window : SDLUI_Control
     bool enabled_last_frame = false;
     SDLUI_String title;
     SDL_Texture *tex_title;
+    bool active;
+    SDLUI_Array children;
 };
 
 struct SDLUI_Control_Button : SDLUI_Control
@@ -229,35 +256,3 @@ struct SDLUI_Control_Text : SDLUI_Control
     bool modified;
     SDL_Texture *tex_text;
 };
-
-struct __SDLUI_RadioButtonGroups
-{
-    i32 num_elements = 0;
-    i32 *groups;
-    SDLUI_Control_RadioButton *collection;
-}SDLUI_RadioButtonGroups;
-
-struct __SDLUI_Font
-{
-    TTF_Font *handle;
-    i32 size = 13;
-    i32 width;
-    i32 height;
-}SDLUI_Font;
-
-struct __SDLUI_Base
-{
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    i32 window_width;
-    i32 window_height;
-    u8 mouse_current_frame[5] = {0};
-    u8 mouse_last_frame[5] = {0};
-    SDLUI_Theme theme;
-    
-    SDL_Texture *tex_tick;
-    SDL_Texture *tex_circle;
-    SDL_Texture *tex_circle_fill_1;
-    SDL_Texture *tex_circle_fill_2;
-    SDL_Texture *tex_toggle;
-}SDLUI_Base;

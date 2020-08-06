@@ -35,7 +35,7 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     SDLUI_Base.window = w;
     SDL_GetWindowSize(SDLUI_Base.window, &SDLUI_Base.window_width, &SDLUI_Base.window_height);
     
-    SDLUI_Collection.create();
+    SDLUI_Window_Collection.create();
     
     SDL_Surface *s = IMG_Load("res/tick.png");
     SDLUI_Base.tex_tick = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
@@ -51,6 +51,9 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     
     s = IMG_Load("res/toggle.png");
     SDLUI_Base.tex_toggle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    s = IMG_Load("res/close.png");
+    SDLUI_Base.tex_close = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     
     SDL_FreeSurface(s);
 }
@@ -123,23 +126,42 @@ float SDLUI_Max(float a, float b)
     return b;
 }
 
-void SDLUI_ParentTo(SDLUI_Control *src, SDLUI_Control *dst)
-{
-    if(dst->num_children == 0)
-    {
-        dst->children = (SDLUI_Control**)malloc(1);
-        dst->children[0] = (SDLUI_Control*)src;
-        dst->num_children++;
-    }
-    else
-    {
-        dst->num_children++;
-        dst->children = (SDLUI_Control**)realloc(dst->children, dst->num_children);
-        dst->children[dst->num_children - 1] = (SDLUI_Control*)src;
-    }
-}
-
 void SDLUI_Colorize(SDL_Texture *t, SDL_Color c)
 {
     SDL_SetTextureColorMod(t, c.r, c.g, c.b);
+}
+
+void SDLUI_SetActiveWindow(SDLUI_Control_Window *wnd)
+{
+    SDLUI_Window_Collection.to_back(wnd);
+    SDLUI_Base.active_window = wnd;
+}
+
+void SDLUI_WindowHandler()
+{
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+    {
+        i32 mx, my, index;
+        SDL_GetMouseState(&mx, &my);
+        SDL_Rect r;
+        SDLUI_Control_Window *wnd;
+        
+        for (int i = 0; i < SDLUI_Window_Collection.size; ++i)
+        {
+            wnd = (SDLUI_Control_Window*)SDLUI_Window_Collection.data[i];
+            
+            r = {wnd->x, wnd->y, wnd->w, wnd->h};
+            
+            if(SDLUI_PointCollision(r, mx, my))
+            {
+                index = i;
+            }
+        }
+        
+        if(SDLUI_Window_Collection.data[index] != SDLUI_Base.active_window)
+        {
+            SDLUI_SetActiveWindow((SDLUI_Control_Window*)SDLUI_Window_Collection.data[index]);
+        }
+        
+    }
 }

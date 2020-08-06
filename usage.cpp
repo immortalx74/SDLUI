@@ -9,7 +9,14 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
         wnd->is_dragged = false;
     }
     
-    SDL_Rect r = {wnd->x,wnd->y,wnd->w,30};
+    SDL_Rect r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
+    
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointCollision(r, mx, my))
+    {
+        wnd->visible = false;
+    }
+    
+    r = {wnd->x,wnd->y,wnd->w - 30, 30};
     
     if(SDLUI_PointCollision(r, mx, my))
     {
@@ -28,10 +35,10 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
         wnd->x = mx - wnd->drag_x;
         wnd->y = my - wnd->drag_y;
         
-        for (int i = 0; i < wnd->num_children; ++i)
+        for (int i = 0; i < wnd->children.size; ++i)
         {
-            wnd->children[i]->x += wnd->x - old_x;
-            wnd->children[i]->y += wnd->y - old_y;
+            wnd->children.data[i]->x += wnd->x - old_x;
+            wnd->children.data[i]->y += wnd->y - old_y;
         }
         
     }
@@ -41,30 +48,34 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 
 bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
-    i32 mx, my;
-    SDL_GetMouseState(&mx, &my);
-    
-    SDL_Rect r = {btn->x,btn->y,btn->w,btn->h};
-    if(SDLUI_PointCollision(r, mx, my))
+    if(btn->parent == SDLUI_Base.active_window)
     {
-        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+        i32 mx, my;
+        SDL_GetMouseState(&mx, &my);
+        
+        SDL_Rect r = {btn->x,btn->y,btn->w,btn->h};
+        if(SDLUI_PointCollision(r, mx, my))
         {
-            btn->state = SDLUI_BUTTON_STATE_CLICK;
-            return true;
-        }
-        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
-        {
-            btn->state = SDLUI_BUTTON_STATE_CLICK;
-        }
-        else
-        {
-            btn->state = SDLUI_BUTTON_STATE_HOVER;
+            if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+            {
+                btn->state = SDLUI_BUTTON_STATE_CLICK;
+                return true;
+            }
+            if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
+            {
+                btn->state = SDLUI_BUTTON_STATE_CLICK;
+            }
+            else
+            {
+                btn->state = SDLUI_BUTTON_STATE_HOVER;
+            }
+            
+            return false;
         }
         
+        btn->state = SDLUI_BUTTON_STATE_NORMAL;
         return false;
     }
-    
-    btn->state = SDLUI_BUTTON_STATE_NORMAL;
     return false;
 }
 
@@ -163,16 +174,16 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
         {
             rb->checked = true;
             
-            for (int i = 0; i < SDLUI_Collection.used; ++i)
-            {
-                SDLUI_CONTROL_TYPE type = SDLUI_Collection.elements[i]->type;
-                SDLUI_Control_RadioButton *current = (SDLUI_Control_RadioButton*)SDLUI_Collection.elements[i];
-                
-                if(type == SDLUI_CONTROL_TYPE_RADIO_BUTTON && current != rb &&  current->group == rb->group)
-                {
-                    current->checked = false;
-                }
-            }
+            //for (int i = 0; i < SDLUI_Collection.used; ++i)
+            //{
+            //SDLUI_CONTROL_TYPE type = SDLUI_Collection.elements[i]->type;
+            //SDLUI_Control_RadioButton *current = (SDLUI_Control_RadioButton*)SDLUI_Collection.elements[i];
+            //
+            //if(type == SDLUI_CONTROL_TYPE_RADIO_BUTTON && current != rb &&  current->group == rb->group)
+            //{
+            //current->checked = false;
+            //}
+            //}
             
             return true;
         }
