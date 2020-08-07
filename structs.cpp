@@ -89,6 +89,10 @@ struct __SDLUI_Base
     SDLUI_Theme theme;
     SDLUI_Control *active_window;
     
+    SDL_Cursor *cursor_arrow;
+    SDL_Cursor *cursor_size_we;
+    SDL_Cursor *cursor_size_ns;
+    
     SDL_Texture *tex_tick;
     SDL_Texture *tex_circle;
     SDL_Texture *tex_circle_fill_1;
@@ -165,6 +169,8 @@ struct SDLUI_Control_Window : SDLUI_Control
     i32 drag_x;
     i32 drag_y;
     bool is_dragged = false;
+    bool is_resized = false;
+    SDLUI_RESIZE_DIRECTION resize_direction;
     bool visible_last_frame = false;
     bool enabled_last_frame = false;
     SDLUI_String title;
@@ -216,7 +222,7 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
 {
     i32 w;
     i32 h;
-    i32 group;
+    SDLUI_Array *group;
     bool checked;
     bool checked_changed;
 };

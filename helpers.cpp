@@ -37,6 +37,11 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     
     SDLUI_Window_Collection.create();
     
+    SDLUI_Base.cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+    SDLUI_Base.cursor_size_we = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
+    SDLUI_Base.cursor_size_ns = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
+    SDL_SetCursor(SDLUI_Base.cursor_arrow);
+    
     SDL_Surface *s = IMG_Load("res/tick.png");
     SDLUI_Base.tex_tick = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     
@@ -137,14 +142,66 @@ void SDLUI_SetActiveWindow(SDLUI_Control_Window *wnd)
     SDLUI_Base.active_window = wnd;
 }
 
+//SDLUI_RESIZE_DIRECTION SDLUI_WindowResizeDirection()
+//{
+//
+//}
+
 void SDLUI_WindowHandler()
 {
+    i32 mx, my, index = 0;
+    SDL_GetMouseState(&mx, &my);
+    SDLUI_Control_Window *aw = (SDLUI_Control_Window*)SDLUI_Base.active_window;
+    SDL_Rect left, top, right, bottom;
+    left = {aw->x-8, aw->y, 8, aw->h};
+    top = {aw->x, aw->y-8, aw->w, 8};
+    right = {aw->x+aw->w, aw->y, 8, aw->h};
+    bottom = {aw->x, aw->y+aw->h, aw->w, 8};
+    
+    if(SDLUI_PointCollision(left, mx, my))
+    {
+        std::cout << "left" << std::endl;
+    }
+    if(SDLUI_PointCollision(top, mx, my))
+    {
+        std::cout << "top" << std::endl;
+    }
+    if(SDLUI_PointCollision(right, mx, my))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_we);
+        
+        if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
+        {
+            aw->is_resized = true;
+        }
+    }
+    else if(!aw->is_resized)
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_arrow);
+    }
+    if(SDLUI_PointCollision(bottom, mx, my))
+    {
+        std::cout << "bot" << std::endl;
+    }
+    
+    
+    if(aw->is_resized)
+    {
+        aw->w = mx - aw->x;
+    }
+    if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && aw->is_resized)
+    {
+        aw->is_resized = false;
+        SDL_SetCursor(SDLUI_Base.cursor_arrow);
+    }
+    
+    
+    
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
     {
-        i32 mx, my, index;
-        SDL_GetMouseState(&mx, &my);
-        SDL_Rect r;
         SDLUI_Control_Window *wnd;
+        SDL_Rect r;
+        bool over_window = false;
         
         for (int i = 0; i < SDLUI_Window_Collection.size; ++i)
         {
@@ -155,13 +212,13 @@ void SDLUI_WindowHandler()
             if(SDLUI_PointCollision(r, mx, my))
             {
                 index = i;
+                over_window = true;
             }
         }
         
-        if(SDLUI_Window_Collection.data[index] != SDLUI_Base.active_window)
+        if(SDLUI_Window_Collection.data[index] != SDLUI_Base.active_window && over_window)
         {
             SDLUI_SetActiveWindow((SDLUI_Control_Window*)SDLUI_Window_Collection.data[index]);
         }
-        
     }
 }

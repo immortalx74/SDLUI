@@ -54,7 +54,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
         SDL_GetMouseState(&mx, &my);
         r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
         
-        if(SDLUI_PointCollision(r, mx, my))
+        if(wnd == SDLUI_Base.active_window && SDLUI_PointCollision(r, mx, my))
         {
             SDLUI_SetColor(SDLUI_Base.theme.col_red);
             SDL_RenderFillRect(SDLUI_Base.renderer, &r);

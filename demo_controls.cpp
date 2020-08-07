@@ -1,27 +1,21 @@
-SDLUI_Control_Window *wnd = SDLUI_CreateWindow(10, 10, 400, 400, "Demo Window (Enter to toggle visibility)");
-SDLUI_Control_Button *btn = SDLUI_CreateButton(30, 60, "PushButton");
-SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(30, 110, 0, 100, 50);
-SDLUI_Control_CheckBox *chk = SDLUI_CreateCheckBox(30, 140, true);
-SDLUI_Control_ToggleButton *tb = SDLUI_CreateToggleButton(30, 180, false);
-SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(30, 220, true);
-SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(30, 250, false);
-SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(30, 280, false);
+SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(10, 10, 350, 400, "test window1");
+SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(380, 10, 450, 350, "test window2");
+SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(250, 350, 450, 300, "test window3");
 
-SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(90, 220, false, 1);
-SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(90, 250, true, 1);
-SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(90, 280, false, 1);
+SDLUI_Control_Button *btn1 = SDLUI_CreateButton(wnd1, 10, 40, "PushButton");
+SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(wnd1, 10, 90, 0, 100, 20);
+SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
 
-btn->parent_to(wnd);
-si->parent_to(wnd);
-chk->parent_to(wnd);
-tb->parent_to(wnd);
-rb1->parent_to(wnd);
-rb2->parent_to(wnd);
-rb3->parent_to(wnd);
+SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");
+SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, false);
 
-rb4->parent_to(wnd);
-rb5->parent_to(wnd);
-rb6->parent_to(wnd);
+SDLUI_Array rb_group1 = SDLUI_Create_RadioButtonGroup();
+SDLUI_Array rb_group2 = SDLUI_Create_RadioButtonGroup();
 
+SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 40, true);
+SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 70, false);
+SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 100, false);
 
-SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(10, 300, 400, 400, "Another Window");
+SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 40, false);
+SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 70, true);
+SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 100, false);

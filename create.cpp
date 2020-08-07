@@ -12,6 +12,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
     wnd->drag_y = 0;
     wnd->w = w;
     wnd->h = h;
+    wnd->is_resized = false;
     
     SDL_Color c = {255, 255, 255, 255};
     SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
@@ -60,8 +61,8 @@ SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(SDLUI_Control_Window *wnd, i32 x,
     SDLUI_Control_SliderInt *si = (SDLUI_Control_SliderInt*)malloc(sizeof(SDLUI_Control_SliderInt));
     
     si->type = SDLUI_CONTROL_TYPE_SLIDER_INT;
-    si->x = x;
-    si->y = y;
+    si->x = wnd->x + x;
+    si->y = wnd->y + y;
     si->min = min;
     si->max = max;
     si->value = value;
@@ -90,8 +91,8 @@ SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i
     SDLUI_Control_CheckBox *chk = (SDLUI_Control_CheckBox*)malloc(sizeof(SDLUI_Control_CheckBox));
     
     chk->type = SDLUI_CONTROL_TYPE_CHECKBOX;
-    chk->x = x;
-    chk->y = y;
+    chk->x = wnd->x + x;
+    chk->y = wnd->y + y;
     chk->w = 16;
     chk->h = 16;
     chk->checked = checked;
@@ -108,8 +109,8 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
     
     txt->type = SDLUI_CONTROL_TYPE_TEXT;
     txt->text.create(text);
-    txt->x = x;
-    txt->y = y;
+    txt->x = wnd->x + x;
+    txt->y = wnd->y + y;
     txt->w = txt->text.length * SDLUI_Font.width;
     txt->h = SDLUI_Font.height;
     txt->parent = wnd;
@@ -128,8 +129,8 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
     SDLUI_Control_ToggleButton *tb = (SDLUI_Control_ToggleButton*)malloc(sizeof(SDLUI_Control_ToggleButton));
     
     tb->type = SDLUI_CONTROL_TYPE_TOGGLE_BUTTON;
-    tb->x = x;
-    tb->y = y;
+    tb->x = wnd->x + x;
+    tb->y = wnd->y + y;
     tb->w = 32;
     tb->h = 16;
     tb->checked = checked;
@@ -140,17 +141,26 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
     return tb;
 }
 
-SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, i32 x, i32 y, bool checked, i32 group = 0)
+SDLUI_Array SDLUI_Create_RadioButtonGroup()
+{
+    SDLUI_Array rb_group;
+    rb_group.create();
+    return rb_group;
+}
+
+SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SDLUI_Array &group, i32 x, i32 y, bool checked)
 {
     SDLUI_Control_RadioButton *rb = (SDLUI_Control_RadioButton*)malloc(sizeof(SDLUI_Control_RadioButton));
     
     rb->type = SDLUI_CONTROL_TYPE_RADIO_BUTTON;
-    rb->x = x;
-    rb->y = y;
+    rb->x = wnd->x + x;
+    rb->y = wnd->y + y;
     rb->w = 16;
     rb->h = 16;
     rb->checked = checked;
-    rb->group = group;
+    rb->group = &group;
+    rb->group->push(rb);
+    
     rb->parent = wnd;
     
     wnd->children.push(rb);
@@ -164,8 +174,8 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
     
     tbc->type = SDLUI_CONTROL_TYPE_TAB_CONTAINER;
     tbc->num_children = 0;
-    tbc->x = x;
-    tbc->y = y;
+    tbc->x = wnd->x + x;
+    tbc->y = wnd->y + y;
     tbc->w = 300;
     tbc->h = 200;
     tbc->bar_height = 30;
