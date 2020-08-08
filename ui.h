@@ -20,6 +20,7 @@ typedef int64_t i64;
 
 #include "enums.cpp"
 #include "structs.cpp"
+#include "image_data.cpp"
 #include "helpers.cpp"
 #include "create.cpp"
 #include "render.cpp"

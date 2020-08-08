@@ -78,29 +78,6 @@ struct __SDLUI_Font
     i32 height;
 }SDLUI_Font;
 
-struct __SDLUI_Base
-{
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    i32 window_width;
-    i32 window_height;
-    u8 mouse_current_frame[5] = {0};
-    u8 mouse_last_frame[5] = {0};
-    SDLUI_Theme theme;
-    SDLUI_Control *active_window;
-    
-    SDL_Cursor *cursor_arrow;
-    SDL_Cursor *cursor_size_we;
-    SDL_Cursor *cursor_size_ns;
-    
-    SDL_Texture *tex_tick;
-    SDL_Texture *tex_circle;
-    SDL_Texture *tex_circle_fill_1;
-    SDL_Texture *tex_circle_fill_2;
-    SDL_Texture *tex_toggle;
-    SDL_Texture *tex_close;
-}SDLUI_Base;
-
 struct SDLUI_Array
 {
     i32 capacity;
@@ -262,3 +239,26 @@ struct SDLUI_Control_Text : SDLUI_Control
     bool modified;
     SDL_Texture *tex_text;
 };
+
+struct __SDLUI_Base
+{
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    i32 window_width;
+    i32 window_height;
+    u8 mouse_current_frame[5] = {0};
+    u8 mouse_last_frame[5] = {0};
+    SDLUI_Theme theme;
+    SDLUI_Control_Window *active_window;
+    
+    SDL_Cursor *cursor_arrow;
+    SDL_Cursor *cursor_size_we;
+    SDL_Cursor *cursor_size_ns;
+    
+    SDL_Texture *tex_tick;
+    SDL_Texture *tex_circle;
+    SDL_Texture *tex_circle_fill_1;
+    SDL_Texture *tex_circle_fill_2;
+    SDL_Texture *tex_toggle;
+    SDL_Texture *tex_close;
+}SDLUI_Base;

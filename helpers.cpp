@@ -42,22 +42,31 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     SDLUI_Base.cursor_size_ns = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
     SDL_SetCursor(SDLUI_Base.cursor_arrow);
     
-    SDL_Surface *s = IMG_Load("res/tick.png");
+    SDL_Surface *s;
+    SDL_RWops *rw;
+    
+    rw = SDL_RWFromMem((void*)sdlui_png_tick, sizeof(sdlui_png_tick));
+    s = IMG_LoadPNG_RW(rw);
     SDLUI_Base.tex_tick = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     
-    s = IMG_Load("res/circle.png");
-    SDLUI_Base.tex_circle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-    
-    s = IMG_Load("res/circle_fill_1.png");
-    SDLUI_Base.tex_circle_fill_1 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-    
-    s = IMG_Load("res/circle_fill_2.png");
-    SDLUI_Base.tex_circle_fill_2 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-    
-    s = IMG_Load("res/toggle.png");
+    rw = SDL_RWFromMem((void*)sdlui_png_toggle, sizeof(sdlui_png_toggle));
+    s = IMG_LoadPNG_RW(rw);
     SDLUI_Base.tex_toggle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     
-    s = IMG_Load("res/close.png");
+    rw = SDL_RWFromMem((void*)sdlui_png_circlefillsmall, sizeof(sdlui_png_circlefillsmall));
+    s = IMG_LoadPNG_RW(rw);
+    SDLUI_Base.tex_circle_fill_2 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    rw = SDL_RWFromMem((void*)sdlui_png_circlefillbig, sizeof(sdlui_png_circlefillbig));
+    s = IMG_LoadPNG_RW(rw);
+    SDLUI_Base.tex_circle_fill_1 = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    rw = SDL_RWFromMem((void*)sdlui_png_circle, sizeof(sdlui_png_circle));
+    s = IMG_LoadPNG_RW(rw);
+    SDLUI_Base.tex_circle = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    
+    rw = SDL_RWFromMem((void*)sdlui_png_close, sizeof(sdlui_png_close));
+    s = IMG_LoadPNG_RW(rw);
     SDLUI_Base.tex_close = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     
     SDL_FreeSurface(s);
@@ -142,52 +151,96 @@ void SDLUI_SetActiveWindow(SDLUI_Control_Window *wnd)
     SDLUI_Base.active_window = wnd;
 }
 
-//SDLUI_RESIZE_DIRECTION SDLUI_WindowResizeDirection()
-//{
-//
-//}
+SDLUI_RESIZE_DIRECTION SDLUI_WindowResizeDirection(SDLUI_Control_Window *wnd, i32 mousex, i32 mousey)
+{
+    SDL_Rect left, top, right, bottom;
+    left = {wnd->x-8, wnd->y, 8, wnd->h};
+    top = {wnd->x, wnd->y-8, wnd->w, 8};
+    right = {wnd->x+wnd->w, wnd->y, 8, wnd->h};
+    bottom = {wnd->x, wnd->y+wnd->h, wnd->w, 8};
+    
+    if(SDLUI_PointCollision(left, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_we);
+        return SDLUI_RESIZE_LEFT;
+    }
+    else if(SDLUI_PointCollision(top, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_ns);
+        return SDLUI_RESIZE_TOP;
+    }
+    else if(SDLUI_PointCollision(right, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_we);
+        return SDLUI_RESIZE_RIGHT;
+    }
+    else if(SDLUI_PointCollision(bottom, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_ns);
+        return SDLUI_RESIZE_BOTTOM;
+    }
+    else
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_arrow);
+        return SDLUI_RESIZE_NONE;
+    }
+}
 
 void SDLUI_WindowHandler()
 {
     i32 mx, my, index = 0;
     SDL_GetMouseState(&mx, &my);
-    SDLUI_Control_Window *aw = (SDLUI_Control_Window*)SDLUI_Base.active_window;
-    SDL_Rect left, top, right, bottom;
-    left = {aw->x-8, aw->y, 8, aw->h};
-    top = {aw->x, aw->y-8, aw->w, 8};
-    right = {aw->x+aw->w, aw->y, 8, aw->h};
-    bottom = {aw->x, aw->y+aw->h, aw->w, 8};
+    SDLUI_Control_Window *aw = SDLUI_Base.active_window;
+    static SDLUI_RESIZE_DIRECTION res_dir = SDLUI_RESIZE_NONE;
     
-    if(SDLUI_PointCollision(left, mx, my))
+    if(!aw->is_resized)
     {
-        std::cout << "left" << std::endl;
+        res_dir = SDLUI_WindowResizeDirection(aw, mx, my);
     }
-    if(SDLUI_PointCollision(top, mx, my))
+    
+    if(res_dir != SDLUI_RESIZE_NONE)
     {
-        std::cout << "top" << std::endl;
-    }
-    if(SDLUI_PointCollision(right, mx, my))
-    {
-        SDL_SetCursor(SDLUI_Base.cursor_size_we);
-        
         if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
         {
             aw->is_resized = true;
         }
     }
-    else if(!aw->is_resized)
-    {
-        SDL_SetCursor(SDLUI_Base.cursor_arrow);
-    }
-    if(SDLUI_PointCollision(bottom, mx, my))
-    {
-        std::cout << "bot" << std::endl;
-    }
     
-    
-    if(aw->is_resized)
+    if(aw->is_resized && !aw->is_dragged)
     {
-        aw->w = mx - aw->x;
+        if(res_dir == SDLUI_RESIZE_RIGHT)
+        {
+            aw->w = mx - aw->x;
+        }
+        else if(res_dir == SDLUI_RESIZE_LEFT)
+        {
+            i32 old_x = aw->x;
+            aw->w += aw->x - mx;
+            aw->x = mx;
+            
+            for (int i = 0; i < aw->children.size; ++i)
+            {
+                aw->children.data[i]->x += aw->x - old_x;
+            }
+        }
+        else if(res_dir == SDLUI_RESIZE_BOTTOM)
+        {
+            aw->h = my - aw->y;
+        }
+        else if(res_dir == SDLUI_RESIZE_TOP)
+        {
+            i32 old_y = aw->y;
+            aw->h += aw->y - my;
+            aw->y = my;
+            
+            for (int i = 0; i < aw->children.size; ++i)
+            {
+                aw->children.data[i]->y += aw->y - old_y;
+            }
+        }
+        
+        aw->w = SDLUI_Clamp(aw->w, 120, 10000);
+        aw->h = SDLUI_Clamp(aw->h, 120, 10000);
     }
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && aw->is_resized)
     {
@@ -195,7 +248,7 @@ void SDLUI_WindowHandler()
         SDL_SetCursor(SDLUI_Base.cursor_arrow);
     }
     
-    
+    ///////////////////////////////////////////////////
     
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
     {
