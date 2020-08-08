@@ -37,35 +37,24 @@ int main(int argc, char *argv[])
         }
         
         SDLUI_WindowHandler();
+        
         SDLUI_Window(wnd1);
         SDLUI_Window(wnd2);
         SDLUI_Window(wnd3);
-        if(SDLUI_Button(btn1))
-        {
-            
-        }
-        if(SDLUI_SliderInt(si))
-        {
-            
-        }
-        if(SDLUI_CheckBox(chk1))
-        {
-            
-        }
-        if(SDLUI_Button(btn2))
-        {
-            
-        }
-        if(SDLUI_CheckBox(chk2))
-        {
-            
-        }
+        
+        SDLUI_Button(btn1);
+        SDLUI_SliderInt(si);
+        SDLUI_CheckBox(chk1);
+        SDLUI_Button(btn2);
+        SDLUI_CheckBox(chk2);
         SDLUI_RadioButton(rb1);
         SDLUI_RadioButton(rb2);
         SDLUI_RadioButton(rb3);
         SDLUI_RadioButton(rb4);
         SDLUI_RadioButton(rb5);
         SDLUI_RadioButton(rb6);
+        SDLUI_ToggleButton(tb1);
+        
         
         SDL_SetRenderDrawColor(renderer, 30, 100, 140, 255);
         SDL_RenderClear(renderer);

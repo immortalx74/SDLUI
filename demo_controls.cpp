@@ -19,3 +19,5 @@ SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 10
 SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 40, false);
 SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 70, true);
 SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 100, false);
+
+SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 10, 140, true);

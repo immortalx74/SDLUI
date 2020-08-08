@@ -31,6 +31,7 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
         
         if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && wnd->is_dragged)
         {
+            SDL_SetCursor(SDLUI_Base.cursor_arrow);
             i32 old_x = wnd->x;
             i32 old_y = wnd->y;
             wnd->x = mx - wnd->drag_x;

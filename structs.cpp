@@ -255,6 +255,9 @@ struct __SDLUI_Base
     SDL_Cursor *cursor_size_we;
     SDL_Cursor *cursor_size_ns;
     
+    SDL_Cursor *cursor_size_nwse;
+    SDL_Cursor *cursor_size_nesw;
+    
     SDL_Texture *tex_tick;
     SDL_Texture *tex_circle;
     SDL_Texture *tex_circle_fill_1;

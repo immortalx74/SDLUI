@@ -40,6 +40,10 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     SDLUI_Base.cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
     SDLUI_Base.cursor_size_we = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
     SDLUI_Base.cursor_size_ns = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
+    
+    SDLUI_Base.cursor_size_nwse = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENWSE);
+    SDLUI_Base.cursor_size_nesw = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENESW);
+    
     SDL_SetCursor(SDLUI_Base.cursor_arrow);
     
     SDL_Surface *s;
@@ -151,13 +155,18 @@ void SDLUI_SetActiveWindow(SDLUI_Control_Window *wnd)
     SDLUI_Base.active_window = wnd;
 }
 
-SDLUI_RESIZE_DIRECTION SDLUI_WindowResizeDirection(SDLUI_Control_Window *wnd, i32 mousex, i32 mousey)
+SDLUI_RESIZE_DIRECTION SDLUI_SetWindowResizeCursor(SDLUI_Control_Window *wnd, i32 mousex, i32 mousey)
 {
-    SDL_Rect left, top, right, bottom;
+    SDL_Rect left, top, right, bottom, lt, rt, lb, rb;
     left = {wnd->x-8, wnd->y, 8, wnd->h};
     top = {wnd->x, wnd->y-8, wnd->w, 8};
     right = {wnd->x+wnd->w, wnd->y, 8, wnd->h};
     bottom = {wnd->x, wnd->y+wnd->h, wnd->w, 8};
+    
+    lt = {wnd->x-8, wnd->y-8, 8, 8};
+    rt= {wnd->x+wnd->w, wnd->y-8, 8, 8};
+    lb= {wnd->x-8, wnd->y+wnd->h, 8, 8};
+    rb= {wnd->x+wnd->w, wnd->y+wnd->h, 8, 8};
     
     if(SDLUI_PointCollision(left, mousex, mousey))
     {
@@ -179,6 +188,26 @@ SDLUI_RESIZE_DIRECTION SDLUI_WindowResizeDirection(SDLUI_Control_Window *wnd, i3
         SDL_SetCursor(SDLUI_Base.cursor_size_ns);
         return SDLUI_RESIZE_BOTTOM;
     }
+    else if(SDLUI_PointCollision(lt, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_nwse);
+        return SDLUI_RESIZE_LEFT_TOP;
+    }
+    else if(SDLUI_PointCollision(rt, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_nesw);
+        return SDLUI_RESIZE_RIGHT_TOP;
+    }
+    else if(SDLUI_PointCollision(lb, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_nesw);
+        return SDLUI_RESIZE_LEFT_BOTTOM;
+    }
+    else if(SDLUI_PointCollision(rb, mousex, mousey))
+    {
+        SDL_SetCursor(SDLUI_Base.cursor_size_nwse);
+        return SDLUI_RESIZE_RIGHT_BOTTOM;
+    }
     else
     {
         SDL_SetCursor(SDLUI_Base.cursor_arrow);
@@ -195,7 +224,7 @@ void SDLUI_WindowHandler()
     
     if(!aw->is_resized)
     {
-        res_dir = SDLUI_WindowResizeDirection(aw, mx, my);
+        res_dir = SDLUI_SetWindowResizeCursor(aw, mx, my);
     }
     
     if(res_dir != SDLUI_RESIZE_NONE)
@@ -237,6 +266,50 @@ void SDLUI_WindowHandler()
             {
                 aw->children.data[i]->y += aw->y - old_y;
             }
+        }
+        else if(res_dir == SDLUI_RESIZE_LEFT_TOP)
+        {
+            i32 old_x = aw->x;
+            i32 old_y = aw->y;
+            aw->w += aw->x - mx;
+            aw->x = mx;
+            aw->h += aw->y - my;
+            aw->y = my;
+            
+            for (int i = 0; i < aw->children.size; ++i)
+            {
+                aw->children.data[i]->x += aw->x - old_x;
+                aw->children.data[i]->y += aw->y - old_y;
+            }
+        }
+        else if(res_dir == SDLUI_RESIZE_RIGHT_TOP)
+        {
+            i32 old_y = aw->y;
+            aw->h += aw->y - my;
+            aw->y = my;
+            aw->w = mx - aw->x;
+            
+            for (int i = 0; i < aw->children.size; ++i)
+            {
+                aw->children.data[i]->y += aw->y - old_y;
+            }
+        }
+        else if(res_dir == SDLUI_RESIZE_LEFT_BOTTOM)
+        {
+            i32 old_x = aw->x;
+            aw->w += aw->x - mx;
+            aw->x = mx;
+            aw->h = my - aw->y;
+            
+            for (int i = 0; i < aw->children.size; ++i)
+            {
+                aw->children.data[i]->x += aw->x - old_x;
+            }
+        }
+        else if(res_dir == SDLUI_RESIZE_RIGHT_BOTTOM)
+        {
+            aw->w = mx - aw->x;
+            aw->h = my - aw->y;
         }
         
         aw->w = SDLUI_Clamp(aw->w, 120, 10000);
