@@ -208,11 +208,9 @@ SDLUI_RESIZE_DIRECTION SDLUI_SetWindowResizeCursor(SDLUI_Control_Window *wnd, i3
         SDL_SetCursor(SDLUI_Base.cursor_size_nwse);
         return SDLUI_RESIZE_RIGHT_BOTTOM;
     }
-    else
-    {
-        SDL_SetCursor(SDLUI_Base.cursor_arrow);
-        return SDLUI_RESIZE_NONE;
-    }
+    
+    SDL_SetCursor(SDLUI_Base.cursor_arrow);
+    return SDLUI_RESIZE_NONE;
 }
 
 void SDLUI_WindowHandler()
@@ -225,10 +223,7 @@ void SDLUI_WindowHandler()
     if(!aw->is_resized)
     {
         res_dir = SDLUI_SetWindowResizeCursor(aw, mx, my);
-    }
-    
-    if(res_dir != SDLUI_RESIZE_NONE)
-    {
+        
         if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
         {
             aw->is_resized = true;
@@ -321,13 +316,15 @@ void SDLUI_WindowHandler()
         SDL_SetCursor(SDLUI_Base.cursor_arrow);
     }
     
-    ///////////////////////////////////////////////////
+    
+    
+    
     
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
     {
         SDLUI_Control_Window *wnd;
         SDL_Rect r;
-        bool over_window = false;
+        bool hovers_window = false;
         
         for (int i = 0; i < SDLUI_Window_Collection.size; ++i)
         {
@@ -338,11 +335,11 @@ void SDLUI_WindowHandler()
             if(SDLUI_PointCollision(r, mx, my))
             {
                 index = i;
-                over_window = true;
+                hovers_window = true;
             }
         }
         
-        if(SDLUI_Window_Collection.data[index] != SDLUI_Base.active_window && over_window)
+        if(SDLUI_Window_Collection.data[index] != SDLUI_Base.active_window && hovers_window)
         {
             SDLUI_SetActiveWindow((SDLUI_Control_Window*)SDLUI_Window_Collection.data[index]);
         }
