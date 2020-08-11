@@ -152,6 +152,7 @@ struct SDLUI_Control_Window : SDLUI_Control
     bool enabled_last_frame = false;
     SDLUI_String title;
     SDL_Texture *tex_title;
+    SDL_Texture *tex_rect;
     bool active;
     SDLUI_Array children;
 };
@@ -250,6 +251,8 @@ struct __SDLUI_Base
     u8 mouse_last_frame[5] = {0};
     SDLUI_Theme theme;
     SDLUI_Control_Window *active_window;
+    
+    SDL_Event e;
     
     SDL_Cursor *cursor_arrow;
     SDL_Cursor *cursor_size_we;

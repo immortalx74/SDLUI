@@ -19,6 +19,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
     wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
     SDL_FreeSurface(s);
     
+    wnd->tex_rect = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
     
     wnd->children.create();
     SDLUI_Window_Collection.push(wnd);

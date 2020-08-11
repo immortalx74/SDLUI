@@ -1,5 +1,5 @@
 #include "SDL.h"
-#include "ui.h"
+#include "sdlui.h"
 #include <iostream>
 #include <string>
 
@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
 	bool quit = false;
     SDL_Event e;
     
-#include "demo_controls.cpp"
+#include "sdlui_demo_controls_create.cpp"
+    
     while (!quit)
     {
         while (SDL_PollEvent(&e))
@@ -23,38 +24,12 @@ int main(int argc, char *argv[])
 	            quit = true;
 	        }
             
-            if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
-            {
-                SDLUI_MouseStateSet(e.type, e.button.button);
-            }
-            if(e.type == SDL_KEYDOWN)
-            {
-                if(e.key.keysym.sym == SDLK_RETURN)
-                {
-                    wnd1->visible = !wnd1->visible;
-                }
-            }
+            SDLUI_EventHandler(e);
         }
         
         SDLUI_WindowHandler();
         
-        SDLUI_Window(wnd1);
-        SDLUI_Window(wnd2);
-        SDLUI_Window(wnd3);
-        
-        SDLUI_Button(btn1);
-        SDLUI_SliderInt(si);
-        SDLUI_CheckBox(chk1);
-        SDLUI_Button(btn2);
-        SDLUI_CheckBox(chk2);
-        SDLUI_RadioButton(rb1);
-        SDLUI_RadioButton(rb2);
-        SDLUI_RadioButton(rb3);
-        SDLUI_RadioButton(rb4);
-        SDLUI_RadioButton(rb5);
-        SDLUI_RadioButton(rb6);
-        SDLUI_ToggleButton(tb1);
-        
+#include "sdlui_demo_controls_usage.cpp"
         
         SDL_SetRenderDrawColor(renderer, 30, 100, 140, 255);
         SDL_RenderClear(renderer);

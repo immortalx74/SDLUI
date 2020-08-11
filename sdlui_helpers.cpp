@@ -309,16 +309,15 @@ void SDLUI_WindowHandler()
         
         aw->w = SDLUI_Clamp(aw->w, 120, 10000);
         aw->h = SDLUI_Clamp(aw->h, 120, 10000);
+        
+        SDL_DestroyTexture(aw->tex_rect);
+        aw->tex_rect = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, aw->w, aw->h);
     }
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && aw->is_resized)
     {
         aw->is_resized = false;
         SDL_SetCursor(SDLUI_Base.cursor_arrow);
     }
-    
-    
-    
-    
     
     if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
     {

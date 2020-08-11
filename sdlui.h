@@ -18,13 +18,14 @@ typedef int64_t i64;
 #define SDLUI_STRING_CAPACITY 20
 #define SDLUI_MARGIN 8
 
-#include "enums.cpp"
-#include "structs.cpp"
-#include "image_data.cpp"
-#include "helpers.cpp"
-#include "create.cpp"
-#include "render.cpp"
-#include "usage.cpp"
+#include "sdlui_enums.cpp"
+#include "sdlui_structs.cpp"
+#include "sdlui_embeded.cpp"
+#include "sdlui_helpers.cpp"
+#include "sdlui_create.cpp"
+#include "sdlui_render.cpp"
+#include "sdlui_event.cpp"
+#include "sdlui_usage.cpp"
 
 // Each window should have an array of children
 // Each control should have a parent_window pointer field (in SDLUI_Control struct)
