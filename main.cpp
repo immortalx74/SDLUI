@@ -23,6 +23,13 @@ int main(int argc, char *argv[])
 	        {
 	            quit = true;
 	        }
+            if(e.type == SDL_KEYDOWN)
+            {
+                if(e.key.keysym.sym == SDLK_RETURN)
+                {
+                    txt1->text.modify("Button");
+                }
+            }
             
             SDLUI_EventHandler(e);
         }

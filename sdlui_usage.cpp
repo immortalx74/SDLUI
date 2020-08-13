@@ -212,19 +212,40 @@ bool SDLUI_Text(SDLUI_Control_Text *txt)
 {
     if(txt->parent == SDLUI_Base.active_window)
     {
-        if(txt->text.modified)
-        {
-            txt->w = txt->text.length * SDLUI_Font.width;
-            
-            SDL_Color c = {255, 255, 255, 255};
-            SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, c);
-            txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-            SDL_FreeSurface(s);
-            
-            txt->text.modified = false;
-        }
-        
         return true;
+    }
+    return false;
+}
+
+bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
+{
+    if(tbc->parent == SDLUI_Base.active_window)
+    {
+        i32 mx, my;
+        SDL_GetMouseState(&mx, &my);
+        SDL_Rect r = {tbc->x,tbc->y,tbc->w,tbc->bar_height};
+        SDL_Rect tab_r;
+        i32 offset = 0;
+        SDLUI_Control_Tab *tab;
+        
+        if(SDLUI_PointCollision(r, mx, my))
+        {
+            if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+            {
+                for (int i = 0; i < tbc->tabs.size; ++i)
+                {
+                    tab = (SDLUI_Control_Tab*)tbc->tabs.data[i];
+                    tab_r = {tbc->x + offset, tbc->y, tab->w + SDLUI_MARGIN, 30};
+                    
+                    if(SDLUI_PointCollision(tab_r, mx, my))
+                    {
+                        tbc->active_tab = tab;
+                    }
+                    
+                    offset += SDLUI_MARGIN + tab->w;
+                }
+            }
+        }
     }
     return false;
 }

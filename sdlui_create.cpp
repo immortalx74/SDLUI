@@ -112,7 +112,7 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
     txt->text.create(text);
     txt->x = wnd->x + x;
     txt->y = wnd->y + y;
-    txt->w = txt->text.length * SDLUI_Font.width;
+    txt->w = (txt->text.length) * SDLUI_Font.width;
     txt->h = SDLUI_Font.height;
     txt->parent = wnd;
     
@@ -161,7 +161,6 @@ SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SD
     rb->checked = checked;
     rb->group = &group;
     rb->group->push(rb);
-    
     rb->parent = wnd;
     
     wnd->children.push(rb);
@@ -174,18 +173,35 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
     SDLUI_Control_TabContainer *tbc = (SDLUI_Control_TabContainer*)malloc(sizeof(SDLUI_Control_TabContainer));
     
     tbc->type = SDLUI_CONTROL_TYPE_TAB_CONTAINER;
-    tbc->num_children = 0;
+    tbc->tabs.create();
     tbc->x = wnd->x + x;
     tbc->y = wnd->y + y;
-    tbc->w = 300;
-    tbc->h = 200;
+    tbc->w = w;
+    tbc->h = h;
     tbc->bar_height = 30;
-    tbc->num_tabs = 0;
-    tbc->num_children = 0;
-    tbc->active_tab = 0;
+    tbc->active_tab = NULL;
     tbc->parent = wnd;
     
     wnd->children.push(tbc);
     return tbc;
     
+}
+
+SDLUI_Control_Tab *SDLUI_CreateTab(SDLUI_Control_Window *wnd, SDLUI_Control_TabContainer *tbc, char *text)
+{
+    SDLUI_Control_Tab *tab = (SDLUI_Control_Tab*)malloc(sizeof(SDLUI_Control_Tab));
+    
+    tab->type = SDLUI_CONTROL_TYPE_TAB;
+    tab->text.create(text);
+    tab->w = (tab->text.length) * SDLUI_Font.width;
+    tab->h = SDLUI_Font.height;
+    
+    SDL_Color c = {255, 255, 255, 255};
+    SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,tab->text.data, c);
+    tab->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+    SDL_FreeSurface(s);
+    
+    tbc->tabs.push(tab);
+    tbc->active_tab = tab;
+    return tab;
 }

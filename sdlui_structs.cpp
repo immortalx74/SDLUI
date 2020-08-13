@@ -9,11 +9,13 @@ struct SDLUI_String
     
     void create(char *str)
     {
-        length = strlen(str) + 1;
+        length = strlen(str);
         capacity = ((length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
-        data = (char*)malloc(length);
-        memcpy(data, str, length - 1);
-        data[length - 1] = 0;
+        data = (char*)malloc(capacity);
+        memcpy(data, str, length);
+        memset(data + length, 0, 1);
+        
+        modified = false;
     }
     
     void destroy()
@@ -24,20 +26,20 @@ struct SDLUI_String
     
     void modify(char *str)
     {
-        i32 new_length = strlen(str) + 1;
+        i32 new_length = strlen(str);
         if(new_length >= capacity)
         {
             capacity = ((new_length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
             data = (char*)realloc(data, capacity);
-            memcpy(data, str, new_length - 1);
-            memset(data + new_length - 1, 0, capacity - new_length);
-            length = new_length - 1;
+            memcpy(data, str, new_length);
+            memset(data + new_length, 0, 1);
+            length = new_length;
         }
         else
         {
-            memcpy(data, str, new_length - 1);
-            memset(data + new_length - 1, 0, capacity - new_length);
-            length = new_length - 1;
+            memcpy(data, str, new_length);
+            memset(data + new_length, 0, capacity - new_length);
+            length = new_length;
         }
         
         modified = true;
@@ -207,7 +209,8 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
 
 struct SDLUI_Control_Tab : SDLUI_Control
 {
-    i32 width;
+    i32 w;
+    i32 h;
     i32 index;
     SDLUI_String text;
     SDL_Texture *tex_text;
@@ -218,11 +221,9 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
     i32 w;
     i32 h;
     i32 bar_height;
-    i32 num_tabs;
-    i32 active_tab;
-    SDLUI_Control_Tab *tabs;
-    i32 num_children;
-    SDLUI_Control **children;
+    SDLUI_Array tabs;
+    SDLUI_Control *active_tab;
+    SDLUI_ORIENTATION orientation;
 };
 
 struct SDLUI_Control_Label : SDLUI_Control

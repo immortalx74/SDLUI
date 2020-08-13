@@ -4,6 +4,14 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 {
     if(btn->visible)
     {
+        if(btn->text.modified)
+        {
+            SDL_Color c = {255, 255, 255, 255};
+            SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, btn->text.data, c);
+            btn->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+            SDL_FreeSurface(s);
+        }
+        
         i32 xx = btn->x - btn->parent->x;
         i32 yy = btn->y - btn->parent->y;
         
@@ -118,6 +126,29 @@ void SDLUI_Render_CheckBox(SDLUI_Control_CheckBox *chk)
     }
 }
 
+void SDLUI_Render_Text(SDLUI_Control_Text *txt)
+{
+    if(txt->visible)
+    {
+        if(txt->text.modified)
+        {
+            txt->w = (txt->text.length) * SDLUI_Font.width;
+            SDL_Color c = {255, 255, 255, 255};
+            SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, c);
+            txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+            SDL_FreeSurface(s);
+            txt->text.modified = false;
+        }
+        
+        i32 xx = txt->x - txt->parent->x;
+        i32 yy = txt->y - txt->parent->y;
+        
+        SDLUI_SetColor(SDLUI_Base.theme.col_white);
+        SDL_Rect r = {xx, yy, txt->w, txt->h};
+        SDL_RenderCopy(SDLUI_Base.renderer, txt->tex_text, NULL, &r);
+    }
+}
+
 void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
 {
     if(tb->visible)
@@ -140,6 +171,8 @@ void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
             SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
         }
+        
+        SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
     }
 }
 
@@ -150,13 +183,12 @@ void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rb)
         i32 xx = rb->x - rb->parent->x;
         i32 yy = rb->y - rb->parent->y;
         
-        SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
+        SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect r = {xx, yy, rb->w, rb->h};
         SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle, NULL, &r);
         
         if(rb->checked)
         {
-            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
         }
     }
@@ -166,37 +198,42 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
 {
     if(tbc->visible)
     {
-        //i32 tab_width = tbc->w / tbc->num_tabs;
-        i32 tab_width = 0;
-        SDL_Rect r = {tbc->x, tbc->y, 0, tbc->bar_height};
+        i32 xx = tbc->x - tbc->parent->x;
+        i32 yy = tbc->y - tbc->parent->y;
+        i32 offset = 0;
         
-        for (int i = 0; i < tbc->num_tabs; ++i)
+        SDL_Rect r = {xx, yy, tbc->w, tbc->bar_height};
+        SDLUI_SetColor(SDLUI_Base.theme.col_inactive_window_bar);
+        SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        
+        SDLUI_Control_Tab *tab;
+        
+        for (int i = 0; i < tbc->tabs.size; ++i)
         {
-            r.w = tbc->tabs[i].width;
+            tab = (SDLUI_Control_Tab*)tbc->tabs.data[i];
             
-            if(i == tbc->active_tab)
+            SDLUI_SetColor(SDLUI_Base.theme.col_white);
+            SDL_Rect r = {SDLUI_MARGIN + xx + offset, yy + SDLUI_MARGIN, tab->w, tab->h};
+            SDL_RenderCopy(SDLUI_Base.renderer, tab->tex_text, NULL, &r);
+            
+            if(tab == tbc->active_tab)
             {
                 SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
+                r.y += 2*SDLUI_MARGIN;
+                r.h = 2;
+                SDL_RenderFillRect(SDLUI_Base.renderer, &r);
             }
-            else
-            {
-                SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
-            }
-            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
             
-            SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
-            i32 tex_w, tex_h;
-            SDL_QueryTexture(tbc->tabs[i].tex_text, NULL, NULL, &tex_w, &tex_h);
-            SDL_Rect dst = {r.x + SDLUI_MARGIN, r.y + SDLUI_MARGIN, tex_w, tex_h};
-            SDL_RenderCopy(SDLUI_Base.renderer, tbc->tabs[i].tex_text, NULL, &dst);
-            r.x += r.w;
+            offset += SDLUI_MARGIN + tab->w;
         }
         
-        SDLUI_SetColor(SDLUI_Base.theme.col_border);
-        r = {tbc->x, tbc->y + tbc->bar_height, tbc->w, tbc->h - tbc->bar_height};
+        SDLUI_SetColor(SDLUI_Base.theme.col_base);
+        r = {xx, yy + tbc->bar_height, tbc->w, tbc->h - tbc->bar_height};
         SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+        
+        SDLUI_SetColor(SDLUI_Base.theme.col_grey);
+        r = {xx, yy, tbc->w, tbc->h};
+        SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
     }
 }
 
@@ -210,17 +247,7 @@ void SDLUI_Render_Label(SDLUI_Control_Label *lbl)
     }
 }
 
-void SDLUI_Render_Text(SDLUI_Control_Text *txt)
-{
-    if(txt->visible)
-    {
-        SDLUI_SetColor(SDLUI_Base.theme.col_white);
-        SDL_Rect r = {txt->x, txt->y, txt->w, txt->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, txt->tex_text, NULL, &r);
-    }
-}
-
-void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl, SDL_Texture &tex)
+void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
 {
     switch (type)
     {
@@ -251,6 +278,18 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl, SDL_Texture
         case SDLUI_CONTROL_TYPE_RADIO_BUTTON:
         {
             SDLUI_Render_RadioButton((SDLUI_Control_RadioButton*)ctrl);
+        }
+        break;
+        
+        case SDLUI_CONTROL_TYPE_TEXT:
+        {
+            SDLUI_Render_Text((SDLUI_Control_Text*)ctrl);
+        }
+        break;
+        
+        case SDLUI_CONTROL_TYPE_TAB_CONTAINER:
+        {
+            SDLUI_Render_Tabcontainer((SDLUI_Control_TabContainer*)ctrl);
         }
         break;
     }
@@ -330,7 +369,6 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             r = {0 + wnd->w - 30, 0, 30, 30};
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_close, NULL, &r);
             
-            
             SDLUI_CONTROL_TYPE type;
             SDLUI_Control *ctrl;
             
@@ -339,7 +377,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
                 type = wnd->children.data[j]->type;
                 ctrl = wnd->children.data[j];
                 
-                SDLUI_RenderChild(type, ctrl, *wnd->tex_rect);
+                SDLUI_RenderChild(type, ctrl);
             }
             
             r = {wnd->x, wnd->y, wnd->w, wnd->h};
