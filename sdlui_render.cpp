@@ -66,7 +66,6 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
             i32 yy = si->y - si->parent->y;
             
             i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->w, si->value);
-            i32 empty = si->w - fill;
             
             SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
             SDL_RenderDrawLine(SDLUI_Base.renderer, xx, yy + 8, xx + fill, yy + 8);
@@ -83,26 +82,23 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
         }
         else
         {
-            //NOTE: Below is old code. Should copy horizontal code and tweak it.
+            i32 xx = si->x - si->parent->x;
+            i32 yy = si->y - si->parent->y;
             
-            //i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->h, si->value);
-            //i32 empty = si->h - fill;
-            //
-            //SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            //SDL_Rect r = {si->x, si->y, si->w, empty};
-            //SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-            //
-            //SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
-            //r = {si->x, si->y + empty, si->w, fill};
-            //SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-            //
-            //SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
-            //r = {si->x, si->y + empty, si->w, si->thumb_size};
-            //r.y = SDLUI_Clamp(r.y, si->y, si->y + si->h - si->thumb_size);
-            //SDL_RenderFillRect(SDLUI_Base.renderer, &r);
-            //
-            //SDLUI_SetColor(SDLUI_Base.theme.col_border);
-            //SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+            i32 fill = (i32)SDLUI_Map(si->min, si->max, 0, si->h, si->value);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_highlight);
+            SDL_RenderDrawLine(SDLUI_Base.renderer, xx + 8, yy + si->h, xx + 8, yy + si->h - fill);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            SDL_RenderDrawLine(SDLUI_Base.renderer, xx + 8, yy + si->h - fill, xx + 8, yy);
+            
+            SDL_Rect r = {xx, yy + si->h - fill-8, 16, 16};
+            r.y = SDLUI_Clamp(r.y, yy, yy + si->h - 14);
+            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_1, SDLUI_Base.theme.col_thumb);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_1, NULL, &r);
+            SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
+            SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle, NULL, &r);
         }
     }
 }
@@ -157,6 +153,7 @@ void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
         i32 yy = tb->y - tb->parent->y;
         
         SDL_Rect r = {xx, yy, tb->w, tb->h};
+        SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
         SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_toggle, NULL, &r);
         
         if(tb->checked)
@@ -323,16 +320,8 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
         {
             SDL_SetRenderTarget(SDLUI_Base.renderer, wnd->tex_rect);
             
+            SDLUI_SetColor(SDLUI_Base.theme.col_active_window_bar);
             SDL_Rect r = {0, 0, wnd->w, 30};
-            if(wnd == SDLUI_Base.active_window)
-            {
-                SDLUI_SetColor(SDLUI_Base.theme.col_active_window_bar);
-            }
-            else
-            {
-                SDLUI_SetColor(SDLUI_Base.theme.col_inactive_window_bar);
-            }
-            
             SDL_RenderFillRect(SDLUI_Base.renderer, &r);
             
             SDLUI_SetColor(SDLUI_Base.theme.col_white);
@@ -345,15 +334,11 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             r = {0, 0 + 30, wnd->w, wnd->h - 30};
             SDL_RenderFillRect(SDLUI_Base.renderer, &r);
             
-            SDLUI_SetColor(SDLUI_Base.theme.col_grey);
-            r = {0, 0, wnd->w, wnd->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
             i32 mx, my;
             SDL_GetMouseState(&mx, &my);
             r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
             
-            if(wnd == SDLUI_Base.active_window && SDLUI_PointCollision(r, mx, my) && !wnd->is_resized)
+            if(SDLUI_PointCollision(r, mx, my) && !wnd->is_resized)
             {
                 SDLUI_SetColor(SDLUI_Base.theme.col_red);
                 r = {wnd->w - 29, 1, 28, 28};
@@ -377,8 +362,15 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
                 type = wnd->children.data[j]->type;
                 ctrl = wnd->children.data[j];
                 
-                SDLUI_RenderChild(type, ctrl);
+                if(ctrl->x < wnd->x + wnd->w && ctrl->y < wnd->y + wnd->h)
+                {
+                    SDLUI_RenderChild(type, ctrl);
+                }
             }
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_grey);
+            r = {0, 0, wnd->w, wnd->h};
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
             
             r = {wnd->x, wnd->y, wnd->w, wnd->h};
             SDL_SetRenderTarget(SDLUI_Base.renderer, NULL);
@@ -391,10 +383,6 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             SDLUI_SetColor(SDLUI_Base.theme.col_inactive_window_bar);
             SDL_RenderFillRect(SDLUI_Base.renderer, &r);
             
-            SDLUI_SetColor(SDLUI_Base.theme.col_grey);
-            r = {0, 0, wnd->w, wnd->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
             SDLUI_SetColor(SDLUI_Base.theme.col_white);
             i32 tex_w, tex_h;
             SDL_QueryTexture(wnd->tex_title, NULL, NULL, &tex_w, &tex_h);
@@ -403,6 +391,10 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             
             r = {0 + wnd->w - 30, 0, 30, 30};
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_close, NULL, &r);
+            
+            SDLUI_SetColor(SDLUI_Base.theme.col_grey);
+            r = {0, 0, wnd->w, wnd->h};
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
             
             r = {wnd->x, wnd->y, wnd->w, wnd->h};
             SDL_SetRenderTarget(SDLUI_Base.renderer, NULL);

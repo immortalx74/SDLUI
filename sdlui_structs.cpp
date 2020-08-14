@@ -67,6 +67,8 @@ struct SDLUI_Control
     SDLUI_CONTROL_TYPE type;
     i32 x;
     i32 y;
+    i32 w;
+    i32 h;
     bool visible = true;
     bool enabled = true;
     SDLUI_Control *parent;
@@ -140,15 +142,13 @@ struct SDLUI_Array
 
 SDLUI_Array SDLUI_Window_Collection;
 
-
 struct SDLUI_Control_Window : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     i32 drag_x;
     i32 drag_y;
     bool is_dragged = false;
     bool is_resized = false;
+    bool is_hovered = false;
     SDLUI_RESIZE_DIRECTION resize_direction;
     bool visible_last_frame = false;
     bool enabled_last_frame = false;
@@ -161,8 +161,6 @@ struct SDLUI_Control_Window : SDLUI_Control
 
 struct SDLUI_Control_Button : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     SDLUI_String text;
     SDLUI_ALIGN align;
     SDLUI_BUTTON_STATE state;
@@ -174,8 +172,6 @@ struct SDLUI_Control_Button : SDLUI_Control
 
 struct SDLUI_Control_SliderInt : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     i32 min;
     i32 max;
     i32 value;
@@ -186,22 +182,16 @@ struct SDLUI_Control_SliderInt : SDLUI_Control
 
 struct SDLUI_Control_CheckBox : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     bool checked;
 };
 
 struct SDLUI_Control_ToggleButton : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     bool checked;
 };
 
 struct SDLUI_Control_RadioButton : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     SDLUI_Array *group;
     bool checked;
     bool checked_changed;
@@ -209,8 +199,6 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
 
 struct SDLUI_Control_Tab : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     i32 index;
     SDLUI_String text;
     SDL_Texture *tex_text;
@@ -218,8 +206,6 @@ struct SDLUI_Control_Tab : SDLUI_Control
 
 struct SDLUI_Control_TabContainer : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     i32 bar_height;
     SDLUI_Array tabs;
     SDLUI_Control *active_tab;
@@ -228,15 +214,11 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
 
 struct SDLUI_Control_Label : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     SDL_Texture *tex_text;
 };
 
 struct SDLUI_Control_Text : SDLUI_Control
 {
-    i32 w;
-    i32 h;
     SDLUI_String text;
     bool modified;
     SDL_Texture *tex_text;

@@ -4,6 +4,7 @@ SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(250, 300, 550, 400, "test window
 
 SDLUI_Control_Button *btn1 = SDLUI_CreateButton(wnd1, 10, 40, "PushButton");
 SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(wnd1, 10, 90, 0, 100, 20);
+SDLUI_Control_SliderInt *si2 = SDLUI_CreateSliderInt(wnd1, 140, 90, 0, 100, 60, SDLUI_ORIENTATION_VERTICAL);
 SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
 
 SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");

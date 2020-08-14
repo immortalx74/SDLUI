@@ -3,6 +3,7 @@ SDLUI_Window(wnd2);
 SDLUI_Window(wnd3);
 SDLUI_Button(btn1);
 SDLUI_SliderInt(si);
+SDLUI_SliderInt(si2);
 SDLUI_CheckBox(chk1);
 SDLUI_Button(btn2);
 if(SDLUI_CheckBox(chk2))
