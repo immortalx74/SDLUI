@@ -110,7 +110,7 @@ void SDLUI_Render_CheckBox(SDLUI_Control_CheckBox *chk)
         i32 xx = chk->x - chk->parent->x;
         i32 yy = chk->y - chk->parent->y;
         
-        SDLUI_SetColor(SDLUI_Base.theme.col_border);
+        SDLUI_SetColor(SDLUI_Base.theme.col_white);
         
         SDL_Rect r = {xx, yy, chk->w, chk->h};
         SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
@@ -165,7 +165,6 @@ void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
         else
         {
             r = {xx, yy, tb->w - 16, tb->h};
-            SDLUI_Colorize(SDLUI_Base.tex_circle_fill_2, SDLUI_Base.theme.col_white);
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle_fill_2, NULL, &r);
         }
         
@@ -180,7 +179,7 @@ void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rb)
         i32 xx = rb->x - rb->parent->x;
         i32 yy = rb->y - rb->parent->y;
         
-        SDLUI_SetColor(SDLUI_Base.theme.col_white);
+        SDLUI_Colorize(SDLUI_Base.tex_circle, SDLUI_Base.theme.col_white);
         SDL_Rect r = {xx, yy, rb->w, rb->h};
         SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_circle, NULL, &r);
         
@@ -190,6 +189,8 @@ void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rb)
         }
     }
 }
+
+void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl);
 
 void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
 {
@@ -210,7 +211,7 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
             tab = (SDLUI_Control_Tab*)tbc->tabs.data[i];
             
             SDLUI_SetColor(SDLUI_Base.theme.col_white);
-            SDL_Rect r = {SDLUI_MARGIN + xx + offset, yy + SDLUI_MARGIN, tab->w, tab->h};
+            r = {SDLUI_MARGIN + xx + offset, yy + SDLUI_MARGIN, tab->w, tab->h};
             SDL_RenderCopy(SDLUI_Base.renderer, tab->tex_text, NULL, &r);
             
             if(tab == tbc->active_tab)
@@ -231,6 +232,21 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
         SDLUI_SetColor(SDLUI_Base.theme.col_grey);
         r = {xx, yy, tbc->w, tbc->h};
         SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
+        
+        //////////////////////////
+        tab = (SDLUI_Control_Tab*)tbc->active_tab;
+        
+        SDLUI_CONTROL_TYPE type;
+        SDLUI_Control *ctrl;
+        
+        for (int j = 0; j < tab->children.size; ++j)
+        {
+            type = tab->children.data[j]->type;
+            ctrl = tab->children.data[j];
+            
+            ctrl->visible = true;
+            SDLUI_RenderChild(type, ctrl);
+        }
     }
 }
 
@@ -362,9 +378,12 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
                 type = wnd->children.data[j]->type;
                 ctrl = wnd->children.data[j];
                 
-                if(ctrl->x < wnd->x + wnd->w && ctrl->y < wnd->y + wnd->h)
+                if(ctrl->owned_by_window)
                 {
-                    SDLUI_RenderChild(type, ctrl);
+                    if(ctrl->x < wnd->x + wnd->w && ctrl->y < wnd->y + wnd->h)
+                    {
+                        SDLUI_RenderChild(type, ctrl);
+                    }
                 }
             }
             

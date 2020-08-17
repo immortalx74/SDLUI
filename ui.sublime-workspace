@@ -1,0 +1,1081 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"col_",
+				"col_highlight\t(sdlui_structs.cpp)"
+			],
+			[
+				"col",
+				"col_base\t(sdlui_structs.cpp)"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.cpp",
+			"settings":
+			{
+				"buffer_size": 1758,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+			]
+		},
+		{
+			"file": "sdlui_demo_controls_usage.cpp",
+			"settings":
+			{
+				"buffer_size": 507,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_event.cpp",
+			"settings":
+			{
+				"buffer_size": 342,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_structs.cpp",
+			"settings":
+			{
+				"buffer_size": 7248,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_usage.cpp",
+			"settings":
+			{
+				"buffer_size": 7736,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_enums.cpp",
+			"settings":
+			{
+				"buffer_size": 1149,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui.h",
+			"settings":
+			{
+				"buffer_size": 1606,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_render.cpp",
+			"settings":
+			{
+				"buffer_size": 14956,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_helpers.cpp",
+			"settings":
+			{
+				"buffer_size": 10394,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_create.cpp",
+			"settings":
+			{
+				"buffer_size": 6134,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_demo_controls_create.cpp",
+			"settings":
+			{
+				"buffer_size": 1829,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_embeded.cpp",
+			"settings":
+			{
+				"buffer_size": 591027,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/test_build.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C Single File.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++/C Single File.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					""
+				],
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					""
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					""
+				],
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					""
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Build"
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				"Build"
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				],
+				[
+					"Packages/User/test_run.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/test_build.sublime-build",
+					""
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/test_build.sublime-build",
+					"Build"
+				]
+			],
+			[
+				"Packages/User/test_build.sublime-build",
+				"Run"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"packag",
+				"Install Package Control"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"rei",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"reid",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"pac",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			],
+			[
+				"cou",
+				"Snippet: cout"
+			],
+			[
+				"printf",
+				"Snippet: fprintf …"
+			],
+			[
+				"for",
+				"Snippet: For Loop"
+			],
+			[
+				"cout",
+				"Snippet: cout"
+			],
+			[
+				"snippe",
+				"Snippet: snippets"
+			],
+			[
+				"resource",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"snippet:for",
+				"Snippet: For Loop"
+			],
+			[
+				"snipp",
+				"Snippet: struct"
+			],
+			[
+				"the",
+				"UI: Select Theme"
+			],
+			[
+				"ident",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"reide",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"run",
+				"Build With: C++ Single File - Run"
+			],
+			[
+				"build",
+				"Build: New Build System"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 156.0,
+		"history":
+		[
+			"cls",
+			"clear",
+			"?",
+			"help",
+			"prompt_open_file",
+			"prompt_open_file()",
+			"prompt_open_file",
+			"switchFile()",
+			"switchFile",
+			"open()",
+			"open(\".gitignore\")",
+			"open(\"sdlui_helpers.cpp\")",
+			"open(\"sdlui_usage.cpp\")",
+			"open(\"sdlui_structs.cpp\")",
+			"open(\"structs.cpp\")",
+			"open\"structs.cpp\"",
+			"structs.cpp",
+			"open",
+			"open structs.cpp",
+			"open",
+			"clear",
+			"cls",
+			"run"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/dev/ui"
+	],
+	"file_history":
+	[
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/Themes/MarkdownEditing.tmTheme",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/Themes/Flatron.tmTheme",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/Adaptive.sublime-theme",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/C++.sublime-settings",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/Soda Dark.sublime-theme",
+		"/C/Users/immortalx/Desktop/New folder (2)/Soda Dark 3.sublime-theme",
+		"/D/dev/ui/sdlui_usage.cpp",
+		"/D/dev/ui/sdlui_enums.cpp",
+		"/D/dev/ui/sdlui_event.cpp",
+		"/C/Users/immortalx/Desktop/New folder (2)/Soda Dark.sublime-theme",
+		"/C/Users/immortalx/Desktop/New folder (2)/Soda Dark/Widget - Soda Dark.sublime-settings",
+		"/C/Users/immortalx/Desktop/New folder (2)/Soda Dark/Widget - Soda Dark 3.sublime-settings",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Installed Packages/Theme - Soda.sublime-package",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/C++11/messages/install.txt",
+		"/D/dev/ui/sdlui.h",
+		"/D/dev/ui/sdlui_embeded.cpp",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/HighlightBuildErrors.sublime-settings",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/Highlight Build Errors/HighlightBuildErrors.sublime-settings",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/Themes/Adaptive.sublime-theme",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/cout.sublime-snippet",
+		"/C/Users/immortalx/Desktop/New folder (2)/Default.sublime-theme",
+		"/C/Users/immortalx/Desktop/New folder (2)/adaptive/Adaptive.sublime-theme",
+		"/D/dev/ui/sdlui_create.cpp",
+		"/C/Users/immortalx/Desktop/New folder (2)/Snippets/#include-(#inc angle).sublime-snippet",
+		"/C/Users/immortalx/Desktop/New folder (2)/Snippets/forv.sublime-snippet",
+		"/C/Program Files/Sublime Text 3/Packages/C++.sublime-package",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/snippets.sublime-snippet",
+		"/C/Users/immortalx/Desktop/New folder (2)/Widget - Default.hidden-color-scheme",
+		"/C/Program Files/Sublime Text 3/Packages/Theme - Default.sublime-package",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/All Autocomplete/All Autocomplete.sublime-settings",
+		"/D/dev/ui/sdlui_helpers.cpp",
+		"/D/dev/ui/sdlui_demo_controls_create.cpp",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_run.sublime-build"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 117.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"tab_lab",
+			"tab_",
+			"theme",
+			"them",
+			"high",
+			"tab_l",
+			"tab_la",
+			"labels",
+			"spac"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.cpp",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1758,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1491,
+								1491
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 755.2,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "sdlui_demo_controls_usage.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 507,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								395,
+								395
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "sdlui_event.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 342,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								226,
+								226
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "sdlui_structs.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2623,
+								2623
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1763.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "sdlui_usage.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7736,
+						"regions":
+						{
+							"mark":
+							{
+								"flags": 144,
+								"icon": "Packages/Theme - Default/common/dot.png",
+								"regions":
+								[
+									[
+										563,
+										563
+									]
+								],
+								"scope": "mark"
+							}
+						},
+						"selection":
+						[
+							[
+								242,
+								242
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "sdlui_enums.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1149,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 543.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "sdlui.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1606,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								301,
+								301
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 400.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "sdlui_render.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14956,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14632,
+								14632
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8520.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "sdlui_helpers.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10394,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6582,
+								6582
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4143.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "sdlui_create.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6134,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								176,
+								176
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "sdlui_demo_controls_create.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1829,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								253,
+								253
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "sdlui_embeded.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 591027,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 288.0
+	},
+	"output.exec":
+	{
+		"height": 134.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/test_build.sublime-build",
+	"project": "ui.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"usag",
+				"sdlui_usage.cpp"
+			],
+			[
+				"stru",
+				"sdlui_structs.cpp"
+			],
+			[
+				"struct",
+				"sdlui_structs.cpp"
+			],
+			[
+				"sdlui_",
+				"sdlui_helpers.cpp"
+			],
+			[
+				"rend",
+				"sdlui_render.cpp"
+			],
+			[
+				"cre",
+				"sdlui_create.cpp"
+			],
+			[
+				"mai",
+				"main.cpp"
+			],
+			[
+				"str",
+				"sdlui_structs.cpp"
+			],
+			[
+				"usa",
+				"sdlui_usage.cpp"
+			],
+			[
+				"rende",
+				"sdlui_render.cpp"
+			],
+			[
+				"main",
+				"main.cpp"
+			],
+			[
+				"structs",
+				"sdlui_structs.cpp"
+			],
+			[
+				"sdlui.h",
+				"sdlui.h"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 389.6,
+		"last_filter": "SDLUI_Render",
+		"selected_items":
+		[
+			[
+				"SDLUI_Render",
+				"SDLUI_Render"
+			]
+		],
+		"width": 592.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 191.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

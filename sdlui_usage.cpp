@@ -64,7 +64,7 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 
 bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
-    if(btn->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(btn->visible && btn->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -99,7 +99,7 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 
 bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 {
-    if(si->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(si->visible && si->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -152,7 +152,7 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 
 bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 {
-    if(chk->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(chk->visible && chk->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -173,7 +173,7 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 
 bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 {
-    if(tb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(tb->visible && tb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -195,7 +195,7 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 
 bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 {
-    if(rb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(rb->visible && rb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -226,7 +226,7 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 
 bool SDLUI_Text(SDLUI_Control_Text *txt)
 {
-    if(txt->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    if(txt->visible && txt->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         return true;
     }
@@ -235,7 +235,7 @@ bool SDLUI_Text(SDLUI_Control_Text *txt)
 
 bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 {
-    if(tbc->parent == SDLUI_Base.active_window)
+    if(tbc->visible && tbc->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
         SDL_GetMouseState(&mx, &my);
@@ -255,6 +255,11 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
                     
                     if(SDLUI_PointCollision(tab_r, mx, my))
                     {
+                        for (int j = 0; j < tbc->active_tab->children.size; ++j)
+                        {
+                            SDLUI_Control *ctrl = tbc->active_tab->children.data[j];
+                            ctrl->visible = false;
+                        }
                         tbc->active_tab = tab;
                     }
                     

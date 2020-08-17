@@ -48,10 +48,10 @@ struct SDLUI_String
 
 struct SDLUI_Theme
 {
-    SDL_Color col_base = {75, 75, 75, 255};
+    SDL_Color col_base = {55, 55, 55, 255};
     SDL_Color col_border = {38, 38, 38, 255};
-    SDL_Color col_active_window_bar = {20, 20, 20, 255};
-    SDL_Color col_inactive_window_bar = {60, 60, 60, 255};
+    SDL_Color col_active_window_bar = {10, 10, 10, 255};
+    SDL_Color col_inactive_window_bar = {40, 40, 40, 255};
     SDL_Color col_hover = {80, 80, 80, 255};
     SDL_Color col_click = {40, 40, 40, 255};
     SDL_Color col_highlight = {65, 105, 225, 255};
@@ -71,6 +71,7 @@ struct SDLUI_Control
     i32 h;
     bool visible = true;
     bool enabled = true;
+    bool owned_by_window = true;
     SDLUI_Control *parent;
 };
 
@@ -115,7 +116,7 @@ struct SDLUI_Array
     {
         for (int i = 0; i < size; ++i)
         {
-            if(elem == data[i] && (i < size - 1))
+            if((i < size - 1) && elem == data[i])
             {
                 i32 num_elements = size - i - 1;
                 memmove(data + i, data + i + 1, num_elements * sizeof(data));
@@ -129,7 +130,7 @@ struct SDLUI_Array
     {
         for (int i = 0; i < size; ++i)
         {
-            if(elem == data[i] && (i < size - 1))
+            if((i < size - 1) && elem == data[i])
             {
                 i32 num_elements = size - i - 1;
                 memmove(data + i, data + i + 1, num_elements * sizeof(data));
@@ -197,33 +198,6 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
     bool checked_changed;
 };
 
-struct SDLUI_Control_Tab : SDLUI_Control
-{
-    i32 index;
-    SDLUI_String text;
-    SDL_Texture *tex_text;
-};
-
-struct SDLUI_Control_TabContainer : SDLUI_Control
-{
-    i32 bar_height;
-    SDLUI_Array tabs;
-    SDLUI_Control *active_tab;
-    SDLUI_ORIENTATION orientation;
-};
-
-struct SDLUI_Control_Label : SDLUI_Control
-{
-    SDL_Texture *tex_text;
-};
-
-struct SDLUI_Control_Text : SDLUI_Control
-{
-    SDLUI_String text;
-    bool modified;
-    SDL_Texture *tex_text;
-};
-
 struct __SDLUI_Base
 {
     SDL_Window *window;
@@ -251,3 +225,80 @@ struct __SDLUI_Base
     SDL_Texture *tex_toggle;
     SDL_Texture *tex_close;
 }SDLUI_Base;
+
+struct SDLUI_Control_Tab : SDLUI_Control
+{
+    i32 index;
+    SDLUI_String text;
+    SDL_Texture *tex_text;
+    SDLUI_Array children;
+};
+
+struct SDLUI_Control_TabContainer : SDLUI_Control
+{
+    i32 bar_height;
+    SDLUI_Array tabs;
+    SDLUI_Control_Tab *active_tab;
+    SDLUI_ORIENTATION orientation;
+    
+    void add_tab(char *text)
+    {
+        SDLUI_Control_Tab *tab = (SDLUI_Control_Tab*)malloc(sizeof(SDLUI_Control_Tab));
+        
+        tab->type = SDLUI_CONTROL_TYPE_TAB;
+        tab->text.create(text);
+        tab->w = (tab->text.length) * SDLUI_Font.width;
+        tab->h = SDLUI_Font.height;
+        tab->children.create();
+        tab->index = tabs.size;
+        
+        SDL_Color c = {255, 255, 255, 255};
+        SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,tab->text.data, c);
+        tab->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+        SDL_FreeSurface(s);
+        
+        this->tabs.push(tab);
+        this->active_tab = tab;
+        
+    }
+    
+    void add_child(i32 tab_index, SDLUI_Control *ctrl)
+    {
+        SDLUI_Control_Window *wnd = (SDLUI_Control_Window*)this->parent;
+        SDLUI_Control_Tab *tab;
+        SDLUI_Control *cur_ctrl;
+        
+        for (int i = 0; i < wnd->children.size; ++i)
+        {
+            cur_ctrl = wnd->children.data[i];
+            
+            if(cur_ctrl == ctrl)
+            {
+                for (int j = 0; j < this->tabs.size; ++j)
+                {
+                    tab = (SDLUI_Control_Tab*)this->tabs.data[j];
+                    
+                    if(tab->index == tab_index)
+                    {
+                        ctrl->visible = false;
+                        tab->children.push(ctrl);
+                        ctrl->owned_by_window = false;
+                        //wnd->children.pop(ctrl);
+                    }
+                }
+            }
+        }
+    }
+};
+
+struct SDLUI_Control_Label : SDLUI_Control
+{
+    SDL_Texture *tex_text;
+};
+
+struct SDLUI_Control_Text : SDLUI_Control
+{
+    SDLUI_String text;
+    bool modified;
+    SDL_Texture *tex_text;
+};

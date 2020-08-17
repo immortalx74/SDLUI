@@ -17,7 +17,17 @@ SDLUI_RadioButton(rb3);
 SDLUI_RadioButton(rb4);
 SDLUI_RadioButton(rb5);
 SDLUI_RadioButton(rb6);
-SDLUI_ToggleButton(tb1);
+
+
+if(SDLUI_ToggleButton(tb1))
+{
+    std::cout << "toggle" << std::endl;
+}
+
+if(SDLUI_Button(btn3))
+{
+    std::cout << "btn3" << std::endl;
+}
 
 if(SDLUI_TabContainer(tbc1))
 {

@@ -22,9 +22,14 @@ SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 40
 SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 70, true);
 SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 100, false);
 
-SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 10, 140, true);
+SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 140, 140, true);
+SDLUI_Control_Button *btn3 = SDLUI_CreateButton(wnd3, 140, 180, "Test");
 
 SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 100, 40, 350, 200);
-SDLUI_Control_Tab *tab1 = SDLUI_CreateTab(wnd3, tbc1, "First");
-SDLUI_Control_Tab *tab2 = SDLUI_CreateTab(wnd3, tbc1, "Second");
-SDLUI_Control_Tab *tab3 = SDLUI_CreateTab(wnd3, tbc1, "Third");
+
+tbc1->add_tab("First");
+tbc1->add_tab("Second");
+tbc1->add_tab("Third");
+
+tbc1->add_child(0, tb1);
+tbc1->add_child(0, btn3);

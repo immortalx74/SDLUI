@@ -1,4 +1,4 @@
-void SDLUI_EventHandler(SDL_Event &ev)
+void SDLUI_EventHandler(SDL_Event const &ev)
 {
     if(ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP)
     {
