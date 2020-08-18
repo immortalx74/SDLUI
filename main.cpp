@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
 	// Create some UI controls before the application loop. Each SDLUI_Create_xxx function returns a pointer to a control.
 	// This is used as a "handle" to refer to this specific element when you do the UI logic.
-#include "sdlui_demo_controls_create.cpp"
+	#include "sdlui_demo_controls_create.cpp"
 
 	while (!quit)
 	{
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		SDLUI_WindowHandler();
 
 		// Logic handling is similar to that of immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
-#include "sdlui_demo_controls_usage.cpp"
+		#include "sdlui_demo_controls_usage.cpp"
 
 		SDL_SetRenderDrawColor(renderer, 30, 100, 140, 255);
 		SDL_RenderClear(renderer);

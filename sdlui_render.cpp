@@ -245,7 +245,11 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
             ctrl = tab->children.data[j];
             
             ctrl->visible = true;
-            SDLUI_RenderChild(type, ctrl);
+            
+            if (ctrl->do_process)
+            {
+                SDLUI_RenderChild(type, ctrl);
+            }
         }
     }
 }
@@ -378,7 +382,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
                 type = wnd->children.data[j]->type;
                 ctrl = wnd->children.data[j];
                 
-                if(ctrl->owned_by_window)
+                if(ctrl->owned_by_window && ctrl->do_process)
                 {
                     if(ctrl->x < wnd->x + wnd->w && ctrl->y < wnd->y + wnd->h)
                     {

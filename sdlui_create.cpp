@@ -32,6 +32,7 @@ SDLUI_Control_Button *SDLUI_CreateButton(SDLUI_Control_Window *wnd, i32 x, i32 y
 	SDLUI_Control_Button *btn = (SDLUI_Control_Button*)malloc(sizeof(SDLUI_Control_Button));
 	
 	btn->type = SDLUI_CONTROL_TYPE_BUTTON;
+	btn->do_process = false;
 	btn->text.create(text);
 	btn->x = wnd->x + x;
 	btn->y = wnd->y + y;
@@ -62,6 +63,7 @@ SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(SDLUI_Control_Window *wnd, i32 x,
 	SDLUI_Control_SliderInt *si = (SDLUI_Control_SliderInt*)malloc(sizeof(SDLUI_Control_SliderInt));
 	
 	si->type = SDLUI_CONTROL_TYPE_SLIDER_INT;
+	si->do_process = false;
 	si->x = wnd->x + x;
 	si->y = wnd->y + y;
 	si->min = min;
@@ -92,6 +94,7 @@ SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i
 	SDLUI_Control_CheckBox *chk = (SDLUI_Control_CheckBox*)malloc(sizeof(SDLUI_Control_CheckBox));
 	
 	chk->type = SDLUI_CONTROL_TYPE_CHECKBOX;
+	chk->do_process = false;
 	chk->x = wnd->x + x;
 	chk->y = wnd->y + y;
 	chk->w = 16;
@@ -109,6 +112,7 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
 	SDLUI_Control_Text *txt = (SDLUI_Control_Text*)malloc(sizeof(SDLUI_Control_Text));
 	
 	txt->type = SDLUI_CONTROL_TYPE_TEXT;
+	txt->do_process = false;
 	txt->text.create(text);
 	txt->x = wnd->x + x;
 	txt->y = wnd->y + y;
@@ -130,6 +134,7 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
 	SDLUI_Control_ToggleButton *tb = (SDLUI_Control_ToggleButton*)malloc(sizeof(SDLUI_Control_ToggleButton));
 	
 	tb->type = SDLUI_CONTROL_TYPE_TOGGLE_BUTTON;
+	tb->do_process = false;
 	tb->x = wnd->x + x;
 	tb->y = wnd->y + y;
 	tb->w = 32;
@@ -154,6 +159,7 @@ SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SD
 	SDLUI_Control_RadioButton *rb = (SDLUI_Control_RadioButton*)malloc(sizeof(SDLUI_Control_RadioButton));
 	
 	rb->type = SDLUI_CONTROL_TYPE_RADIO_BUTTON;
+	rb->do_process = false;
 	rb->x = wnd->x + x;
 	rb->y = wnd->y + y;
 	rb->w = 16;
@@ -173,6 +179,7 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
 	SDLUI_Control_TabContainer *tbc = (SDLUI_Control_TabContainer*)malloc(sizeof(SDLUI_Control_TabContainer));
 	
 	tbc->type = SDLUI_CONTROL_TYPE_TAB_CONTAINER;
+	tbc->do_process = false;
 	tbc->tabs.create();
 	tbc->x = wnd->x + x;
 	tbc->y = wnd->y + y;
@@ -186,23 +193,3 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
 	return tbc;
 	
 }
-
-//SDLUI_Control_Tab *SDLUI_CreateTab(SDLUI_Control_Window *wnd, SDLUI_Control_TabContainer *tbc, char *text)
-//{
-//SDLUI_Control_Tab *tab = (SDLUI_Control_Tab*)malloc(sizeof(SDLUI_Control_Tab));
-//
-//tab->type = SDLUI_CONTROL_TYPE_TAB;
-//tab->text.create(text);
-//tab->w = (tab->text.length) * SDLUI_Font.width;
-//tab->h = SDLUI_Font.height;
-//tab->parent = tbc;
-//
-//SDL_Color c = {255, 255, 255, 255};
-//SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,tab->text.data, c);
-//tab->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
-//SDL_FreeSurface(s);
-//
-//tbc->tabs.push(tab);
-//tbc->active_tab = tab;
-//return tab;
-//}

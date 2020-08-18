@@ -64,6 +64,8 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 
 bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
+    btn->do_process = true;
+    
     if(btn->visible && btn->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
@@ -99,6 +101,8 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 
 bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 {
+    si->do_process = true;
+
     if(si->visible && si->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
@@ -152,6 +156,8 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 
 bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 {
+    chk->do_process = true;
+
     if(chk->visible && chk->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
@@ -173,6 +179,8 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 
 bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 {
+    tb->do_process = true;
+
     if(tb->visible && tb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
@@ -195,6 +203,8 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 
 bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 {
+    rb->do_process = true;
+
     if(rb->visible && rb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;
@@ -226,6 +236,8 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 
 bool SDLUI_Text(SDLUI_Control_Text *txt)
 {
+    txt->do_process = true;
+
     if(txt->visible && txt->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         return true;
@@ -235,6 +247,8 @@ bool SDLUI_Text(SDLUI_Control_Text *txt)
 
 bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 {
+    tbc->do_process = true;
+    
     if(tbc->visible && tbc->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
     {
         i32 mx, my;

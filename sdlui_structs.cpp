@@ -72,6 +72,7 @@ struct SDLUI_Control
     bool visible = true;
     bool enabled = true;
     bool owned_by_window = true;
+    bool do_process = false;
     SDLUI_Control *parent;
 };
 
