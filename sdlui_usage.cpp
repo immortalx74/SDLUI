@@ -284,3 +284,33 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
     }
     return false;
 }
+
+bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
+{
+    sa->do_process = true;
+
+    if(sa->visible && sa->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+    {
+        i32 mx, my;
+        SDL_GetMouseState(&mx, &my);
+        SDL_Rect r;
+
+        if(sa->content_height > sa->h)
+        {
+            r ={sa->x + sa->w - sa->scrollbar_thickness, sa->y, sa->scrollbar_thickness, sa->h - sa->scrollbar_thickness};
+            
+            if(SDLUI_PointCollision(r, mx, my))
+            {
+                if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+                {
+                    sa->scroll_y++;
+                }
+            }    
+        }
+        
+        return true;
+
+    }
+
+    return false;
+}

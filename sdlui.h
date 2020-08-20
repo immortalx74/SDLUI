@@ -22,8 +22,8 @@ typedef int64_t i64;
 #include "sdlui_structs.cpp"
 #include "sdlui_embeded.cpp"
 #include "sdlui_helpers.cpp"
-#include "sdlui_create.cpp"
 #include "sdlui_render.cpp"
+#include "sdlui_create.cpp"
 #include "sdlui_event.cpp"
 #include "sdlui_usage.cpp"
 

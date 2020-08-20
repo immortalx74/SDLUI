@@ -30,7 +30,7 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     SDLUI_Font.handle = TTF_OpenFont("liberation-mono.ttf", SDLUI_Font.size);
     SDLUI_Font.height = TTF_FontHeight(SDLUI_Font.handle);
     TTF_SizeText(SDLUI_Font.handle, "0", &SDLUI_Font.width, &SDLUI_Font.height);
-    
+
     SDLUI_Base.renderer = r;
     SDLUI_Base.window = w;
     SDL_GetWindowSize(SDLUI_Base.window, &SDLUI_Base.window_width, &SDLUI_Base.window_height);
@@ -46,6 +46,16 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
     
     SDL_SetCursor(SDLUI_Base.cursor_arrow);
     
+    for (int i = 0; i <= 95; ++i)
+    {
+        SDLUI_Font.ascii[i] = 32 + i;
+    }
+    SDLUI_Font.ascii[95] = '\0';
+    
+    SDL_Surface *characters = TTF_RenderText_Blended(SDLUI_Font.handle, SDLUI_Font.ascii, SDLUI_Base.theme.col_white);
+    SDLUI_Font.tex_font = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, characters);
+    SDL_FreeSurface(characters);
+
     SDL_Surface *s;
     SDL_RWops *rw;
     

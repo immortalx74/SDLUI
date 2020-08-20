@@ -1,5 +1,26 @@
 // Render ---------------------------------------------------
 
+void SDLUI_DrawText(i32 x, i32 y, char *text, SDL_Texture *dst)
+{
+    SDL_SetRenderTarget(SDLUI_Base.renderer, dst);
+    i32 cur_char;
+    SDL_Rect glyph_rect;
+    SDL_Rect pos = {x, y, SDLUI_Font.width, SDLUI_Font.height};
+
+    i32 count = strlen(text);
+
+    for (int i = 0; i < count; ++i)
+    {
+        cur_char = (i32)text[i];
+        glyph_rect = {(cur_char - 32) * SDLUI_Font.width, 0, SDLUI_Font.width, SDLUI_Font.height};
+
+        SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Font.tex_font, &glyph_rect, &pos);
+        pos.x += SDLUI_Font.width;
+    }
+
+    SDL_SetRenderTarget(SDLUI_Base.renderer, NULL);
+}
+
 void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 {
     if(btn->visible)
@@ -141,7 +162,7 @@ void SDLUI_Render_Text(SDLUI_Control_Text *txt)
         
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect r = {xx, yy, txt->w, txt->h};
-        SDL_RenderCopy(SDLUI_Base.renderer, txt->tex_text, NULL, &r);
+        SDL_RenderCopy(SDLUI_Base.renderer, txt->tex_text, NULL, &r);;
     }
 }
 
@@ -233,7 +254,6 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
         r = {xx, yy, tbc->w, tbc->h};
         SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
         
-        //////////////////////////
         tab = (SDLUI_Control_Tab*)tbc->active_tab;
         
         SDLUI_CONTROL_TYPE type;
@@ -261,6 +281,50 @@ void SDLUI_Render_Label(SDLUI_Control_Label *lbl)
         SDLUI_SetColor(SDLUI_Base.theme.col_white);
         SDL_Rect r = {lbl->x, lbl->y, lbl->w, lbl->h};
         SDL_RenderCopy(SDLUI_Base.renderer, lbl->tex_text, NULL, &r);
+    }
+}
+
+void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
+{
+    if(sa->visible)
+    {
+        i32 xx = sa->x - sa->parent->x;
+        i32 yy = sa->y - sa->parent->y;
+
+        SDL_Rect r;
+
+        if(sa->content_height > sa->h)
+        {
+            // vertical scrollbar
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            r = {xx + sa->w - sa->scrollbar_thickness, yy, sa->scrollbar_thickness, sa->scrollbar_length_v};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+
+            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
+            sa->thumb_size_v = (float)(sa->scrollbar_length_v * sa->h) / (float)sa->content_height;
+
+            r = {xx + sa->w - sa->scrollbar_thickness+1, yy + sa->scroll_y, sa->scrollbar_thickness-4, sa->thumb_size_v};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);        
+        }
+        
+        if(sa->content_width > sa->w)
+        {
+            // horizontal scrollbar
+            SDLUI_SetColor(SDLUI_Base.theme.col_border);
+            r = {xx, yy + sa->h - sa->scrollbar_thickness, sa->scrollbar_length_h, sa->scrollbar_thickness};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);
+
+            SDLUI_SetColor(SDLUI_Base.theme.col_thumb);
+            sa->thumb_size_h = (float)(sa->scrollbar_length_h * sa->w) / (float)sa->content_width;
+
+            r = {xx + sa->scroll_x, yy + sa->h - sa->scrollbar_thickness+1, sa->thumb_size_h, sa->scrollbar_thickness-4};
+            SDL_RenderFillRect(SDLUI_Base.renderer, &r);        
+        }
+
+        // Container rect
+        SDLUI_SetColor(SDLUI_Base.theme.col_grey);
+        r = {xx, yy, sa->w, sa->h};
+        SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
     }
 }
 
@@ -307,6 +371,12 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
         case SDLUI_CONTROL_TYPE_TAB_CONTAINER:
         {
             SDLUI_Render_Tabcontainer((SDLUI_Control_TabContainer*)ctrl);
+        }
+        break;
+
+        case SDLUI_CONTROL_TYPE_SCROLL_AREA:
+        {
+            SDLUI_Render_ScrollArea((SDLUI_Control_ScrollArea*)ctrl);
         }
         break;
     }
@@ -393,8 +463,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             
             SDLUI_SetColor(SDLUI_Base.theme.col_grey);
             r = {0, 0, wnd->w, wnd->h};
-            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);
-            
+            SDL_RenderDrawRect(SDLUI_Base.renderer, &r);    
             r = {wnd->x, wnd->y, wnd->w, wnd->h};
             SDL_SetRenderTarget(SDLUI_Base.renderer, NULL);
             SDL_RenderCopy(SDLUI_Base.renderer, wnd->tex_rect, NULL, &r);
@@ -414,7 +483,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
             
             r = {0 + wnd->w - 30, 0, 30, 30};
             SDL_RenderCopy(SDLUI_Base.renderer, SDLUI_Base.tex_close, NULL, &r);
-            
+
             SDLUI_SetColor(SDLUI_Base.theme.col_grey);
             r = {0, 0, wnd->w, wnd->h};
             SDL_RenderDrawRect(SDLUI_Base.renderer, &r);

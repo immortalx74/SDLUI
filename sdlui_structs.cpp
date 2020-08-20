@@ -82,6 +82,8 @@ struct __SDLUI_Font
     i32 size = 13;
     i32 width;
     i32 height;
+    char ascii[96];
+    SDL_Texture *tex_font;
 }SDLUI_Font;
 
 struct SDLUI_Array
@@ -302,4 +304,17 @@ struct SDLUI_Control_Text : SDLUI_Control
     SDLUI_String text;
     bool modified;
     SDL_Texture *tex_text;
+};
+
+struct SDLUI_Control_ScrollArea : SDLUI_Control
+{
+    i32 content_width;
+    i32 content_height;
+    i32 scrollbar_thickness;
+    i32 scrollbar_length_h;
+    i32 scrollbar_length_v;
+    i32 thumb_size_h;
+    i32 thumb_size_v;
+    i32 scroll_x;
+    i32 scroll_y;
 };

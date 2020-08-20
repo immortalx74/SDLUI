@@ -106,7 +106,6 @@ SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i
 	return chk;
 }
 
-
 SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, char *text)
 {
 	SDLUI_Control_Text *txt = (SDLUI_Control_Text*)malloc(sizeof(SDLUI_Control_Text));
@@ -120,8 +119,7 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
 	txt->h = SDLUI_Font.height;
 	txt->parent = wnd;
 	
-	SDL_Color c = {255, 255, 255, 255};
-	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, c);
+	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, SDLUI_Base.theme.col_white);
 	txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
 	SDL_FreeSurface(s);
 	
@@ -192,4 +190,29 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
 	wnd->children.push(tbc);
 	return tbc;
 	
+}
+
+SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 x, i32 y, i32 w, i32 h)
+{
+	SDLUI_Control_ScrollArea *sa = (SDLUI_Control_ScrollArea*)malloc(sizeof(SDLUI_Control_ScrollArea));
+
+	sa->type = SDLUI_CONTROL_TYPE_SCROLL_AREA;
+	sa->do_process = false;
+	sa->x = wnd->x + x;
+	sa->y = wnd->y + y;
+	sa->w = w;
+	sa->h = h;
+	sa->content_width = w*2;
+	sa->content_height = h*2;
+	sa->scrollbar_thickness = 12;
+	sa->scrollbar_length_h = sa->w - sa->scrollbar_thickness;
+	sa->scrollbar_length_v = sa->h - sa->scrollbar_thickness;
+	sa->thumb_size_h = w;
+	sa->thumb_size_v = h;
+	sa->scroll_x = 0;
+	sa->scroll_y = 0;
+	sa->parent = wnd;
+
+	wnd->children.push(sa);
+	return sa;
 }
