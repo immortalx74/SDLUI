@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
 	// Initializes SDLUI
 	SDLUI_Init(renderer, window);
-	
+
 	bool quit = false;
 	SDL_Event e;
 
@@ -33,8 +33,6 @@ int main(int argc, char *argv[])
 				if(e.key.keysym.sym == SDLK_RETURN)
 				{
 					// txt1->text.modify("Button");
-					sa->scroll_y++;
-					std::cout << sa->scroll_y << std::endl;
 				}
 			}
 			if(e.type == SDL_WINDOWEVENT)
@@ -46,7 +44,7 @@ int main(int argc, char *argv[])
 						if(e.window.event == SDL_WINDOWEVENT_RESTORED || e.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
 						{
 							break;
-						}		
+						}
 					}
 				}
 			}

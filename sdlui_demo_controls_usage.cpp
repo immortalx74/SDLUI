@@ -8,7 +8,7 @@ if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
 if(SDLUI_Button(btn2)) {std::cout << "btn2" << std::endl;}
 if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
 SDLUI_Text(txt1);
-SDLUI_ScrollArea(sa);
+if(SDLUI_ScrollArea(sa)) {std::cout << sa->scroll_x << "-" << sa->scroll_y << std::endl;;}
 
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}
 if(SDLUI_RadioButton(rb2)) {std::cout << "rb2" << std::endl;}
