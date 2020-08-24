@@ -10,10 +10,14 @@ SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
 SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");
 SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, false);
 SDLUI_Control_Text *txt1 = SDLUI_CreateText(wnd2, 50, 90, "Some text here!");
-SDLUI_Control_ScrollArea *sa = SDLUI_CreateScrollArea(wnd2, 10, 120, 430, 100);
 
-SDLUI_Array rb_group1 = SDLUI_Create_RadioButtonGroup();
-SDLUI_Array rb_group2 = SDLUI_Create_RadioButtonGroup();
+SDL_Surface *surf = IMG_Load("res/forest3.png");
+SDL_Texture *tex = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, surf);
+SDL_FreeSurface(surf);
+SDLUI_Control_ScrollArea *sa = SDLUI_CreateScrollArea(wnd2, 10, 120, 400, 100, tex);
+
+SDLUI_ArrayOfControls rb_group1 = SDLUI_CreateRadioButtonGroup();
+SDLUI_ArrayOfControls rb_group2 = SDLUI_CreateRadioButtonGroup();
 
 SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 40, true);
 SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 70, false);

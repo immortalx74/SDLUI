@@ -86,7 +86,7 @@ struct __SDLUI_Font
 	SDL_Texture *tex_font;
 }SDLUI_Font;
 
-struct SDLUI_Array
+struct SDLUI_ArrayOfControls
 {
 	i32 capacity;
 	i32 size;
@@ -144,7 +144,7 @@ struct SDLUI_Array
 	}
 };
 
-SDLUI_Array SDLUI_Window_Collection;
+SDLUI_ArrayOfControls SDLUI_Window_Collection;
 
 struct SDLUI_Control_Window : SDLUI_Control
 {
@@ -160,7 +160,7 @@ struct SDLUI_Control_Window : SDLUI_Control
 	SDL_Texture *tex_title;
 	SDL_Texture *tex_rect;
 	bool active;
-	SDLUI_Array children;
+	SDLUI_ArrayOfControls children;
 };
 
 struct SDLUI_Control_Button : SDLUI_Control
@@ -196,12 +196,12 @@ struct SDLUI_Control_ToggleButton : SDLUI_Control
 
 struct SDLUI_Control_RadioButton : SDLUI_Control
 {
-	SDLUI_Array *group;
+	SDLUI_ArrayOfControls *group;
 	bool checked;
 	bool checked_changed;
 };
 
-struct __SDLUI_Base
+struct __SDLUI_Core
 {
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -229,20 +229,20 @@ struct __SDLUI_Base
 	SDL_Texture *tex_circle_fill_2;
 	SDL_Texture *tex_toggle;
 	SDL_Texture *tex_close;
-}SDLUI_Base;
+}SDLUI_Core;
 
 struct SDLUI_Control_Tab : SDLUI_Control
 {
 	i32 index;
 	SDLUI_String text;
 	SDL_Texture *tex_text;
-	SDLUI_Array children;
+	SDLUI_ArrayOfControls children;
 };
 
 struct SDLUI_Control_TabContainer : SDLUI_Control
 {
 	i32 bar_height;
-	SDLUI_Array tabs;
+	SDLUI_ArrayOfControls tabs;
 	SDLUI_Control_Tab *active_tab;
 	SDLUI_ORIENTATION orientation;
 
@@ -259,7 +259,7 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
 
 		SDL_Color c = {255, 255, 255, 255};
 		SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,tab->text.data, c);
-		tab->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+		tab->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 		SDL_FreeSurface(s);
 
 		this->tabs.push(tab);
@@ -313,12 +313,13 @@ struct SDLUI_Control_ScrollArea : SDLUI_Control
 	i32 content_width;
 	i32 content_height;
 	i32 scrollbar_thickness;
-	i32 track_length_h;
-	i32 track_length_v;
+	i32 track_size_h;
+	i32 track_size_v;
 	i32 thumb_size_h;
 	i32 thumb_size_v;
 	i32 scroll_x;
 	i32 scroll_y;
 	bool is_changing_v;
 	bool is_changing_h;
+	SDL_Texture *tex_rect;
 };

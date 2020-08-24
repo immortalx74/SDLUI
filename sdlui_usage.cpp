@@ -6,14 +6,14 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 		wnd->is_dragged = false;
 	}
 
-	if(wnd == SDLUI_Base.active_window)
+	if(wnd == SDLUI_Core.active_window)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {wnd->x, wnd->y, wnd->w, wnd->h};
 
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			wnd->is_hovered = true;
 		}
@@ -24,14 +24,14 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 
 		r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
 
-		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointInRect(r, mx, my))
 		{
 			wnd->visible = false;
 		}
 
 		r = {wnd->x,wnd->y,wnd->w - 30, 30};
 
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && !wnd->is_dragged)
 			{
@@ -43,7 +43,7 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 
 		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && wnd->is_dragged)
 		{
-			SDL_SetCursor(SDLUI_Base.cursor_arrow);
+			SDL_SetCursor(SDLUI_Core.cursor_arrow);
 			i32 old_x = wnd->x;
 			i32 old_y = wnd->y;
 			wnd->x = mx - wnd->drag_x;
@@ -66,13 +66,13 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 {
 	btn->do_process = true;
 
-	if(btn->visible && btn->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(btn->visible && btn->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {btn->x,btn->y,btn->w,btn->h};
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -103,13 +103,13 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 {
 	si->do_process = true;
 
-	if(si->visible && si->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(si->visible && si->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {si->x,si->y,si->w,si->h};
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -157,13 +157,13 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 {
 	chk->do_process = true;
 
-	if(chk->visible && chk->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(chk->visible && chk->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {chk->x,chk->y,chk->w,chk->h};
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -180,13 +180,13 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 {
 	tb->do_process = true;
 
-	if(tb->visible && tb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(tb->visible && tb->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {tb->x,tb->y,tb->w,tb->h};
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -204,13 +204,13 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 {
 	rb->do_process = true;
 
-	if(rb->visible && rb->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(rb->visible && rb->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
 		SDL_Rect r = {rb->x,rb->y,rb->w,rb->h};
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -237,7 +237,7 @@ bool SDLUI_Text(SDLUI_Control_Text *txt)
 {
 	txt->do_process = true;
 
-	if(txt->visible && txt->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(txt->visible && txt->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		return true;
 	}
@@ -248,7 +248,7 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 {
 	tbc->do_process = true;
 
-	if(tbc->visible && tbc->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(tbc->visible && tbc->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
@@ -257,7 +257,7 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 		i32 offset = 0;
 		SDLUI_Control_Tab *tab;
 
-		if(SDLUI_PointCollision(r, mx, my))
+		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
@@ -266,7 +266,7 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 					tab = (SDLUI_Control_Tab*)tbc->tabs.data[i];
 					tab_r = {tbc->x + offset, tbc->y, tab->w + SDLUI_MARGIN, 30};
 
-					if(SDLUI_PointCollision(tab_r, mx, my))
+					if(SDLUI_PointInRect(tab_r, mx, my))
 					{
 						for (int j = 0; j < tbc->active_tab->children.size; ++j)
 						{
@@ -288,7 +288,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 {
 	sa->do_process = true;
 
-	if(sa->visible && sa->parent == SDLUI_Base.active_window && SDLUI_Base.active_window->is_hovered)
+	if(sa->visible && sa->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
@@ -298,14 +298,14 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 
 		if(sa->content_height > sa->h)
 		{
-			if(SDLUI_PointCollision(r, mx, my))
+			if(SDLUI_PointInRect(r, mx, my))
 			{
 				// mouse wheel vertical
-				if(SDLUI_Base.mouse_wheel_y != 0)
+				if(SDLUI_Core.mouse_wheel_y != 0)
 				{
-					sa->scroll_y -= SDLUI_Base.mouse_wheel_y;
-					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_length_v - sa->thumb_size_v);
-					SDLUI_Base.mouse_wheel_y = 0;
+					sa->scroll_y -= SDLUI_Core.mouse_wheel_y;
+					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);
+					SDLUI_Core.mouse_wheel_y = 0;
 					return true;
 				}
 			}
@@ -313,7 +313,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 			static i32 my_offset;
 
 			rv = {sa->x + sa->w - sa->scrollbar_thickness, sa->y + sa->scroll_y, sa->scrollbar_thickness, sa->thumb_size_v};
-			if(SDLUI_PointCollision(rv, mx, my))
+			if(SDLUI_PointInRect(rv, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
@@ -326,29 +326,29 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 			rv.y = sa->y;
 			rv.h = sa->scroll_y;
 
-			if(SDLUI_PointCollision(rv, mx, my))
+			if(SDLUI_PointInRect(rv, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
 					float pages = (float)sa->content_height / (float)sa->h;
-					float pixels_per_page = (float)sa->track_length_v / pages;
+					float pixels_per_page = (float)sa->track_size_v / pages;
 					sa->scroll_y -= pixels_per_page;
-					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_length_v - sa->thumb_size_v);
+					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);
 					return true;
 				}
 			}
 
 			rv.y = sa->y + sa->scroll_y + sa->thumb_size_v;
-			rv.h = sa->track_length_v - sa->thumb_size_v - sa->scroll_y;
+			rv.h = sa->track_size_v - sa->thumb_size_v - sa->scroll_y;
 
-			if(SDLUI_PointCollision(rv, mx, my))
+			if(SDLUI_PointInRect(rv, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
 					float pages = (float)sa->content_height / (float)sa->h;
-					float pixels_per_page = (float)sa->track_length_v / pages;
+					float pixels_per_page = (float)sa->track_size_v / pages;
 					sa->scroll_y += pixels_per_page;
-					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_length_v - sa->thumb_size_v);
+					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);
 					return true;
 				}
 			}
@@ -358,7 +358,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
 				{
 					sa->scroll_y = my - my_offset;
-					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_length_v - sa->thumb_size_v);
+					sa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);
 				}
 
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED)
@@ -371,14 +371,14 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 
 		if (sa->content_width > sa->w)
 		{
-			if(SDLUI_PointCollision(r, mx, my))
+			if(SDLUI_PointInRect(r, mx, my))
 			{
 				// mouse wheel horizontal
-				if(SDLUI_Base.mouse_wheel_x != 0)
+				if(SDLUI_Core.mouse_wheel_x != 0)
 				{
-					sa->scroll_x += SDLUI_Base.mouse_wheel_x;
-					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_length_h - sa->thumb_size_h);
-					SDLUI_Base.mouse_wheel_x = 0;
+					sa->scroll_x += SDLUI_Core.mouse_wheel_x;
+					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);
+					SDLUI_Core.mouse_wheel_x = 0;
 					return true;
 				}
 			}
@@ -386,7 +386,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 			static i32 mx_offset;
 
 			rh = {sa->x + sa->scroll_x, sa->y + sa->h - sa->scrollbar_thickness, sa->thumb_size_h, sa->scrollbar_thickness};
-			if(SDLUI_PointCollision(rh, mx, my))
+			if(SDLUI_PointInRect(rh, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
@@ -399,29 +399,29 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 			rh.x = sa->x;
 			rh.w = sa->scroll_x;
 
-			if(SDLUI_PointCollision(rh, mx, my))
+			if(SDLUI_PointInRect(rh, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
 					float pages = (float)sa->content_width / (float)sa->w;
-					float pixels_per_page = (float)sa->track_length_h / pages;
+					float pixels_per_page = (float)sa->track_size_h / pages;
 					sa->scroll_x -= pixels_per_page;
-					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_length_h - sa->thumb_size_h);
+					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);
 					return true;
 				}
 			}
 
 			rh.x = sa->x + sa->scroll_x + sa->thumb_size_h;
-			rh.w = sa->track_length_h - sa->thumb_size_h - sa->scroll_x;
+			rh.w = sa->track_size_h - sa->thumb_size_h - sa->scroll_x;
 
-			if(SDLUI_PointCollision(rh, mx, my))
+			if(SDLUI_PointInRect(rh, mx, my))
 			{
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 				{
 					float pages = (float)sa->content_width / (float)sa->w;
-					float pixels_per_page = (float)sa->track_length_h / pages;
+					float pixels_per_page = (float)sa->track_size_h / pages;
 					sa->scroll_x += pixels_per_page;
-					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_length_h - sa->thumb_size_h);
+					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);
 					return true;
 				}
 			}
@@ -431,7 +431,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
 				{
 					sa->scroll_x = mx - mx_offset;
-					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_length_h - sa->thumb_size_h);
+					sa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);
 				}
 
 				if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED)

@@ -16,10 +16,10 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 
 	SDL_Color c = {255, 255, 255, 255};
 	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
-	wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+	wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 	SDL_FreeSurface(s);
 
-	wnd->tex_rect = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+	wnd->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
 
 	wnd->children.create();
 	SDLUI_Window_Collection.push(wnd);
@@ -44,15 +44,15 @@ SDLUI_Control_Button *SDLUI_CreateButton(SDLUI_Control_Window *wnd, i32 x, i32 y
 
 	SDL_Color c = {255, 255, 255, 255};
 	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, c);
-	btn->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+	btn->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 	SDL_FreeSurface(s);
-	btn->tex_back_normal = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
-	btn->tex_back_hover = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
-	btn->tex_back_click = SDL_CreateTexture(SDLUI_Base.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
+	btn->tex_back_normal = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
+	btn->tex_back_hover = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
+	btn->tex_back_click = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
 
-	SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Base.theme.col_base, btn->w-2, btn->h-2, (btn->h-2)/12);
-	SDLUI_GradientToTexture(btn->tex_back_hover, SDLUI_Base.theme.col_highlight, btn->w-2, btn->h-2, (btn->h-2)/12);
-	SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Base.theme.col_border, btn->w-2, btn->h-2, (btn->h-2)/12);
+	SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Core.theme.col_base, btn->w-2, btn->h-2, (btn->h-2)/12);
+	SDLUI_GradientToTexture(btn->tex_back_hover, SDLUI_Core.theme.col_highlight, btn->w-2, btn->h-2, (btn->h-2)/12);
+	SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Core.theme.col_border, btn->w-2, btn->h-2, (btn->h-2)/12);
 
 	wnd->children.push(btn);
 	return btn;
@@ -119,8 +119,8 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
 	txt->h = SDLUI_Font.height;
 	txt->parent = wnd;
 
-	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, SDLUI_Base.theme.col_white);
-	txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Base.renderer, s);
+	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, SDLUI_Core.theme.col_white);
+	txt->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 	SDL_FreeSurface(s);
 
 	wnd->children.push(txt);
@@ -145,14 +145,14 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
 	return tb;
 }
 
-SDLUI_Array SDLUI_Create_RadioButtonGroup()
+SDLUI_ArrayOfControls SDLUI_CreateRadioButtonGroup()
 {
-	SDLUI_Array rb_group;
+	SDLUI_ArrayOfControls rb_group;
 	rb_group.create();
 	return rb_group;
 }
 
-SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SDLUI_Array &group, i32 x, i32 y, bool checked)
+SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SDLUI_ArrayOfControls &group, i32 x, i32 y, bool checked)
 {
 	SDLUI_Control_RadioButton *rb = (SDLUI_Control_RadioButton*)malloc(sizeof(SDLUI_Control_RadioButton));
 
@@ -192,7 +192,7 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
 
 }
 
-SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 x, i32 y, i32 w, i32 h)
+SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 x, i32 y, i32 w, i32 h, SDL_Texture *tex)
 {
 	SDLUI_Control_ScrollArea *sa = (SDLUI_Control_ScrollArea*)malloc(sizeof(SDLUI_Control_ScrollArea));
 
@@ -202,17 +202,20 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->y = wnd->y + y;
 	sa->w = w;
 	sa->h = h;
-	sa->content_width = w*2;
-	sa->content_height = h*3;
+	// sa->content_width = w*2;
+	// sa->content_height = h*3;
 	sa->scrollbar_thickness = 12;
-	sa->track_length_h = sa->w - sa->scrollbar_thickness;
-	sa->track_length_v = sa->h - sa->scrollbar_thickness;
+	sa->track_size_h = sa->w - sa->scrollbar_thickness;
+	sa->track_size_v = sa->h - sa->scrollbar_thickness;
 	sa->thumb_size_h = w;
 	sa->thumb_size_v = h;
 	sa->scroll_x = 0;
 	sa->scroll_y = 0;
 	sa->is_changing_v = false;
 	sa->is_changing_h = false;
+	sa->tex_rect = tex;
+	SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height);
+
 	sa->parent = wnd;
 
 	wnd->children.push(sa);
