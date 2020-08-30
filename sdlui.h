@@ -26,23 +26,3 @@ typedef int64_t i64;
 #include "sdlui_create.cpp"
 #include "sdlui_event.cpp"
 #include "sdlui_usage.cpp"
-
-// Each window should have an array of children
-// Each control should have a parent_window pointer field (in SDLUI_Control struct)
-// Could a window belong to another window or NULL if it lives on screen???
-// A window_collection array holds pointers to all windows
-
-// Each window has an "active" field. With every click on screen, a check should
-// be made to determine if it's inside the active window. If not, another check
-// should be made to determine if it's inside another window. If true, first make
-// the other window active. Proccess ONLY the active window's child controls
-// on render loop (by checking if the control on current iteration belongs to
-// the active_window??)
-
-// Make the active window and its children render last.
-
-// Controls that belong to a window should get clipped it their position is outside
-// of the window bounds. Maybe render each window with its controls to a texture
-// and then draw only the window rectangle part of the texture?
-
-// Windows should prob have a resize feature

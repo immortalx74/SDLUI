@@ -202,22 +202,55 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->y = wnd->y + y;
 	sa->w = w;
 	sa->h = h;
-	// sa->content_width = w*2;
-	// sa->content_height = h*3;
 	sa->scrollbar_thickness = 12;
 	sa->track_size_h = sa->w - sa->scrollbar_thickness;
 	sa->track_size_v = sa->h - sa->scrollbar_thickness;
-	sa->thumb_size_h = w;
-	sa->thumb_size_v = h;
+	//sa->thumb_size_h = w;
+	//sa->thumb_size_v = h;
 	sa->scroll_x = 0;
 	sa->scroll_y = 0;
 	sa->is_changing_v = false;
 	sa->is_changing_h = false;
 	sa->tex_rect = tex;
-	SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height);
+	if(SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height) == 0)
+	{
+		if(sa->content_width > sa->w)
+		{
+			sa->client_height = sa->h - sa->scrollbar_thickness;
+		}
+		if(sa->content_height > sa->h)
+		{
+			sa->client_width = sa->w - sa->scrollbar_thickness;
+		}
+	}
+	else
+	{
+		sa->client_width = sa->w;
+		sa->client_height = sa->h;
+	}
 
 	sa->parent = wnd;
 
 	wnd->children.push(sa);
 	return sa;
+}
+
+SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_ScrollArea *sa, i32 num_items)
+{
+	SDLUI_Control_List *lst = (SDLUI_Control_List*)malloc(sizeof(SDLUI_Control_List));
+
+	lst->type = SDLUI_CONTROL_TYPE_LIST;
+	lst->do_process = false;
+	lst->scroll_area = sa;
+	lst->num_items = num_items;
+	lst->cur_index = 0;
+
+	i32 h = num_items * SDLUI_Font.height;
+	sa->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sa->w, h);
+	sa->client_width = sa->w - sa->scrollbar_thickness;
+
+	lst->parent = wnd;
+
+	wnd->children.push(lst);
+	return lst;
 }

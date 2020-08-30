@@ -1,6 +1,6 @@
 // Render ---------------------------------------------------
 
-void SDLUI_DrawText(i32 x, i32 y, char *text, SDL_Texture *dst)
+void SDLUI_DrawText(i32 x, i32 y, const char *text, SDL_Texture *dst)
 {
 	SDL_SetRenderTarget(SDLUI_Core.renderer, dst);
 	i32 cur_char;
@@ -162,7 +162,7 @@ void SDLUI_Render_Text(SDLUI_Control_Text *txt)
 
 		SDLUI_SetColor(SDLUI_Core.theme.col_white);
 		SDL_Rect r = {xx, yy, txt->w, txt->h};
-		SDL_RenderCopy(SDLUI_Core.renderer, txt->tex_text, NULL, &r);;
+		SDL_RenderCopy(SDLUI_Core.renderer, txt->tex_text, NULL, &r);
 	}
 }
 
@@ -292,19 +292,17 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 		i32 yy = sa->y - sa->parent->y;
 
 		SDL_Rect r;
-		SDL_Rect dst = {xx, yy, sa->w, sa->h};
+		SDL_Rect dst = {xx, yy, sa->client_width, sa->client_height};
 
 		if(sa->content_height > sa->h)
 		{
-			dst.h -= sa->scrollbar_thickness;
-
 			// vertical scrollbar
 			SDLUI_SetColor(SDLUI_Core.theme.col_border);
 			r = {xx + sa->w - sa->scrollbar_thickness, yy, sa->scrollbar_thickness, sa->track_size_v};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
 			SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
-			sa->thumb_size_v = (float)(sa->track_size_v * sa->h) / (float)sa->content_height;
+			sa->thumb_size_v = (float)(sa->track_size_v * (sa->h - sa->scrollbar_thickness)) / (float)sa->content_height;
 
 			r = {xx + sa->w - sa->scrollbar_thickness+1, yy + sa->scroll_y, sa->scrollbar_thickness-4, sa->thumb_size_v};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -312,30 +310,60 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 
 		if(sa->content_width > sa->w)
 		{
-			dst.w -= sa->scrollbar_thickness;
-
 			// horizontal scrollbar
 			SDLUI_SetColor(SDLUI_Core.theme.col_border);
 			r = {xx, yy + sa->h - sa->scrollbar_thickness, sa->track_size_h, sa->scrollbar_thickness};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
 			SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
-			sa->thumb_size_h = (float)(sa->track_size_h * sa->w) / (float)sa->content_width;
+			sa->thumb_size_h = (float)(sa->track_size_h * (sa->w - sa->scrollbar_thickness)) / (float)sa->content_width;
 
 			r = {xx + sa->scroll_x, yy + sa->h - sa->scrollbar_thickness+1, sa->thumb_size_h, sa->scrollbar_thickness-4};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 		}
 
 		// Texture
-		//SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height);
+		if(SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height) == 0)
+		{
+			if(sa->content_width > sa->w)
+			{
+				sa->client_height = sa->h - sa->scrollbar_thickness;
+			}
+			if(sa->content_height > sa->h)
+			{
+				sa->client_width = sa->w - sa->scrollbar_thickness;
+			}
+		}
+		else
+		{
+			sa->content_width = sa->w;
+			sa->content_height = sa->h;
+		}
 
-		SDL_Rect src = {sa->scroll_x*3, sa->scroll_y*3, dst.w, dst.h};
+		float ratio_y = (float)sa->content_height / sa->client_height;
+		float ratio_x = (float)sa->content_width / sa->client_width;
+
+		float offset_x = sa->scroll_x * ratio_x;
+		float offset_y = sa->scroll_y * ratio_y;
+		offset_x = SDLUI_Clamp(offset_x, 0, sa->content_width - sa->w);
+		offset_y = SDLUI_Clamp(offset_y, 0, sa->content_height - sa->h);
+
+		SDL_Rect src = {(i32)offset_x, (i32)offset_y, sa->w, sa->h};
 		SDL_RenderCopy(SDLUI_Core.renderer, sa->tex_rect, &src, &dst);
 
 		// Container rect
 		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
 		r = {xx, yy, sa->w, sa->h};
 		SDL_RenderDrawRect(SDLUI_Core.renderer, &r);
+	}
+}
+
+void SDLUI_Render_List(SDLUI_Control_List *lst)
+{
+	if(lst->visible)
+	{
+		i32 xx = lst->scroll_area->x - lst->scroll_area->parent->x;
+		i32 yy = lst->scroll_area->y - lst->scroll_area->parent->y;
 	}
 }
 
@@ -388,6 +416,12 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
 		case SDLUI_CONTROL_TYPE_SCROLL_AREA:
 		{
 			SDLUI_Render_ScrollArea((SDLUI_Control_ScrollArea*)ctrl);
+		}
+		break;
+
+		case SDLUI_CONTROL_TYPE_LIST:
+		{
+			SDLUI_Render_List((SDLUI_Control_List*)ctrl);
 		}
 		break;
 	}

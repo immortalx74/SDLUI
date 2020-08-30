@@ -60,6 +60,7 @@ struct SDLUI_Theme
 	SDL_Color col_white = {255, 255, 255, 255};
 	SDL_Color col_grey = {127, 127, 127, 255};
 	SDL_Color col_red = {222, 17, 35, 255};
+	SDL_Color col_black = {0, 0, 0, 255};
 };
 
 struct SDLUI_Control
@@ -312,6 +313,8 @@ struct SDLUI_Control_ScrollArea : SDLUI_Control
 {
 	i32 content_width;
 	i32 content_height;
+	i32 client_width;
+	i32 client_height;
 	i32 scrollbar_thickness;
 	i32 track_size_h;
 	i32 track_size_v;
@@ -322,4 +325,12 @@ struct SDLUI_Control_ScrollArea : SDLUI_Control
 	bool is_changing_v;
 	bool is_changing_h;
 	SDL_Texture *tex_rect;
+};
+
+struct SDLUI_Control_List : SDLUI_Control
+{
+	SDLUI_Control_ScrollArea *scroll_area;
+	i32 num_items;
+	i32 cur_index;
+	const char *cur_item;
 };

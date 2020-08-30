@@ -4,11 +4,21 @@ SDLUI_Window(wnd3);
 if(SDLUI_Button(btn1)) {std::cout << "btn1" << std::endl;}
 if(SDLUI_SliderInt(si1)) {std::cout << si1->value << std::endl;}
 if(SDLUI_SliderInt(si2)) {std::cout << si2->value << std::endl;}
+
+
+SDLUI_ScrollArea(sa1);
+
+for (int i = 0; i < list_items.size(); ++i)
+{
+	SDLUI_List(lst1, list_items[i].c_str(), list_items.size());
+}
+
 if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
 if(SDLUI_Button(btn2)) {std::cout << "btn2" << std::endl;}
 if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
 SDLUI_Text(txt1);
-if(SDLUI_ScrollArea(sa)) {std::cout << sa->scroll_x << "-" << sa->scroll_y << std::endl;;}
+if(SDLUI_ScrollArea(sa2)) {std::cout << sa2->scroll_x << "-" << sa2->scroll_y << std::endl;}
+
 
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}
 if(SDLUI_RadioButton(rb2)) {std::cout << "rb2" << std::endl;}

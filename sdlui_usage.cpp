@@ -446,3 +446,49 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 	}
 	return false;
 }
+
+bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)
+{
+	lst->do_process = true;
+
+	lst->num_items = num_items;
+
+	static i32 offset_y;
+	static i32 counter;
+
+	if(counter == 0)
+	{
+		SDLUI_SetColor(SDLUI_Core.theme.col_black);
+		SDL_Rect r = {0, 0, lst->scroll_area->content_width, lst->scroll_area->content_height};
+		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
+		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+		SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+	}
+
+	SDLUI_DrawText(SDLUI_MARGIN, offset_y, cur_item, lst->scroll_area->tex_rect);
+	offset_y += SDLUI_Font.height;
+	counter++;
+
+	if(counter == num_items)
+	{
+		offset_y = 0;
+		counter = 0;
+	}
+
+	if(lst->visible && lst->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void SDLUI_ListStart()
+{
+
+}
+
+void SDLUI_ListEnd()
+{
+
+}
