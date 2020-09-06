@@ -48,19 +48,21 @@ struct SDLUI_String
 
 struct SDLUI_Theme
 {
-	SDL_Color col_base = {55, 55, 55, 255};
-	SDL_Color col_border = {38, 38, 38, 255};
+	SDL_Color col_window_bg = {40, 40, 40, 255};
+	SDL_Color col_border = {68, 68, 68, 255};
 	SDL_Color col_active_window_bar = {10, 10, 10, 255};
-	SDL_Color col_inactive_window_bar = {40, 40, 40, 255};
-	SDL_Color col_hover = {80, 80, 80, 255};
-	SDL_Color col_click = {40, 40, 40, 255};
-	SDL_Color col_highlight = {65, 105, 225, 255};
+	SDL_Color col_inactive_window_bar = {32, 32, 32, 255};
+	SDL_Color col_button_normal = {44, 44, 44, 255};
+	SDL_Color col_button_click = {20, 20, 20, 255};
+	SDL_Color col_highlight = {0, 120, 215, 255};
 	SDL_Color col_test = {255, 0, 225, 255};
-	SDL_Color col_thumb = {66, 66, 66, 255};
+	SDL_Color col_scrollbar_thumb = {26, 26, 26, 255};
+	SDL_Color col_scrollbar_track = {56, 56, 56, 255};
 	SDL_Color col_white = {255, 255, 255, 255};
-	SDL_Color col_grey = {127, 127, 127, 255};
+	SDL_Color col_grey = {80, 80, 80, 255};
 	SDL_Color col_red = {222, 17, 35, 255};
 	SDL_Color col_black = {0, 0, 0, 255};
+	SDL_Color col_list_background = {32, 32, 32, 255};
 };
 
 struct SDLUI_Control

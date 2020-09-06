@@ -9,7 +9,7 @@ SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
 SDLUI_Control_ScrollArea *sa1 = SDLUI_CreateScrollArea(wnd1, 10, 220, 320, 160, NULL);
 
 std::vector<std::string> list_items;
-for (int i = 0; i <= 150; ++i)
+for (int i = 0; i < 100; ++i)
 {
 	std::string cur_item = "List Item:";
 	cur_item += std::to_string(i);
@@ -22,7 +22,7 @@ SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");
 SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, false);
 SDLUI_Control_Text *txt1 = SDLUI_CreateText(wnd2, 50, 90, "Some text here!");
 
-SDL_Surface *surf = IMG_Load("res/forest2.png");
+SDL_Surface *surf = IMG_Load("res/test1.png");
 SDL_Texture *tex = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, surf);
 SDL_FreeSurface(surf);
 SDLUI_Control_ScrollArea *sa2 = SDLUI_CreateScrollArea(wnd2, 10, 120, 400, 100, tex);

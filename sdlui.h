@@ -1,5 +1,13 @@
 #pragma once
 
+#ifdef _WIN32
+	#define WIN32_LEAN_AND_MEAN
+	#pragma comment(lib, "Shcore.lib")
+	#include <windows.h>
+	#include <ShellScalingAPI.h>
+	#include <comdef.h>
+#endif
+
 #include <iostream>
 #include "SDL_ttf.h"
 #include "SDL_image.h"

@@ -458,7 +458,7 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)
 
 	if(counter == 0)
 	{
-		SDLUI_SetColor(SDLUI_Core.theme.col_black);
+		SDLUI_SetColor(SDLUI_Core.theme.col_list_background);
 		SDL_Rect r = {0, 0, lst->scroll_area->content_width, lst->scroll_area->content_height};
 		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
 		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -481,14 +481,4 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)
 	}
 
 	return false;
-}
-
-void SDLUI_ListStart()
-{
-
-}
-
-void SDLUI_ListEnd()
-{
-
 }

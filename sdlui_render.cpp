@@ -54,7 +54,7 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 		}
 
 		r = {xx, yy, btn->w, btn->h};
-		SDLUI_SetColor(SDLUI_Core.theme.col_border);
+		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
 		SDL_RenderDrawRect(SDLUI_Core.renderer, &r);
 
 		i32 tex_w, tex_h;
@@ -96,7 +96,7 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
 
 			SDL_Rect r = {xx + fill-8, yy, 16, 16};
 			r.x = SDLUI_Clamp(r.x, xx, xx + si->w - 14);
-			SDLUI_Colorize(SDLUI_Core.tex_circle_fill_1, SDLUI_Core.theme.col_thumb);
+			SDLUI_Colorize(SDLUI_Core.tex_circle_fill_1, SDLUI_Core.theme.col_scrollbar_thumb);
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_circle_fill_1, NULL, &r);
 			SDLUI_Colorize(SDLUI_Core.tex_circle, SDLUI_Core.theme.col_white);
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_circle, NULL, &r);
@@ -116,7 +116,7 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
 
 			SDL_Rect r = {xx, yy + si->h - fill-8, 16, 16};
 			r.y = SDLUI_Clamp(r.y, yy, yy + si->h - 14);
-			SDLUI_Colorize(SDLUI_Core.tex_circle_fill_1, SDLUI_Core.theme.col_thumb);
+			SDLUI_Colorize(SDLUI_Core.tex_circle_fill_1, SDLUI_Core.theme.col_scrollbar_thumb);
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_circle_fill_1, NULL, &r);
 			SDLUI_Colorize(SDLUI_Core.tex_circle, SDLUI_Core.theme.col_white);
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_circle, NULL, &r);
@@ -246,7 +246,7 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
 			offset += SDLUI_MARGIN + tab->w;
 		}
 
-		SDLUI_SetColor(SDLUI_Core.theme.col_base);
+		SDLUI_SetColor(SDLUI_Core.theme.col_window_bg);
 		r = {xx, yy + tbc->bar_height, tbc->w, tbc->h - tbc->bar_height};
 		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
@@ -297,11 +297,11 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 		if(sa->content_height > sa->h)
 		{
 			// vertical scrollbar
-			SDLUI_SetColor(SDLUI_Core.theme.col_border);
+			SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_track);
 			r = {xx + sa->w - sa->scrollbar_thickness, yy, sa->scrollbar_thickness, sa->track_size_v};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
-			SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
+			SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_thumb);
 			sa->thumb_size_v = (float)(sa->track_size_v * (sa->h - sa->scrollbar_thickness)) / (float)sa->content_height;
 
 			r = {xx + sa->w - sa->scrollbar_thickness+1, yy + sa->scroll_y, sa->scrollbar_thickness-4, sa->thumb_size_v};
@@ -311,11 +311,11 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 		if(sa->content_width > sa->w)
 		{
 			// horizontal scrollbar
-			SDLUI_SetColor(SDLUI_Core.theme.col_border);
+			SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_track);
 			r = {xx, yy + sa->h - sa->scrollbar_thickness, sa->track_size_h, sa->scrollbar_thickness};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
-			SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
+			SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_thumb);
 			sa->thumb_size_h = (float)(sa->track_size_h * (sa->w - sa->scrollbar_thickness)) / (float)sa->content_width;
 
 			r = {xx + sa->scroll_x, yy + sa->h - sa->scrollbar_thickness+1, sa->thumb_size_h, sa->scrollbar_thickness-4};
@@ -336,8 +336,8 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 		}
 		else
 		{
-			sa->content_width = sa->w;
-			sa->content_height = sa->h;
+			sa->client_width = sa->w;
+			sa->client_height = sa->h;
 		}
 
 		float ratio_y = (float)sa->content_height / sa->client_height;
@@ -345,10 +345,11 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 
 		float offset_x = sa->scroll_x * ratio_x;
 		float offset_y = sa->scroll_y * ratio_y;
-		offset_x = SDLUI_Clamp(offset_x, 0, sa->content_width - sa->w);
-		offset_y = SDLUI_Clamp(offset_y, 0, sa->content_height - sa->h);
 
-		SDL_Rect src = {(i32)offset_x, (i32)offset_y, sa->w, sa->h};
+		offset_x = SDLUI_Clamp(offset_x, 0, sa->content_width - sa->client_width);
+		offset_y = SDLUI_Clamp(offset_y, 0, sa->content_height - sa->client_height);
+
+		SDL_Rect src = {(i32)offset_x, (i32)offset_y, sa->client_width, sa->client_height};
 		SDL_RenderCopy(SDLUI_Core.renderer, sa->tex_rect, &src, &dst);
 
 		// Container rect
@@ -465,7 +466,7 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 			r = {SDLUI_MARGIN, SDLUI_MARGIN, tex_w, tex_h};
 			SDL_RenderCopy(SDLUI_Core.renderer, wnd->tex_title, NULL, &r);
 
-			SDLUI_SetColor(SDLUI_Core.theme.col_base);
+			SDLUI_SetColor(SDLUI_Core.theme.col_window_bg);
 			r = {0, 0 + 30, wnd->w, wnd->h - 30};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 

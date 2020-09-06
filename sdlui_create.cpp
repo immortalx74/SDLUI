@@ -50,9 +50,9 @@ SDLUI_Control_Button *SDLUI_CreateButton(SDLUI_Control_Window *wnd, i32 x, i32 y
 	btn->tex_back_hover = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
 	btn->tex_back_click = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
 
-	SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Core.theme.col_base, btn->w-2, btn->h-2, (btn->h-2)/12);
+	SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Core.theme.col_button_normal, btn->w-2, btn->h-2, (btn->h-2)/12);
 	SDLUI_GradientToTexture(btn->tex_back_hover, SDLUI_Core.theme.col_highlight, btn->w-2, btn->h-2, (btn->h-2)/12);
-	SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Core.theme.col_border, btn->w-2, btn->h-2, (btn->h-2)/12);
+	SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Core.theme.col_button_click, btn->w-2, btn->h-2, (btn->h-2)/12);
 
 	wnd->children.push(btn);
 	return btn;
@@ -205,8 +205,6 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->scrollbar_thickness = 12;
 	sa->track_size_h = sa->w - sa->scrollbar_thickness;
 	sa->track_size_v = sa->h - sa->scrollbar_thickness;
-	//sa->thumb_size_h = w;
-	//sa->thumb_size_v = h;
 	sa->scroll_x = 0;
 	sa->scroll_y = 0;
 	sa->is_changing_v = false;
@@ -232,6 +230,7 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->parent = wnd;
 
 	wnd->children.push(sa);
+
 	return sa;
 }
 
@@ -247,7 +246,20 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 
 	i32 h = num_items * SDLUI_Font.height;
 	sa->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sa->w, h);
-	sa->client_width = sa->w - sa->scrollbar_thickness;
+	sa->content_width = sa->w;
+	sa->content_height = h;
+
+	// if(sa->content_height > sa->h)
+	// {
+	// 	if(sa->content_width > sa->w)
+	// 	{
+	// 		sa->client_height = sa->h - sa->scrollbar_thickness;
+	// 	}
+	// 	else
+	// 	{
+	// 		sa->client_height = sa->h;
+	// 	}
+	// }
 
 	lst->parent = wnd;
 

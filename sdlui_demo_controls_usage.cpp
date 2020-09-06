@@ -14,10 +14,11 @@ for (int i = 0; i < list_items.size(); ++i)
 }
 
 if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
+
 if(SDLUI_Button(btn2)) {std::cout << "btn2" << std::endl;}
 if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
 SDLUI_Text(txt1);
-if(SDLUI_ScrollArea(sa2)) {std::cout << sa2->scroll_x << "-" << sa2->scroll_y << std::endl;}
+if(SDLUI_ScrollArea(sa2)) {}
 
 
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}

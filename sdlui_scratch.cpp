@@ -109,13 +109,13 @@ struct SDLUI_String
 
 struct SDLUI_Theme
 {
-    SDL_Color col_base = {75, 75, 75, 255};
+    SDL_Color col_window_bg = {75, 75, 75, 255};
     SDL_Color col_border = {38, 38, 38, 255};
     SDL_Color col_hover = {80, 80, 80, 255};
-    SDL_Color col_click = {40, 40, 40, 255};
+    SDL_Color col_button_click = {40, 40, 40, 255};
     SDL_Color col_highlight = {65, 105, 225, 255};
     SDL_Color col_test = {255, 0, 225, 255};
-    SDL_Color col_thumb = {66, 66, 66, 255};
+    SDL_Color col_scrollbar_thumb = {66, 66, 66, 255};
     SDL_Color col_white = {255, 255, 255, 255};
     SDL_Color col_grey = {127, 127, 127, 255};
 };
@@ -496,7 +496,7 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
             r = {si->x + fill, si->y, empty, si->h};
             SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
-            SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
+            SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_thumb);
             r = {si->x + fill, si->y, si->thumb_size, si->h};
             r.x = SDLUI_Clamp(r.x, si->x, si->x + si->w - si->thumb_size);
             SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -517,7 +517,7 @@ void SDLUI_Render_SliderInt(SDLUI_Control_SliderInt *si)
             r = {si->x, si->y + empty, si->w, fill};
             SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
-            SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
+            SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_thumb);
             r = {si->x, si->y + empty, si->w, si->thumb_size};
             r.y = SDLUI_Clamp(r.y, si->y, si->y + si->h - si->thumb_size);
             SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -595,7 +595,7 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
             }
             else
             {
-                SDLUI_SetColor(SDLUI_Core.theme.col_thumb);
+                SDLUI_SetColor(SDLUI_Core.theme.col_scrollbar_thumb);
             }
             SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 
@@ -748,7 +748,7 @@ SDLUI_Control_Button *SDLUI_CreateButton(char * caption, i32 x, i32 y)
         ctrl->button.t_back_hover = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, ctrl->button.w - 2, ctrl->button.h - 2);
         ctrl->button.t_back_click = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, ctrl->button.w - 2, ctrl->button.h - 2);
 
-        SDLUI_GradientToTexture(ctrl->button.t_back_normal, SDLUI_Core.theme.col_base, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
+        SDLUI_GradientToTexture(ctrl->button.t_back_normal, SDLUI_Core.theme.col_window_bg, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
         SDLUI_GradientToTexture(ctrl->button.t_back_hover, SDLUI_Core.theme.col_highlight, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
         SDLUI_GradientToTexture(ctrl->button.t_back_click, SDLUI_Core.theme.col_border, ctrl->button.w-2, ctrl->button.h-2, (ctrl->button.h-2)/12);
 
