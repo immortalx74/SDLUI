@@ -113,14 +113,14 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
 			{
-				if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
-				{
-					si->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);
-				}
-				else
-				{
-					si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
-				}
+				// if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)
+				// {
+				// 	si->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);
+				// }
+				// else
+				// {
+				// 	si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
+				// }
 
 				si->is_changing = true;
 			}
@@ -138,6 +138,9 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 				si->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);
 				si->value = SDLUI_Clamp(si->value, si->min, si->max);
 			}
+
+			// NOTE: Return here or on mouse release?
+			return true;
 		}
 
 		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && si->is_changing)
@@ -149,7 +152,7 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 		return false;
 	}
 
-	si->is_changing = false;
+	//si->is_changing = false;
 	return false;
 }
 
@@ -447,14 +450,36 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 	return false;
 }
 
-bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)
+bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i32 cur_index)
 {
 	lst->do_process = true;
 
-	lst->num_items = num_items;
-
 	static i32 offset_y;
 	static i32 counter;
+	i32 mx, my;
+	SDL_GetMouseState(&mx, &my);
+	SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
+
+	if(SDLUI_PointInRect(r, mx, my) && cur_index == 0)
+	{
+		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+		{
+			float ratio = (float)lst->scroll_area->content_height / (float)lst->scroll_area->client_height;
+			float oy = my - lst->scroll_area->y + ((float)lst->scroll_area->scroll_y * ratio);
+			lst->selected_index = oy / SDLUI_Font.height;
+		}
+	}
+
+
+	if(lst->num_items != num_items)
+	{
+		lst->num_items = num_items;
+		SDL_DestroyTexture(lst->scroll_area->tex_rect);
+		i32 h = num_items * SDLUI_Font.height;
+		lst->scroll_area->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, lst->scroll_area->w, h);
+		lst->scroll_area->content_width = lst->scroll_area->w;
+		lst->scroll_area->content_height = h;
+	}
 
 	if(counter == 0)
 	{
@@ -463,6 +488,14 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)
 		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
 		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 		SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+	}
+
+	if(counter == lst->selected_index)
+	{
+		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
+		SDLUI_SetColor(SDLUI_Core.theme.col_highlight);
+		SDL_Rect r = {0, lst->selected_index * SDLUI_Font.height, lst->scroll_area->w, SDLUI_Font.height};
+		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 	}
 
 	SDLUI_DrawText(SDLUI_MARGIN, offset_y, cur_item, lst->scroll_area->tex_rect);

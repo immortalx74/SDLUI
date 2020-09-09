@@ -333,6 +333,6 @@ struct SDLUI_Control_List : SDLUI_Control
 {
 	SDLUI_Control_ScrollArea *scroll_area;
 	i32 num_items;
-	i32 cur_index;
+	i32 selected_index;
 	const char *cur_item;
 };

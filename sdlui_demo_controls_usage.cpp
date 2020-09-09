@@ -10,7 +10,7 @@ SDLUI_ScrollArea(sa1);
 
 for (int i = 0; i < list_items.size(); ++i)
 {
-	SDLUI_List(lst1, list_items[i].c_str(), list_items.size());
+	SDLUI_List(lst1, list_items[i].c_str(), list_items.size(), i);
 }
 
 if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
@@ -18,7 +18,7 @@ if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
 if(SDLUI_Button(btn2)) {std::cout << "btn2" << std::endl;}
 if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
 SDLUI_Text(txt1);
-if(SDLUI_ScrollArea(sa2)) {}
+if(SDLUI_ScrollArea(sa2)) {;}
 
 
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}
@@ -31,3 +31,72 @@ SDLUI_RadioButton(rb6);
 if(SDLUI_ToggleButton(tb1)) {std::cout << "tb1" << std::endl;}
 if(SDLUI_Button(btn3)) {std::cout << "btn3" << std::endl;}
 (SDLUI_TabContainer(tbc1));
+
+
+SDLUI_Window(wnd4);
+if(SDLUI_Button(btn_copy))
+{
+	SDLUI_Control_SliderInt *cur;
+	std::string cb =
+	"SDLUI_Theme my_theme = {\n\t{";
+
+	for (int i = 0; i < num_sliders; ++i)
+	{
+		cur = (SDLUI_Control_SliderInt*)color_sliders.data[i];
+
+		cb += std::to_string(cur->value);
+
+		if((i + 1) % 3 == 0)
+		{
+			if(i < num_sliders - 1)
+			{
+				cb += ", 255},\n\t{";
+			}
+			else
+			{
+				cb += ", 255}\n};";
+			}
+
+		}
+		else
+		{
+			cb += ", ";
+		}
+	}
+
+	SDL_SetClipboardText(cb.c_str());
+}
+SDLUI_Control_SliderInt * col_slider;
+
+SDLUI_Text(txt01);
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[0];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_active_window_bar.r = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[1];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_active_window_bar.g = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[2];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_active_window_bar.b = col_slider->value; SDLUI_ForceReDraw();}
+
+SDLUI_Text(txt02);
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[3];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_inactive_window_bar.r = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[4];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_inactive_window_bar.g = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[5];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_inactive_window_bar.b = col_slider->value; SDLUI_ForceReDraw();}
+
+SDLUI_Text(txt03);
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[6];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_window_bg.r = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[7];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_window_bg.g = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[8];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_window_bg.b = col_slider->value; SDLUI_ForceReDraw();}
+
+SDLUI_Text(txt04);
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[9];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.r = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.g = col_slider->value; SDLUI_ForceReDraw();}
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11];
+if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.b = col_slider->value; SDLUI_ForceReDraw();}
+

@@ -242,24 +242,33 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 	lst->do_process = false;
 	lst->scroll_area = sa;
 	lst->num_items = num_items;
-	lst->cur_index = 0;
+	lst->selected_index = 2;
 
 	i32 h = num_items * SDLUI_Font.height;
 	sa->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sa->w, h);
 	sa->content_width = sa->w;
 	sa->content_height = h;
 
-	// if(sa->content_height > sa->h)
-	// {
-	// 	if(sa->content_width > sa->w)
-	// 	{
-	// 		sa->client_height = sa->h - sa->scrollbar_thickness;
-	// 	}
-	// 	else
-	// 	{
-	// 		sa->client_height = sa->h;
-	// 	}
-	// }
+	sa->client_height = sa->h - sa->scrollbar_thickness;
+
+	if(SDL_QueryTexture(sa->tex_rect, NULL, NULL, &sa->content_width, &sa->content_height) == 0)
+	{
+		if(sa->content_width > sa->w)
+		{
+			sa->client_height = sa->h - sa->scrollbar_thickness;
+		}
+		if(sa->content_height > sa->h)
+		{
+			sa->client_width = sa->w - sa->scrollbar_thickness;
+		}
+	}
+	else
+	{
+		sa->client_width = sa->w;
+		sa->client_height = sa->h;
+	}
+
+
 
 	lst->parent = wnd;
 

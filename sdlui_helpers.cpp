@@ -93,6 +93,10 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 	SDLUI_Core.tex_close = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 
 	SDL_FreeSurface(s);
+	if (SDL_RWclose(rw) != 0)
+	{
+std::cout << "error" << std::endl;
+	}
 }
 
 void SDLUI_MouseStateReset()

@@ -49,3 +49,52 @@ tbc1->add_tab("Third");
 
 tbc1->add_child(0, tb1);
 tbc1->add_child(0, btn3);
+
+
+
+const int num_sliders = 12;
+SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 10, 820, 400, "colors");
+SDLUI_Control_Button *btn_copy = SDLUI_CreateButton(wnd4, 680, 40, "Copy");
+
+SDLUI_Control_Text *txt01 = SDLUI_CreateText(wnd4, 10, 40, "Active window bar");
+SDLUI_Control_Text *txt02 = SDLUI_CreateText(wnd4, 10, 70, "Inactive window bar");;
+SDLUI_Control_Text *txt03 = SDLUI_CreateText(wnd4, 10, 100, "Window bg");
+SDLUI_Control_Text *txt04 = SDLUI_CreateText(wnd4, 10, 130, "Highlight");
+
+SDLUI_ArrayOfControls color_sliders;
+color_sliders.create();
+
+i32 x = 200, y = 40;
+
+for (int i = 0; i < num_sliders; ++i)
+{
+	SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(wnd4, x, y, 0, 255, 0);
+	si->w = 128;
+
+	color_sliders.push(si);
+
+	x += 150;
+
+	if((i + 1) % 3 == 0 && i > 0)
+	{
+		x = 200;
+		y += 30;
+	}
+}
+
+SDLUI_Control_SliderInt * col_slider;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[0]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.r;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[1]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.g;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[2]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.b;
+
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[3]; col_slider->value = SDLUI_Core.theme.col_inactive_window_bar.r;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[4]; col_slider->value = SDLUI_Core.theme.col_inactive_window_bar.g;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[5]; col_slider->value = SDLUI_Core.theme.col_inactive_window_bar.b;
+
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[6]; col_slider->value = SDLUI_Core.theme.col_window_bg.r;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[7]; col_slider->value = SDLUI_Core.theme.col_window_bg.g;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[8]; col_slider->value = SDLUI_Core.theme.col_window_bg.b;
+
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[9]; col_slider->value = SDLUI_Core.theme.col_highlight.r;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10]; col_slider->value = SDLUI_Core.theme.col_highlight.g;
+col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11]; col_slider->value = SDLUI_Core.theme.col_highlight.b;
