@@ -1,3 +1,18 @@
+// SDL skeleton application demonstrating how to use SDLUI.
+
+// There are 4 function calls that handle initialization, input, window management and rendering:
+// SDLUI_Init
+// SDLUI_EventHandler
+// SDLUI_WindowHandler
+// SDLUI_Render
+
+// Control creation and usage is performed with functions of the following convention:
+// Control creation: 	SDLUI_Create< control name >
+// Control usage: 		SDLUI< control name >
+
+// The rest of the code is just what one would find in a typical SDL application.
+// NOTE: The in-place includes were done for clarity.
+
 #include "SDL.h"
 #include "sdlui.h"
 #include <iostream>
@@ -7,34 +22,28 @@
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *window = SDL_CreateWindow("SDLUI app", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window *window = SDL_CreateWindow("SDLUI app",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                          1200, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE |
+                                          SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	// Initializes SDLUI
+	// Initializes SDLUI. Called after a window and renderer have been created.
     SDLUI_Init(renderer, window);
+
+	// Each SDLUI_Create_xxx function returns a pointer to a control. It is used to access its properties,
+	// and is later passed on to its usage function inside tha main application loop.
+	#include "sdlui_demo_controls_creation.cpp"
 
     bool quit = false;
     SDL_Event e;
 
-	// Each SDLUI_Create_xxx function returns a pointer to a control. These are used as "handles"
-	// to call a control's logic, or to modify its properties.
-	#include "sdlui_demo_controls_create.cpp"
-
     while (!quit)
     {
-    	while (SDL_PollEvent(&e))
+    	if (SDL_WaitEvent(&e) != 0)
     	{
     		if (e.type == SDL_QUIT)
     		{
     			quit = true;
-    		}
-    		if(e.type == SDL_KEYDOWN)
-    		{
-    			if(e.key.keysym.sym == SDLK_RETURN)
-    			{
-					// txt1->text.modify("Button");
-    				save_texture(renderer, sa1->tex_rect, "testimg.bmp");
-    			}
     		}
     		if(e.type == SDL_WINDOWEVENT)
     		{
@@ -44,20 +53,21 @@ int main(int argc, char *argv[])
     				{
     					if(e.window.event == SDL_WINDOWEVENT_RESTORED || e.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
     					{
+    						SDLUI_ForceReDraw();
     						break;
     					}
     				}
     			}
     		}
 
-			// Needs to be called inside the event loop, to capture mouse input and window events.
+			// Captures mouse input and window events.
     		SDLUI_EventHandler(e);
     	}
 
 		// Manages SDLUI windows and their child controls
     	SDLUI_WindowHandler();
 
-		// Logic handling is similar to that of immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
+		// Controls are called just like in immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
 		#include "sdlui_demo_controls_usage.cpp"
 
     	SDL_SetRenderDrawColor(renderer, 30, 100, 140, 255);

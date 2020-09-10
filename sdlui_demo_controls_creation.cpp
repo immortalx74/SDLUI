@@ -1,13 +1,25 @@
-SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(10, 10, 350, 400, "test window1");
-SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(380, 10, 450, 350, "test window2");
-SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(250, 300, 550, 400, "test window3");
+// First create some windows.
+SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(10, 10, 350, 400, "Window1");
+SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(380, 10, 450, 350, "Window2");
+SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(250, 300, 550, 400, "Window3");
+SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 400, 820, 170, "Colors");
 
+// Add some common controls. Simple controls such as these should be easy to grasp.
 SDLUI_Control_Button *btn1 = SDLUI_CreateButton(wnd1, 10, 40, "PushButton");
 SDLUI_Control_SliderInt *si1 = SDLUI_CreateSliderInt(wnd1, 10, 90, 0, 100, 20);
 SDLUI_Control_SliderInt *si2 = SDLUI_CreateSliderInt(wnd1, 140, 90, 0, 100, 60, SDLUI_ORIENTATION_VERTICAL);
 SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
+
+// A ScrollArea is a dual purpose control. It can either host an image (in the form of an SDL_Texture),
+// or a list, where it effectively replicates the functionality of a listbox.
+// In both cases it draws and handles scrollbars when the content is bigger than the ScrollArea's size.
+// In the example bellow we create a ScrollArea that will be used as a listbox.
+// We pass NULL as the last parameter since we don't have an image texture.
 SDLUI_Control_ScrollArea *sa1 = SDLUI_CreateScrollArea(wnd1, 10, 220, 320, 160, NULL);
 
+// A list needs an array of strings. It doesn't matter what kind of container it is (std::vector, C array of strings, etc),
+// as long as it can feed the list with a char* representing the caption for each element. This will make more sense
+// when we'll later call the control's usage function inside the application loop.
 std::vector<std::string> list_items;
 for (int i = 0; i < 100; ++i)
 {
@@ -16,20 +28,30 @@ for (int i = 0; i < 100; ++i)
 	list_items.push_back(cur_item);
 }
 
+// We can now create a list and bind it to the ScrollArea above.
+// If the size of the container isn't known at compile time we can simply pass zero to the last function parameter.
+// In this case we pass the size of the list_items vector.
 SDLUI_Control_List *lst1 = SDLUI_CreateList(wnd1, sa1, list_items.size());
 
+// Some more controls...
 SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");
 SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, false);
 SDLUI_Control_Text *txt1 = SDLUI_CreateText(wnd2, 50, 90, "Some text here!");
 
+// Here's another ScrollArea. This time it hosts an image. If the image texture isn't availlable at compile time,
+// we can pass NULL as the last parameter. Here we first create a texture and pass it on to the ScrollArea.
 SDL_Surface *surf = IMG_Load("res/test1.png");
 SDL_Texture *tex = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, surf);
 SDL_FreeSurface(surf);
 SDLUI_Control_ScrollArea *sa2 = SDLUI_CreateScrollArea(wnd2, 10, 120, 400, 100, tex);
 
+// RadioButtons are handled in groups. A special kind of array(SDLUI_ArrayOfControls) is used
+// to store pointers to RadioButtons which belong in the same group. The SDLUI_CreateRadioButtonGroup() function
+// is just a helper to create and initialize such an array.
 SDLUI_ArrayOfControls rb_group1 = SDLUI_CreateRadioButtonGroup();
 SDLUI_ArrayOfControls rb_group2 = SDLUI_CreateRadioButtonGroup();
 
+// Create a bunch of RadioButtons, assigning them to their respective group.
 SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 40, true);
 SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 70, false);
 SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 100, false);
@@ -38,9 +60,14 @@ SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 40
 SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 70, true);
 SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 100, false);
 
+// More controls...
 SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 140, 140, true);
 SDLUI_Control_Button *btn3 = SDLUI_CreateButton(wnd3, 140, 180, "Test");
 
+// A TabContainer is a container for child controls, and all it does is manage their visibility.
+// It can be created with either a horizontal (default) or vertical strip of tabs.
+// It's a 3-step proccess: Create a TabContainer, add some tabs, and finally add previously created controls to each tab.
+// Note that positioning of controls is relative to the window and not to the position of the TabContainer.
 SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 100, 40, 350, 200);
 
 tbc1->add_tab("First");
@@ -50,29 +77,25 @@ tbc1->add_tab("Third");
 tbc1->add_child(0, tb1);
 tbc1->add_child(0, btn3);
 
-
-
-const int num_sliders = 12;
-SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 10, 820, 400, "colors");
+// Yet more controls...
 SDLUI_Control_Button *btn_copy = SDLUI_CreateButton(wnd4, 680, 40, "Copy");
-
 SDLUI_Control_Text *txt01 = SDLUI_CreateText(wnd4, 10, 40, "Active window bar");
 SDLUI_Control_Text *txt02 = SDLUI_CreateText(wnd4, 10, 70, "Inactive window bar");;
 SDLUI_Control_Text *txt03 = SDLUI_CreateText(wnd4, 10, 100, "Window bg");
 SDLUI_Control_Text *txt04 = SDLUI_CreateText(wnd4, 10, 130, "Highlight");
 
+// Here's an example creating controls in batch and storing their pointers in an SDLUI_ArrayOfControls.
 SDLUI_ArrayOfControls color_sliders;
 color_sliders.create();
 
 i32 x = 200, y = 40;
+const int num_sliders = 12;
 
 for (int i = 0; i < num_sliders; ++i)
 {
 	SDLUI_Control_SliderInt *si = SDLUI_CreateSliderInt(wnd4, x, y, 0, 255, 0);
 	si->w = 128;
-
 	color_sliders.push(si);
-
 	x += 150;
 
 	if((i + 1) % 3 == 0 && i > 0)
@@ -82,7 +105,9 @@ for (int i = 0; i < num_sliders; ++i)
 	}
 }
 
-SDLUI_Control_SliderInt * col_slider;
+// We modify the 'value' field of each slider after creation. Most control fields are safe to modify directly,
+// but not all of them (currently undocumented).
+SDLUI_Control_SliderInt *col_slider;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[0]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.r;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[1]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.g;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[2]; col_slider->value = SDLUI_Core.theme.col_active_window_bar.b;

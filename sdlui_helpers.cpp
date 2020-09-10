@@ -1,5 +1,3 @@
-// Helpers ---------------------------------------------------------
-
 float SDLUI_Map(float in_min, float in_max, float out_min, float out_max, float value)
 {
 	float slope = (out_max - out_min) / (in_max - in_min);
@@ -93,10 +91,7 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 	SDLUI_Core.tex_close = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 
 	SDL_FreeSurface(s);
-	if (SDL_RWclose(rw) != 0)
-	{
-std::cout << "error" << std::endl;
-	}
+	SDL_RWclose(rw);
 }
 
 void SDLUI_MouseStateReset()
@@ -263,7 +258,10 @@ void SDLUI_WindowHandler()
 		{
 			i32 old_x = aw->x;
 			aw->w += aw->x - mx;
-			aw->x = mx;
+			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->x = mx;
+			}
 
 			for (int i = 0; i < aw->children.size; ++i)
 			{
@@ -278,7 +276,10 @@ void SDLUI_WindowHandler()
 		{
 			i32 old_y = aw->y;
 			aw->h += aw->y - my;
-			aw->y = my;
+			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->y = my;
+			}
 
 			for (int i = 0; i < aw->children.size; ++i)
 			{
@@ -290,9 +291,15 @@ void SDLUI_WindowHandler()
 			i32 old_x = aw->x;
 			i32 old_y = aw->y;
 			aw->w += aw->x - mx;
-			aw->x = mx;
+			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->x = mx;
+			}
 			aw->h += aw->y - my;
-			aw->y = my;
+			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->y = my;
+			}
 
 			for (int i = 0; i < aw->children.size; ++i)
 			{
@@ -304,7 +311,10 @@ void SDLUI_WindowHandler()
 		{
 			i32 old_y = aw->y;
 			aw->h += aw->y - my;
-			aw->y = my;
+			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->y = my;
+			}
 			aw->w = mx - aw->x;
 
 			for (int i = 0; i < aw->children.size; ++i)
@@ -316,7 +326,10 @@ void SDLUI_WindowHandler()
 		{
 			i32 old_x = aw->x;
 			aw->w += aw->x - mx;
-			aw->x = mx;
+			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+			{
+				aw->x = mx;
+			}
 			aw->h = my - aw->y;
 
 			for (int i = 0; i < aw->children.size; ++i)
@@ -342,7 +355,7 @@ void SDLUI_WindowHandler()
 		SDL_SetCursor(SDLUI_Core.cursor_arrow);
 	}
 
-	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDL_GetCursor() == SDLUI_Core.cursor_arrow)
 	{
 		SDLUI_Control_Window *wnd;
 		SDL_Rect r;

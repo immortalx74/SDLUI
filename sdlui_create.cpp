@@ -1,5 +1,3 @@
-// Create ---------------------------------------------------
-
 SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title)
 {
 	SDLUI_Control_Window *wnd = (SDLUI_Control_Window*)malloc(sizeof(SDLUI_Control_Window));
@@ -13,6 +11,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 	wnd->w = w;
 	wnd->h = h;
 	wnd->is_resized = false;
+	wnd->do_process = false;;
 
 	SDL_Color c = {255, 255, 255, 255};
 	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
@@ -230,7 +229,6 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->parent = wnd;
 
 	wnd->children.push(sa);
-
 	return sa;
 }
 
@@ -268,10 +266,7 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 		sa->client_height = sa->h;
 	}
 
-
-
 	lst->parent = wnd;
-
 	wnd->children.push(lst);
 	return lst;
 }

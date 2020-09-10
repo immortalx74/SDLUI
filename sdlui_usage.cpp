@@ -1,6 +1,7 @@
-// Usage
 bool SDLUI_Window(SDLUI_Control_Window *wnd)
 {
+	wnd->do_process = true;
+
 	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED || SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_NONE)
 	{
 		wnd->is_dragged = false;
@@ -456,6 +457,7 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 
 	static i32 offset_y;
 	static i32 counter;
+	static i32 clicked;
 	i32 mx, my;
 	SDL_GetMouseState(&mx, &my);
 	SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
@@ -467,9 +469,9 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 			float ratio = (float)lst->scroll_area->content_height / (float)lst->scroll_area->client_height;
 			float oy = my - lst->scroll_area->y + ((float)lst->scroll_area->scroll_y * ratio);
 			lst->selected_index = oy / SDLUI_Font.height;
+			clicked = true;
 		}
 	}
-
 
 	if(lst->num_items != num_items)
 	{
@@ -506,11 +508,12 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 	{
 		offset_y = 0;
 		counter = 0;
-	}
 
-	if(lst->visible && lst->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
-	{
-		return true;
+		if(clicked)
+		{
+			clicked = false;
+			return true;
+		}
 	}
 
 	return false;

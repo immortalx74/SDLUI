@@ -1,16 +1,22 @@
 SDLUI_Window(wnd1);
 SDLUI_Window(wnd2);
 SDLUI_Window(wnd3);
+SDLUI_Window(wnd4);
+
 if(SDLUI_Button(btn1)) {std::cout << "btn1" << std::endl;}
 if(SDLUI_SliderInt(si1)) {std::cout << si1->value << std::endl;}
 if(SDLUI_SliderInt(si2)) {std::cout << si2->value << std::endl;}
 
-
 SDLUI_ScrollArea(sa1);
 
+// This is how we "feed" the list with elements. It's simply a loop where we pass the element caption,
+// the total count of elements, and current iteration index.
 for (int i = 0; i < list_items.size(); ++i)
 {
-	SDLUI_List(lst1, list_items[i].c_str(), list_items.size(), i);
+	if(SDLUI_List(lst1, list_items[i].c_str(), list_items.size(), i))
+	{
+		std::cout << lst1->selected_index << std::endl;
+	}
 }
 
 if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
@@ -20,20 +26,17 @@ if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
 SDLUI_Text(txt1);
 if(SDLUI_ScrollArea(sa2)) {;}
 
-
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}
 if(SDLUI_RadioButton(rb2)) {std::cout << "rb2" << std::endl;}
 if(SDLUI_RadioButton(rb3)) {std::cout << "rb3" << std::endl;}
 if(SDLUI_RadioButton(rb4)) {std::cout << "rb4" << std::endl;}
-SDLUI_RadioButton(rb5);
-SDLUI_RadioButton(rb6);
+if(SDLUI_RadioButton(rb5)) {std::cout << "rb5" << std::endl;}
+if(SDLUI_RadioButton(rb6)) {std::cout << "rb6" << std::endl;}
 
 if(SDLUI_ToggleButton(tb1)) {std::cout << "tb1" << std::endl;}
 if(SDLUI_Button(btn3)) {std::cout << "btn3" << std::endl;}
-(SDLUI_TabContainer(tbc1));
+SDLUI_TabContainer(tbc1);
 
-
-SDLUI_Window(wnd4);
 if(SDLUI_Button(btn_copy))
 {
 	SDLUI_Control_SliderInt *cur;
@@ -56,7 +59,6 @@ if(SDLUI_Button(btn_copy))
 			{
 				cb += ", 255}\n};";
 			}
-
 		}
 		else
 		{
@@ -66,6 +68,7 @@ if(SDLUI_Button(btn_copy))
 
 	SDL_SetClipboardText(cb.c_str());
 }
+
 SDLUI_Control_SliderInt * col_slider;
 
 SDLUI_Text(txt01);
@@ -99,4 +102,3 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10];
 if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.g = col_slider->value; SDLUI_ForceReDraw();}
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11];
 if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.b = col_slider->value; SDLUI_ForceReDraw();}
-

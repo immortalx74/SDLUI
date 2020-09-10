@@ -1,5 +1,3 @@
-// Render ---------------------------------------------------
-
 void SDLUI_DrawText(i32 x, i32 y, const char *text, SDL_Texture *dst)
 {
 	SDL_SetRenderTarget(SDLUI_Core.renderer, dst);
@@ -430,6 +428,11 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
 
 void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 {
+	if(!wnd->do_process)
+	{
+		return;
+	}
+
 	if(wnd->visible != wnd->visible_last_frame)
 	{
 		for (int i = 0; i < wnd->children.size; ++i)

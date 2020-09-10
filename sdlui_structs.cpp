@@ -1,5 +1,3 @@
-// Structs --------------------------------------------
-
 struct SDLUI_String
 {
 	i32 capacity = 0;
