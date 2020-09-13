@@ -1,5 +1,10 @@
 bool SDLUI_Window(SDLUI_Control_Window *wnd)
 {
+	if(!wnd->visible)
+	{
+		return false;
+	}
+
 	wnd->do_process = true;
 
 	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED || SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_NONE)
@@ -478,6 +483,10 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		lst->num_items = num_items;
 		SDL_DestroyTexture(lst->scroll_area->tex_rect);
 		i32 h = num_items * SDLUI_Font.height;
+		if(h < lst->scroll_area->h)
+		{
+			h = lst->scroll_area->h;
+		}
 		lst->scroll_area->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, lst->scroll_area->w, h);
 		lst->scroll_area->content_width = lst->scroll_area->w;
 		lst->scroll_area->content_height = h;
@@ -496,8 +505,31 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 	{
 		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
 		SDLUI_SetColor(SDLUI_Core.theme.col_highlight);
-		SDL_Rect r = {0, lst->selected_index * SDLUI_Font.height, lst->scroll_area->w, SDLUI_Font.height};
+
+		float ratio = (float)lst->scroll_area->content_width / (float)lst->scroll_area->client_width;
+		i32 offset_x = lst->scroll_area->scroll_x * ratio;
+		SDL_Rect r = {offset_x, lst->selected_index * SDLUI_Font.height, lst->scroll_area->w, SDLUI_Font.height};
 		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+	}
+
+	if(strlen(cur_item) * SDLUI_Font.width > lst->max_string_width)
+	{
+		lst->max_string_width = strlen(cur_item) * SDLUI_Font.width;
+	}
+	i32 cur_tex_width;
+	SDL_QueryTexture(lst->scroll_area->tex_rect, NULL, NULL, &cur_tex_width, NULL);
+
+	if(lst->max_string_width > cur_tex_width)
+	{
+		SDL_DestroyTexture(lst->scroll_area->tex_rect);
+		i32 h = num_items * SDLUI_Font.height;
+		if(h < lst->scroll_area->h)
+		{
+			h = lst->scroll_area->h;
+		}
+		lst->scroll_area->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, lst->max_string_width, h);
+		lst->scroll_area->content_width = lst->max_string_width;
+		lst->scroll_area->content_height = h;
 	}
 
 	SDLUI_DrawText(SDLUI_MARGIN, offset_y, cur_item, lst->scroll_area->tex_rect);

@@ -22,7 +22,7 @@ struct SDLUI_String
 		data = NULL;
 	}
 
-	void modify(char *str)
+	void modify(const char *str)
 	{
 		i32 new_length = strlen(str);
 		if(new_length >= capacity)
@@ -46,18 +46,18 @@ struct SDLUI_String
 
 struct SDLUI_Theme
 {
-	SDL_Color col_window_bg = {40, 40, 40, 255};
+	SDL_Color col_window_bg = {30, 30, 30, 255};
 	SDL_Color col_border = {68, 68, 68, 255};
-	SDL_Color col_active_window_bar = {10, 10, 10, 255};
-	SDL_Color col_inactive_window_bar = {32, 32, 32, 255};
-	SDL_Color col_button_normal = {44, 44, 44, 255};
-	SDL_Color col_button_click = {20, 20, 20, 255};
+	SDL_Color col_active_window_bar = {0, 0, 0, 255};
+	SDL_Color col_inactive_window_bar = {22, 22, 22, 255};
+	SDL_Color col_button_normal = {28, 28, 28, 255};
+	SDL_Color col_button_click = {0, 0, 0, 255};
 	SDL_Color col_highlight = {0, 120, 215, 255};
 	SDL_Color col_test = {255, 0, 225, 255};
 	SDL_Color col_scrollbar_thumb = {26, 26, 26, 255};
 	SDL_Color col_scrollbar_track = {56, 56, 56, 255};
 	SDL_Color col_white = {255, 255, 255, 255};
-	SDL_Color col_grey = {80, 80, 80, 255};
+	SDL_Color col_grey = {58, 58, 58, 255};
 	SDL_Color col_red = {222, 17, 35, 255};
 	SDL_Color col_black = {0, 0, 0, 255};
 	SDL_Color col_list_background = {32, 32, 32, 255};
@@ -170,9 +170,6 @@ struct SDLUI_Control_Button : SDLUI_Control
 	SDLUI_ALIGN align;
 	SDLUI_BUTTON_STATE state;
 	SDL_Texture *tex_text;
-	SDL_Texture *tex_back_normal;
-	SDL_Texture *tex_back_hover;
-	SDL_Texture *tex_back_click;
 };
 
 struct SDLUI_Control_SliderInt : SDLUI_Control
@@ -332,5 +329,6 @@ struct SDLUI_Control_List : SDLUI_Control
 	SDLUI_Control_ScrollArea *scroll_area;
 	i32 num_items;
 	i32 selected_index;
+	i32 max_string_width;
 	const char *cur_item;
 };

@@ -102,3 +102,36 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10];
 if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.g = col_slider->value; SDLUI_ForceReDraw();}
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11];
 if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.b = col_slider->value; SDLUI_ForceReDraw();}
+
+
+/////////////////////////////
+enum op{op_digit, op_eq, op_add, op_sub, op_mul, op_div};
+static double result = 0.0f;
+
+SDLUI_Window(calc);
+
+display->x = display->parent->x + display->parent->w - (display->text.length * SDLUI_Font.width) - 10;
+SDLUI_Text(display);
+
+if(SDLUI_Button(calc_btnc)) {;}
+
+if(SDLUI_Button(calc_btn7)) {calculator(op_digit, 7, result, display->text);}
+if(SDLUI_Button(calc_btn8)) {calculator(op_digit, 8, result, display->text);}
+SDLUI_Button(calc_btn9);
+SDLUI_Button(calc_btndiv);
+
+SDLUI_Button(calc_btn4);
+SDLUI_Button(calc_btn5);
+SDLUI_Button(calc_btn6);
+SDLUI_Button(calc_btnmul);
+
+SDLUI_Button(calc_btn1);
+SDLUI_Button(calc_btn2);
+SDLUI_Button(calc_btn3);
+SDLUI_Button(calc_btnsub);
+
+SDLUI_Button(calc_btn0);
+SDLUI_Button(calc_btnfp);
+SDLUI_Button(calc_btneq);
+SDLUI_Button(calc_btnadd);
+

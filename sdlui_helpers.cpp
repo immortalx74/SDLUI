@@ -24,7 +24,7 @@ bool SDLUI_PointInRect(SDL_Rect rect, i32 x, i32 y)
 void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 {
 	#ifdef _WIN32
-	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
+		SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 	#endif
 
 	IMG_Init(IMG_INIT_PNG);
@@ -231,6 +231,105 @@ SDLUI_RESIZE_DIRECTION SDLUI_SetWindowResizeCursor(SDLUI_Control_Window *wnd, i3
 	return SDLUI_RESIZE_NONE;
 }
 
+void SDLUI_ResizeWindow(SDLUI_Control_Window *aw, SDLUI_RESIZE_DIRECTION res_dir, i32 mx, i32 my)
+{
+	if(res_dir == SDLUI_RESIZE_RIGHT)
+	{
+		aw->w = mx - aw->x;
+	}
+	else if(res_dir == SDLUI_RESIZE_LEFT)
+	{
+		i32 old_x = aw->x;
+		aw->w += aw->x - mx;
+		if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->x = mx;
+		}
+
+		for (int i = 0; i < aw->children.size; ++i)
+		{
+			aw->children.data[i]->x += aw->x - old_x;
+		}
+	}
+	else if(res_dir == SDLUI_RESIZE_BOTTOM)
+	{
+		aw->h = my - aw->y;
+	}
+	else if(res_dir == SDLUI_RESIZE_TOP)
+	{
+		i32 old_y = aw->y;
+		aw->h += aw->y - my;
+		if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->y = my;
+		}
+
+		for (int i = 0; i < aw->children.size; ++i)
+		{
+			aw->children.data[i]->y += aw->y - old_y;
+		}
+	}
+	else if(res_dir == SDLUI_RESIZE_LEFT_TOP)
+	{
+		i32 old_x = aw->x;
+		i32 old_y = aw->y;
+		aw->w += aw->x - mx;
+		if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->x = mx;
+		}
+		aw->h += aw->y - my;
+		if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->y = my;
+		}
+
+		for (int i = 0; i < aw->children.size; ++i)
+		{
+			aw->children.data[i]->x += aw->x - old_x;
+			aw->children.data[i]->y += aw->y - old_y;
+		}
+	}
+	else if(res_dir == SDLUI_RESIZE_RIGHT_TOP)
+	{
+		i32 old_y = aw->y;
+		aw->h += aw->y - my;
+		if(aw->h > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->y = my;
+		}
+		aw->w = mx - aw->x;
+
+		for (int i = 0; i < aw->children.size; ++i)
+		{
+			aw->children.data[i]->y += aw->y - old_y;
+		}
+	}
+	else if(res_dir == SDLUI_RESIZE_LEFT_BOTTOM)
+	{
+		i32 old_x = aw->x;
+		aw->w += aw->x - mx;
+		if(aw->w > SDLUI_WINDOW_MIN_SIZE)
+		{
+			aw->x = mx;
+		}
+		aw->h = my - aw->y;
+
+		for (int i = 0; i < aw->children.size; ++i)
+		{
+			aw->children.data[i]->x += aw->x - old_x;
+		}
+	}
+	else if(res_dir == SDLUI_RESIZE_RIGHT_BOTTOM)
+	{
+		aw->w = mx - aw->x;
+		aw->h = my - aw->y;
+	}
+
+	aw->w = SDLUI_Clamp(aw->w, 120, 10000);
+	aw->h = SDLUI_Clamp(aw->h, 120, 10000);
+}
+
 void SDLUI_WindowHandler()
 {
 	i32 mx, my, index = 0;
@@ -250,102 +349,7 @@ void SDLUI_WindowHandler()
 
 	if(aw->is_resized && !aw->is_dragged)
 	{
-		if(res_dir == SDLUI_RESIZE_RIGHT)
-		{
-			aw->w = mx - aw->x;
-		}
-		else if(res_dir == SDLUI_RESIZE_LEFT)
-		{
-			i32 old_x = aw->x;
-			aw->w += aw->x - mx;
-			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->x = mx;
-			}
-
-			for (int i = 0; i < aw->children.size; ++i)
-			{
-				aw->children.data[i]->x += aw->x - old_x;
-			}
-		}
-		else if(res_dir == SDLUI_RESIZE_BOTTOM)
-		{
-			aw->h = my - aw->y;
-		}
-		else if(res_dir == SDLUI_RESIZE_TOP)
-		{
-			i32 old_y = aw->y;
-			aw->h += aw->y - my;
-			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->y = my;
-			}
-
-			for (int i = 0; i < aw->children.size; ++i)
-			{
-				aw->children.data[i]->y += aw->y - old_y;
-			}
-		}
-		else if(res_dir == SDLUI_RESIZE_LEFT_TOP)
-		{
-			i32 old_x = aw->x;
-			i32 old_y = aw->y;
-			aw->w += aw->x - mx;
-			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->x = mx;
-			}
-			aw->h += aw->y - my;
-			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->y = my;
-			}
-
-			for (int i = 0; i < aw->children.size; ++i)
-			{
-				aw->children.data[i]->x += aw->x - old_x;
-				aw->children.data[i]->y += aw->y - old_y;
-			}
-		}
-		else if(res_dir == SDLUI_RESIZE_RIGHT_TOP)
-		{
-			i32 old_y = aw->y;
-			aw->h += aw->y - my;
-			if(aw->h > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->y = my;
-			}
-			aw->w = mx - aw->x;
-
-			for (int i = 0; i < aw->children.size; ++i)
-			{
-				aw->children.data[i]->y += aw->y - old_y;
-			}
-		}
-		else if(res_dir == SDLUI_RESIZE_LEFT_BOTTOM)
-		{
-			i32 old_x = aw->x;
-			aw->w += aw->x - mx;
-			if(aw->w > SDLUI_WINDOW_MIN_SIZE)
-			{
-				aw->x = mx;
-			}
-			aw->h = my - aw->y;
-
-			for (int i = 0; i < aw->children.size; ++i)
-			{
-				aw->children.data[i]->x += aw->x - old_x;
-			}
-		}
-		else if(res_dir == SDLUI_RESIZE_RIGHT_BOTTOM)
-		{
-			aw->w = mx - aw->x;
-			aw->h = my - aw->y;
-		}
-
-		aw->w = SDLUI_Clamp(aw->w, 120, 10000);
-		aw->h = SDLUI_Clamp(aw->h, 120, 10000);
-
+		SDLUI_ResizeWindow(aw, res_dir, mx, my);
 		SDL_DestroyTexture(aw->tex_rect);
 		aw->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, aw->w, aw->h);
 	}
@@ -365,12 +369,15 @@ void SDLUI_WindowHandler()
 		{
 			wnd = (SDLUI_Control_Window*)SDLUI_Window_Collection.data[i];
 
-			r = {wnd->x, wnd->y, wnd->w, wnd->h};
-
-			if(SDLUI_PointInRect(r, mx, my))
+			if(wnd->visible)
 			{
-				index = i;
-				hovers_window = true;
+				r = {wnd->x, wnd->y, wnd->w, wnd->h};
+
+				if(SDLUI_PointInRect(r, mx, my))
+				{
+					index = i;
+					hovers_window = true;
+				}
 			}
 		}
 

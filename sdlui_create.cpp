@@ -13,8 +13,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 	wnd->is_resized = false;
 	wnd->do_process = false;;
 
-	SDL_Color c = {255, 255, 255, 255};
-	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, c);
+	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, SDLUI_Core.theme.col_white);
 	wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 	SDL_FreeSurface(s);
 
@@ -41,17 +40,9 @@ SDLUI_Control_Button *SDLUI_CreateButton(SDLUI_Control_Window *wnd, i32 x, i32 y
 	btn->state = SDLUI_BUTTON_STATE_NORMAL;
 	btn->parent = wnd;
 
-	SDL_Color c = {255, 255, 255, 255};
-	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, c);
+	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, SDLUI_Core.theme.col_white);
 	btn->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
 	SDL_FreeSurface(s);
-	btn->tex_back_normal = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
-	btn->tex_back_hover = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
-	btn->tex_back_click = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, btn->w - 2, btn->h - 2);
-
-	SDLUI_GradientToTexture(btn->tex_back_normal, SDLUI_Core.theme.col_button_normal, btn->w-2, btn->h-2, (btn->h-2)/12);
-	SDLUI_GradientToTexture(btn->tex_back_hover, SDLUI_Core.theme.col_highlight, btn->w-2, btn->h-2, (btn->h-2)/12);
-	SDLUI_GradientToTexture(btn->tex_back_click, SDLUI_Core.theme.col_button_click, btn->w-2, btn->h-2, (btn->h-2)/12);
 
 	wnd->children.push(btn);
 	return btn;
@@ -240,9 +231,14 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 	lst->do_process = false;
 	lst->scroll_area = sa;
 	lst->num_items = num_items;
-	lst->selected_index = 2;
+	lst->selected_index = 0;
+	lst->max_string_width = 0;
 
 	i32 h = num_items * SDLUI_Font.height;
+	if(h < sa->h)
+	{
+		h = sa->h;
+	}
 	sa->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sa->w, h);
 	sa->content_width = sa->w;
 	sa->content_height = h;

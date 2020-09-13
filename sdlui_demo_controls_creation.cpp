@@ -23,7 +23,7 @@ SDLUI_Control_ScrollArea *sa1 = SDLUI_CreateScrollArea(wnd1, 10, 220, 320, 160, 
 std::vector<std::string> list_items;
 for (int i = 0; i < 100; ++i)
 {
-	std::string cur_item = "List Item:";
+	std::string cur_item = "List Item: ";
 	cur_item += std::to_string(i);
 	list_items.push_back(cur_item);
 }
@@ -123,3 +123,29 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[8]; col_slider->value 
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[9]; col_slider->value = SDLUI_Core.theme.col_highlight.r;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10]; col_slider->value = SDLUI_Core.theme.col_highlight.g;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11]; col_slider->value = SDLUI_Core.theme.col_highlight.b;
+
+////////////////////////////
+SDLUI_Control_Window *calc = SDLUI_CreateWindow(400, 300, 170, 280, "Calc");
+SDLUI_Control_Text *display = SDLUI_CreateText(calc, 150, 50, "0");
+
+SDLUI_Control_Button *calc_btnc = SDLUI_CreateButton(calc, 130, 80, "C"); calc_btnc->w = 30;
+
+SDLUI_Control_Button *calc_btn7 = SDLUI_CreateButton(calc, 10, 120, "7"); calc_btn7->w = 30;
+SDLUI_Control_Button *calc_btn8 = SDLUI_CreateButton(calc, 50, 120, "8"); calc_btn8->w = 30;
+SDLUI_Control_Button *calc_btn9 = SDLUI_CreateButton(calc, 90, 120, "9"); calc_btn9->w = 30;
+SDLUI_Control_Button *calc_btndiv = SDLUI_CreateButton(calc, 130, 120, "/"); calc_btndiv->w = 30;
+
+SDLUI_Control_Button *calc_btn4 = SDLUI_CreateButton(calc, 10, 160, "4"); calc_btn4->w = 30;
+SDLUI_Control_Button *calc_btn5 = SDLUI_CreateButton(calc, 50, 160, "5"); calc_btn5->w = 30;
+SDLUI_Control_Button *calc_btn6 = SDLUI_CreateButton(calc, 90, 160, "6"); calc_btn6->w = 30;
+SDLUI_Control_Button *calc_btnmul = SDLUI_CreateButton(calc, 130, 160, "x"); calc_btnmul->w = 30;
+
+SDLUI_Control_Button *calc_btn1 = SDLUI_CreateButton(calc, 10, 200, "1"); calc_btn1->w = 30;
+SDLUI_Control_Button *calc_btn2 = SDLUI_CreateButton(calc, 50, 200, "2"); calc_btn2->w = 30;
+SDLUI_Control_Button *calc_btn3 = SDLUI_CreateButton(calc, 90, 200, "3"); calc_btn3->w = 30;
+SDLUI_Control_Button *calc_btnsub = SDLUI_CreateButton(calc, 130, 200, "-"); calc_btnsub->w = 30;
+
+SDLUI_Control_Button *calc_btn0 = SDLUI_CreateButton(calc, 10, 240, "0"); calc_btn0->w = 30;
+SDLUI_Control_Button *calc_btnfp = SDLUI_CreateButton(calc, 50, 240, "."); calc_btnfp->w = 30;
+SDLUI_Control_Button *calc_btneq = SDLUI_CreateButton(calc, 90, 240, "="); calc_btneq->w = 30;
+SDLUI_Control_Button *calc_btnadd = SDLUI_CreateButton(calc, 130, 240, "+"); calc_btnadd->w = 30;

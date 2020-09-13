@@ -34,24 +34,25 @@ void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 		i32 xx = btn->x - btn->parent->x;
 		i32 yy = btn->y - btn->parent->y;
 
-		SDL_Rect r = {xx+1, yy+1, btn->w-2, btn->h-2};
+		SDL_Rect r = {xx, yy, btn->w, btn->h};
 
 		switch (btn->state)
 		{
 			case SDLUI_BUTTON_STATE_NORMAL:
-			SDL_RenderCopy(SDLUI_Core.renderer, btn->tex_back_normal, NULL, &r);
+			SDLUI_SetColor(SDLUI_Core.theme.col_button_normal);
 			break;
 
 			case SDLUI_BUTTON_STATE_HOVER:
-			SDL_RenderCopy(SDLUI_Core.renderer, btn->tex_back_hover, NULL, &r);
+			SDLUI_SetColor(SDLUI_Core.theme.col_highlight);
 			break;
 
 			case SDLUI_BUTTON_STATE_CLICK:
-			SDL_RenderCopy(SDLUI_Core.renderer, btn->tex_back_click, NULL, &r);
+			SDLUI_SetColor(SDLUI_Core.theme.col_button_click);
 			break;
 		}
 
-		r = {xx, yy, btn->w, btn->h};
+		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+
 		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
 		SDL_RenderDrawRect(SDLUI_Core.renderer, &r);
 
