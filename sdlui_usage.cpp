@@ -28,14 +28,18 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 			wnd->is_hovered = false;
 		}
 
-		r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
-
-		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointInRect(r, mx, my))
+		if(wnd->has_close_button)
 		{
-			wnd->visible = false;
+			r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
+
+			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointInRect(r, mx, my))
+			{
+				wnd->visible = false;
+				SDLUI_Core.active_window = NULL;
+			}
 		}
 
-		r = {wnd->x,wnd->y,wnd->w - 30, 30};
+		r = {wnd->x,wnd->y,wnd->w - (wnd->has_close_button * 30), 30};
 
 		if(SDLUI_PointInRect(r, mx, my))
 		{
@@ -171,7 +175,14 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
-		SDL_Rect r = {chk->x,chk->y,chk->w,chk->h};
+		i32 tex_w, tex_h;
+		SDL_QueryTexture(chk->tex_text, NULL, NULL, &tex_w, &tex_h);
+
+		SDL_Rect r = {chk->x, chk->y, chk->w, chk->h};
+		if(chk->tex_text != NULL)
+		{
+			r.w += SDLUI_MARGIN + tex_w;
+		}
 		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
@@ -194,7 +205,15 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
+		i32 tex_w, tex_h;
+		SDL_QueryTexture(tb->tex_text, NULL, NULL, &tex_w, &tex_h);
+
 		SDL_Rect r = {tb->x,tb->y,tb->w,tb->h};
+		if(tb->tex_text != NULL)
+		{
+			r.w += SDLUI_MARGIN + tex_w;
+		}
+
 		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
@@ -218,7 +237,15 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
 
+		i32 tex_w, tex_h;
+		SDL_QueryTexture(rb->tex_text, NULL, NULL, &tex_w, &tex_h);
+
 		SDL_Rect r = {rb->x,rb->y,rb->w,rb->h};
+		if(rb->tex_text != NULL)
+		{
+			r.w += SDLUI_MARGIN + tex_w;
+		}
+
 		if(SDLUI_PointInRect(r, mx, my))
 		{
 			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
@@ -460,21 +487,23 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 {
 	lst->do_process = true;
 
-	static i32 offset_y;
-	static i32 counter;
 	static i32 clicked;
-	i32 mx, my;
-	SDL_GetMouseState(&mx, &my);
-	SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
 
-	if(SDLUI_PointInRect(r, mx, my) && cur_index == 0)
+	if(lst->scroll_area->visible && lst->scroll_area->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
 	{
-		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+		i32 mx, my;
+		SDL_GetMouseState(&mx, &my);
+		SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
+
+		if(SDLUI_PointInRect(r, mx, my) && cur_index == 0)
 		{
-			float ratio = (float)lst->scroll_area->content_height / (float)lst->scroll_area->client_height;
-			float oy = my - lst->scroll_area->y + ((float)lst->scroll_area->scroll_y * ratio);
-			lst->selected_index = oy / SDLUI_Font.height;
-			clicked = true;
+			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+			{
+				float ratio = (float)lst->scroll_area->content_height / (float)lst->scroll_area->client_height;
+				float oy = my - lst->scroll_area->y + ((float)lst->scroll_area->scroll_y * ratio);
+				lst->selected_index = oy / SDLUI_Font.height;
+				clicked = true;
+			}
 		}
 	}
 
@@ -491,6 +520,8 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		lst->scroll_area->content_width = lst->scroll_area->w;
 		lst->scroll_area->content_height = h;
 	}
+
+	static i32 counter;
 
 	if(counter == 0)
 	{
@@ -532,6 +563,8 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		lst->scroll_area->content_height = h;
 	}
 
+	static i32 offset_y;
+
 	SDLUI_DrawText(SDLUI_MARGIN, offset_y, cur_item, lst->scroll_area->tex_rect);
 	offset_y += SDLUI_Font.height;
 	counter++;
@@ -545,6 +578,46 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		{
 			clicked = false;
 			return true;
+		}
+	}
+
+
+	return false;
+}
+
+bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
+{
+	tbx->do_process = true;
+
+	if(tbx->visible && tbx->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
+	{
+		i32 mx, my;
+		SDL_GetMouseState(&mx, &my);
+
+		SDL_Rect r = {tbx->x,tbx->y,tbx->w,tbx->h};
+
+		if(SDLUI_PointInRect(r, mx, my))
+		{
+			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+			{
+				tbx->focused = true;
+				return true;
+			}
+		}
+
+		if(tbx->focused && SDLUI_Core.e.type == SDL_TEXTINPUT)
+		{
+			tbx->text.insert_char(SDLUI_Core.e.text.text[0], tbx->cursor_pos);
+			tbx->cursor_pos++;
+			std::cout << tbx->text.data << std::endl;
+
+			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
+			SDL_Rect r = {0, 0, SDLUI_Font.width * tbx->text.length, SDLUI_Font.height};
+			SDLUI_SetColor(SDLUI_Core.theme.col_window_bg);
+			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+			SDLUI_SetColor(SDLUI_Core.theme.col_white);
+			SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
 		}
 	}
 

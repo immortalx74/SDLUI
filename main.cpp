@@ -24,8 +24,8 @@
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window *window = SDL_CreateWindow("SDLUI app",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-	                                      1200, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE |
+	SDL_Window *window = SDL_CreateWindow("SDLUI app", 50, 50,
+	                                      1400, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE |
 	                                      SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_ALLOW_HIGHDPI);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -69,11 +69,11 @@ int main(int argc, char *argv[])
 		// Manages SDLUI windows and their child controls
 		SDLUI_WindowHandler();
 
-		// Controls are called just like in immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
-		#include "sdlui_demo_controls_usage.cpp"
-
 		SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
 		SDL_RenderClear(renderer);
+
+		// Controls are called just like in immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
+		#include "sdlui_demo_controls_usage.cpp"
 
 		// Draws the UI. Regular SDL drawing should take place before this, for the UI to appear on top.
 		SDLUI_Render();

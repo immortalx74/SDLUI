@@ -4,20 +4,152 @@
 		"selected_items":
 		[
 			[
+				"memo",
+				"memmove\tabc"
+			],
+			[
+				"new",
+				"new_length\tabc"
+			],
+			[
+				"len",
+				"length\tabc"
+			],
+			[
+				"curso",
+				"cursor_pos\tabc"
+			],
+			[
+				"curs",
+				"cursor_pos\tabc"
+			],
+			[
+				"sele",
+				"select_end\t(sdlui_structs.cpp)"
+			],
+			[
+				"SDLUI_CONTROL_TYPE_TEXT",
+				"SDLUI_CONTROL_TYPE_TEXTBOX\t(sdlui_enums.cpp)"
+			],
+			[
+				"SDLUI_Text",
+				"SDLUI_TextBox\t(sdlui_usage.cpp)"
+			],
+			[
+				"SDLUI_Control_Text",
+				"SDLUI_Control_TextBox\t(sdlui_structs.cpp)"
+			],
+			[
+				"SDLUI_Cont",
+				"SDLUI_Control_TextBox\t(sdlui_structs.cpp)"
+			],
+			[
+				"SDLUI_CONTROL_TYPE_TEX",
+				"SDLUI_CONTROL_TYPE_TEXTBOX\t(sdlui_enums.cpp)"
+			],
+			[
+				"active",
+				"active_tab\t(sdlui_structs.cpp)"
+			],
+			[
+				"activ",
+				"active_tab\t(sdlui_structs.cpp)"
+			],
+			[
+				"SDLUI_Set",
+				"SDLUI_SetActiveWindow\t(sdlui_helpers.cpp)"
+			],
+			[
+				"SDLUI_ALI",
+				"SDLUI_ALIGN_RIGHT\t(sdlui_render.cpp)"
+			],
+			[
+				"fp",
+				"fp_digits\tabc"
+			],
+			[
+				"modi",
+				"modify\t(sdlui_structs.cpp)"
+			],
+			[
+				"SDLUI_Crea",
+				"SDLUI_CreateText\tabc"
+			],
+			[
+				"SDLUI_Cre",
+				"SDLUI_CreateButton\tabc"
+			],
+			[
+				"SDLUI_Contr",
+				"SDLUI_Control_Window\tabc"
+			],
+			[
+				"SDLUI_RESIZ",
+				"SDLUI_RESIZE_DIRECTION\tabc"
+			],
+			[
+				"SDLUI_Control",
+				"SDLUI_Control_Window\tabc"
+			],
+			[
+				"acti",
+				"active_window\tabc"
+			],
+			[
+				"scrol",
+				"scroll_x\tabc"
+			],
+			[
+				"scr",
+				"scroll_area\tabc"
+			],
+			[
+				"tex",
+				"tex_rect\tabc"
+			],
+			[
+				"cli",
+				"client_width\tabc"
+			],
+			[
+				"max",
+				"max_string_width\tabc"
+			],
+			[
 				"col_",
-				"col_grey\t(sdlui_structs.cpp)"
+				"col_button_normal\t(sdlui_structs.cpp)"
+			],
+			[
+				"do",
+				"do_process\tabc"
+			],
+			[
+				"clien",
+				"client_height\tabc"
+			],
+			[
+				"clie",
+				"client_height\tabc"
+			],
+			[
+				"conte",
+				"content_height\tabc"
+			],
+			[
+				"scro",
+				"scroll_y\tabc"
+			],
+			[
+				"cur",
+				"cur_index\tabc"
+			],
+			[
+				"SDLUI_MOUSE",
+				"SDLUI_MOUSEBUTTON_PRESSED\tabc"
 			],
 			[
 				"scroll",
 				"scroll_area\tabc"
-			],
-			[
-				"SDLUI_Control",
-				"SDLUI_Control_SliderInt\tabc"
-			],
-			[
-				"SDLUI_Cont",
-				"SDLUI_Control_SliderInt\t(sdlui_structs.cpp)"
 			],
 			[
 				"color",
@@ -26,10 +158,6 @@
 			[
 				"SDLUI_ORI",
 				"SDLUI_ORIENTATION_VERTICAL\tabc"
-			],
-			[
-				"scrol",
-				"scroll_area\tabc"
 			],
 			[
 				"SDL_Des",
@@ -52,14 +180,6 @@
 				"scrollbar_thickness\tabc"
 			],
 			[
-				"clie",
-				"client_height\tabc"
-			],
-			[
-				"cli",
-				"client_height\tabc"
-			],
-			[
 				"client",
 				"client_width\tabc"
 			],
@@ -68,20 +188,12 @@
 				"offset_y\tabc"
 			],
 			[
-				"conte",
-				"content_width\tabc"
-			],
-			[
 				"cont",
 				"content_width\tabc"
 			],
 			[
 				"SDL_Render",
 				"SDL_RenderPresent\t(main.cpp)"
-			],
-			[
-				"scro",
-				"scroll_area\tabc"
 			],
 			[
 				"SDL_Set",
@@ -98,10 +210,6 @@
 			[
 				"SDLUI_CONT",
 				"SDLUI_CONTROL_TYPE_LIST\t(sdlui_enums.cpp)"
-			],
-			[
-				"SDLUI_Contr",
-				"SDLUI_Control_List\tabc"
 			],
 			[
 				"offset",
@@ -124,10 +232,6 @@
 				"IMG_LoadPNG_RW\t(sdlui_helpers.cpp)"
 			],
 			[
-				"tex",
-				"tex_rect\t(sdlui_helpers.cpp)"
-			],
-			[
 				"thum",
 				"thumb_size_h\t(sdlui_structs.cpp)"
 			],
@@ -142,10 +246,6 @@
 			[
 				"old",
 				"old_scroll_y\tabc"
-			],
-			[
-				"scr",
-				"scrollbar_length_v\t(sdlui_structs.cpp)"
 			],
 			[
 				"old_",
@@ -184,20 +284,12 @@
 				"theme\t(sdlui_render.cpp)"
 			],
 			[
-				"do",
-				"do_process\tabc"
-			],
-			[
 				"SDLUI_Creat",
 				"SDLUI_CreateButton\tabc"
 			],
 			[
 				"SDLUI_Control_",
 				"SDLUI_Control_Button\tabc"
-			],
-			[
-				"activ",
-				"active_tab\tabc"
 			],
 			[
 				"swit",
@@ -219,7 +311,25 @@
 			"file": "main.cpp",
 			"settings":
 			{
-				"buffer_size": 2189,
+				"buffer_size": 2556,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "sdlui_event.cpp",
+			"settings":
+			{
+				"buffer_size": 533,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_demo_calc.cpp",
+			"settings":
+			{
+				"buffer_size": 2054,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -228,16 +338,24 @@
 			"file": "sdlui_helpers.cpp",
 			"settings":
 			{
-				"buffer_size": 11599,
+				"buffer_size": 12038,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/dev/ed/input.cpp",
+			"settings":
+			{
+				"buffer_size": 26376,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "sdlui_structs.cpp",
 			"settings":
 			{
-				"buffer_size": 6848,
+				"buffer_size": 7778,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -246,19 +364,16 @@
 			"file": "sdlui_create.cpp",
 			"settings":
 			{
-				"buffer_size": 7736,
+				"buffer_size": 8440,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "// Usage\nbool SDLUI_Window(SDLUI_Control_Window *wnd)\n{\n\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED || SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_NONE)\n\t{\n\t\twnd->is_dragged = false;\n\t}\n\n\tif(wnd == SDLUI_Core.active_window)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {wnd->x, wnd->y, wnd->w, wnd->h};\n\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\twnd->is_hovered = true;\n\t\t}\n\t\telse\n\t\t{\n\t\t\twnd->is_hovered = false;\n\t\t}\n\n\t\tr = {wnd->x + wnd->w - 30, wnd->y, 30, 30};\n\n\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\twnd->visible = false;\n\t\t}\n\n\t\tr = {wnd->x,wnd->y,wnd->w - 30, 30};\n\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && !wnd->is_dragged)\n\t\t\t{\n\t\t\t\twnd->is_dragged = true;\n\t\t\t\twnd->drag_x = mx - wnd->x;\n\t\t\t\twnd->drag_y = my - wnd->y;\n\t\t\t}\n\t\t}\n\n\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && wnd->is_dragged)\n\t\t{\n\t\t\tSDL_SetCursor(SDLUI_Core.cursor_arrow);\n\t\t\ti32 old_x = wnd->x;\n\t\t\ti32 old_y = wnd->y;\n\t\t\twnd->x = mx - wnd->drag_x;\n\t\t\twnd->y = my - wnd->drag_y;\n\n\t\t\tfor (int i = 0; i < wnd->children.size; ++i)\n\t\t\t{\n\t\t\t\twnd->children.data[i]->x += wnd->x - old_x;\n\t\t\t\twnd->children.data[i]->y += wnd->y - old_y;\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\n\treturn false;\n}\n\nbool SDLUI_Button(SDLUI_Control_Button *btn)\n{\n\tbtn->do_process = true;\n\n\tif(btn->visible && btn->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {btn->x,btn->y,btn->w,btn->h};\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\tbtn->state = SDLUI_BUTTON_STATE_CLICK;\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)\n\t\t\t{\n\t\t\t\tbtn->state = SDLUI_BUTTON_STATE_CLICK;\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\tbtn->state = SDLUI_BUTTON_STATE_HOVER;\n\t\t\t}\n\n\t\t\treturn false;\n\t\t}\n\n\t\tbtn->state = SDLUI_BUTTON_STATE_NORMAL;\n\t\treturn false;\n\t}\n\n\tbtn->state = SDLUI_BUTTON_STATE_NORMAL;\n\treturn false;\n}\n\nbool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)\n{\n\tsi->do_process = true;\n\n\tif(si->visible && si->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {si->x,si->y,si->w,si->h};\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\t// if(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)\n\t\t\t\t// {\n\t\t\t\t// \tsi->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);\n\t\t\t\t// }\n\t\t\t\t// else\n\t\t\t\t// {\n\t\t\t\t// \tsi->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);\n\t\t\t\t// }\n\n\t\t\t\tsi->is_changing = true;\n\t\t\t}\n\t\t}\n\n\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD && si->is_changing)\n\t\t{\n\t\t\tif(si->orientation == SDLUI_ORIENTATION_HORIZONTAL)\n\t\t\t{\n\t\t\t\tsi->value = SDLUI_Map(si->x, si->x + si->w, si->min, si->max, mx);\n\t\t\t\tsi->value = SDLUI_Clamp(si->value, si->min, si->max);\n\t\t\t}\n\t\t\telse\n\t\t\t{\n\t\t\t\tsi->value = SDLUI_Map(si->y + si->h, si->y, si->min, si->max, my);\n\t\t\t\tsi->value = SDLUI_Clamp(si->value, si->min, si->max);\n\t\t\t}\n\n\t\t\t// NOTE: Return here or on mouse release?\n\t\t\treturn true;\n\t\t}\n\n\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && si->is_changing)\n\t\t{\n\t\t\tsi->is_changing = false;\n\t\t\treturn true;\n\t\t}\n\n\t\treturn false;\n\t}\n\n\t//si->is_changing = false;\n\treturn false;\n}\n\nbool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)\n{\n\tchk->do_process = true;\n\n\tif(chk->visible && chk->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {chk->x,chk->y,chk->w,chk->h};\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\tchk->checked = !chk->checked;\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\treturn false;\n}\n\nbool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)\n{\n\ttb->do_process = true;\n\n\tif(tb->visible && tb->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {tb->x,tb->y,tb->w,tb->h};\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\ttb->checked = !tb->checked;\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\treturn false;\n}\n\nbool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)\n{\n\trb->do_process = true;\n\n\tif(rb->visible && rb->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\n\t\tSDL_Rect r = {rb->x,rb->y,rb->w,rb->h};\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\tSDLUI_Control_RadioButton *cur;\n\n\t\t\t\tfor (int i = 0; i < rb->group->size; ++i)\n\t\t\t\t{\n\t\t\t\t\tcur = (SDLUI_Control_RadioButton*)rb->group->data[i];\n\t\t\t\t\tcur->checked = false;\n\t\t\t\t}\n\n\t\t\t\trb->checked = true;\n\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\treturn false;\n}\n\nbool SDLUI_Text(SDLUI_Control_Text *txt)\n{\n\ttxt->do_process = true;\n\n\tif(txt->visible && txt->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\treturn true;\n\t}\n\treturn false;\n}\n\nbool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)\n{\n\ttbc->do_process = true;\n\n\tif(tbc->visible && tbc->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\t\tSDL_Rect r = {tbc->x,tbc->y,tbc->w,tbc->bar_height};\n\t\tSDL_Rect tab_r;\n\t\ti32 offset = 0;\n\t\tSDLUI_Control_Tab *tab;\n\n\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t{\n\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t{\n\t\t\t\tfor (int i = 0; i < tbc->tabs.size; ++i)\n\t\t\t\t{\n\t\t\t\t\ttab = (SDLUI_Control_Tab*)tbc->tabs.data[i];\n\t\t\t\t\ttab_r = {tbc->x + offset, tbc->y, tab->w + SDLUI_MARGIN, 30};\n\n\t\t\t\t\tif(SDLUI_PointInRect(tab_r, mx, my))\n\t\t\t\t\t{\n\t\t\t\t\t\tfor (int j = 0; j < tbc->active_tab->children.size; ++j)\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\tSDLUI_Control *ctrl = tbc->active_tab->children.data[j];\n\t\t\t\t\t\t\tctrl->visible = false;\n\t\t\t\t\t\t}\n\t\t\t\t\t\ttbc->active_tab = tab;\n\t\t\t\t\t}\n\n\t\t\t\t\toffset += SDLUI_MARGIN + tab->w;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn false;\n}\n\nbool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)\n{\n\tsa->do_process = true;\n\n\tif(sa->visible && sa->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\ti32 mx, my;\n\t\tSDL_GetMouseState(&mx, &my);\n\t\tSDL_Rect r, rv, rh;\n\n\t\tr = {sa->x, sa->y, sa->w, sa->h};\n\n\t\tif(sa->content_height > sa->h)\n\t\t{\n\t\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t\t{\n\t\t\t\t// mouse wheel vertical\n\t\t\t\tif(SDLUI_Core.mouse_wheel_y != 0)\n\t\t\t\t{\n\t\t\t\t\tsa->scroll_y -= SDLUI_Core.mouse_wheel_y;\n\t\t\t\t\tsa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);\n\t\t\t\t\tSDLUI_Core.mouse_wheel_y = 0;\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tstatic i32 my_offset;\n\n\t\t\trv = {sa->x + sa->w - sa->scrollbar_thickness, sa->y + sa->scroll_y, sa->scrollbar_thickness, sa->thumb_size_v};\n\t\t\tif(SDLUI_PointInRect(rv, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tmy_offset = my - sa->scroll_y;\n\t\t\t\t\tsa->is_changing_v = true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// scroll per page\n\t\t\trv.y = sa->y;\n\t\t\trv.h = sa->scroll_y;\n\n\t\t\tif(SDLUI_PointInRect(rv, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tfloat pages = (float)sa->content_height / (float)sa->h;\n\t\t\t\t\tfloat pixels_per_page = (float)sa->track_size_v / pages;\n\t\t\t\t\tsa->scroll_y -= pixels_per_page;\n\t\t\t\t\tsa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\trv.y = sa->y + sa->scroll_y + sa->thumb_size_v;\n\t\t\trv.h = sa->track_size_v - sa->thumb_size_v - sa->scroll_y;\n\n\t\t\tif(SDLUI_PointInRect(rv, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tfloat pages = (float)sa->content_height / (float)sa->h;\n\t\t\t\t\tfloat pixels_per_page = (float)sa->track_size_v / pages;\n\t\t\t\t\tsa->scroll_y += pixels_per_page;\n\t\t\t\t\tsa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif(sa->is_changing_v)\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)\n\t\t\t\t{\n\t\t\t\t\tsa->scroll_y = my - my_offset;\n\t\t\t\t\tsa->scroll_y = SDLUI_Clamp(sa->scroll_y, 0, sa->track_size_v - sa->thumb_size_v);\n\t\t\t\t}\n\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED)\n\t\t\t\t{\n\t\t\t\t\tsa->is_changing_v = false;\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tif (sa->content_width > sa->w)\n\t\t{\n\t\t\tif(SDLUI_PointInRect(r, mx, my))\n\t\t\t{\n\t\t\t\t// mouse wheel horizontal\n\t\t\t\tif(SDLUI_Core.mouse_wheel_x != 0)\n\t\t\t\t{\n\t\t\t\t\tsa->scroll_x += SDLUI_Core.mouse_wheel_x;\n\t\t\t\t\tsa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);\n\t\t\t\t\tSDLUI_Core.mouse_wheel_x = 0;\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tstatic i32 mx_offset;\n\n\t\t\trh = {sa->x + sa->scroll_x, sa->y + sa->h - sa->scrollbar_thickness, sa->thumb_size_h, sa->scrollbar_thickness};\n\t\t\tif(SDLUI_PointInRect(rh, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tmx_offset = mx - sa->scroll_x;\n\t\t\t\t\tsa->is_changing_h = true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// scroll per page\n\t\t\trh.x = sa->x;\n\t\t\trh.w = sa->scroll_x;\n\n\t\t\tif(SDLUI_PointInRect(rh, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tfloat pages = (float)sa->content_width / (float)sa->w;\n\t\t\t\t\tfloat pixels_per_page = (float)sa->track_size_h / pages;\n\t\t\t\t\tsa->scroll_x -= pixels_per_page;\n\t\t\t\t\tsa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\trh.x = sa->x + sa->scroll_x + sa->thumb_size_h;\n\t\t\trh.w = sa->track_size_h - sa->thumb_size_h - sa->scroll_x;\n\n\t\t\tif(SDLUI_PointInRect(rh, mx, my))\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)\n\t\t\t\t{\n\t\t\t\t\tfloat pages = (float)sa->content_width / (float)sa->w;\n\t\t\t\t\tfloat pixels_per_page = (float)sa->track_size_h / pages;\n\t\t\t\t\tsa->scroll_x += pixels_per_page;\n\t\t\t\t\tsa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif(sa->is_changing_h)\n\t\t\t{\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)\n\t\t\t\t{\n\t\t\t\t\tsa->scroll_x = mx - mx_offset;\n\t\t\t\t\tsa->scroll_x = SDLUI_Clamp(sa->scroll_x, 0, sa->track_size_h - sa->thumb_size_h);\n\t\t\t\t}\n\n\t\t\t\tif(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED)\n\t\t\t\t{\n\t\t\t\t\tsa->is_changing_h = false;\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t}\n\t\treturn false;\n\t}\n\treturn false;\n}\n\nbool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items)\n{\n\tlst->do_process = true;\n\n\tif(lst->num_items != num_items)\n\t{\n\t\tlst->num_items = num_items;\n\t\tSDL_DestroyTexture(lst->scroll_area->tex_rect);\n\t\ti32 h = num_items * SDLUI_Font.height;\n\t\tlst->scroll_area->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, lst->scroll_area->w, h);\n\t\tlst->scroll_area->content_width = lst->scroll_area->w;\n\t\tlst->scroll_area->content_height = h;\n\t}\n\n\tstatic i32 offset_y;\n\tstatic i32 counter;\n\n\tif(counter == 0)\n\t{\n\t\tSDLUI_SetColor(SDLUI_Core.theme.col_list_background);\n\t\tSDL_Rect r = {0, 0, lst->scroll_area->content_width, lst->scroll_area->content_height};\n\t\tSDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);\n\t\tSDL_RenderFillRect(SDLUI_Core.renderer, &r);\n\t\tSDL_SetRenderTarget(SDLUI_Core.renderer, NULL);\n\t}\n\n\tSDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);\n\tSDLUI_SetColor(SDLUI_Core.theme.col_highlight);\n\tSDL_Rect r = {0, lst->cur_index * SDLUI_Font.height, lst->scroll_area->w-250, SDLUI_Font.height};\n\tSDL_RenderFillRect(SDLUI_Core.renderer, &r);\n\n\tSDLUI_DrawText(SDLUI_MARGIN, offset_y, cur_item, lst->scroll_area->tex_rect);\n\toffset_y += SDLUI_Font.height;\n\tcounter++;\n\n\tif(counter == num_items)\n\t{\n\t\toffset_y = 0;\n\t\tcounter = 0;\n\t}\n\n\tif(lst->visible && lst->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)\n\t{\n\t\treturn true;\n\t}\n\n\treturn false;\n}",
 			"file": "sdlui_usage.cpp",
-			"file_size": 12247,
-			"file_write_time": 132440634132531096,
 			"settings":
 			{
-				"buffer_size": 12232,
+				"buffer_size": 15188,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -267,16 +382,16 @@
 			"file": "sdlui_render.cpp",
 			"settings":
 			{
-				"buffer_size": 15485,
+				"buffer_size": 16331,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "sdlui_demo_controls_create.cpp",
+			"file": "sdlui_demo_controls_creation.cpp",
 			"settings":
 			{
-				"buffer_size": 4740,
+				"buffer_size": 9319,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -285,7 +400,7 @@
 			"file": "sdlui_demo_controls_usage.cpp",
 			"settings":
 			{
-				"buffer_size": 3771,
+				"buffer_size": 5908,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -652,16 +767,21 @@
 	],
 	"file_history":
 	[
-		"/D/dev/ui/sdlui_event.cpp",
+		"/D/dev/ed/helpers.cpp",
+		"/D/dev/ed/globals.cpp",
+		"/D/dev/ui/sdlui_enums.cpp",
 		"/D/dev/ui/sdlui.h",
+		"/D/dev/ui/include/SDL_video.h",
+		"/D/dev/ui/include/SDL_render.h",
+		"/D/dev/bb/game.h",
+		"/D/dev/ui/sdlui_render.cpp",
+		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
+		"/D/dev/ui/sdlui_event.cpp",
 		"/D/dev/ui/sdlui_embeded.cpp",
 		"/D/dev/ui/sdlui_scratch.cpp",
 		"/D/dev/ui/liberation-mono.c",
-		"/D/dev/ui/sdlui_render.cpp",
-		"/D/dev/ui/sdlui_enums.cpp",
 		"/D/dev/ui/build.bat",
 		"/D/dev/ui/.gitignore",
-		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
 		"/D/dev/ui/ui.sublime-project",
 		"/D/sublime text 3 settings backup/Packages/User/Package Control.cache/01524fae79697630d0454ba3fabd9414",
 		"/D/sublime text 3 settings backup/Packages/User/Package Control.cache/01524fae79697630d0454ba3fabd9414.info",
@@ -686,14 +806,12 @@
 		"/D/dev/ui/sdlui_helpers.cpp",
 		"/D/dev/ed/main.cpp",
 		"/D/dev/ed/render.cpp",
-		"/D/dev/ed/globals.cpp",
 		"/D/dev/ed/globals.h",
 		"/D/dev/ui/sdlui_create.cpp",
 		"/D/dev/ui/sdlui_demo_controls_create.cpp",
 		"/D/dev/SDL_OpenGL_template/main.cpp",
 		"/D/dev/ed/character.cpp",
 		"/D/dev/ed/input.cpp",
-		"/D/dev/ed/helpers.cpp",
 		"/D/dev/ed/file.cpp",
 		"/D/dev/ed/helpers.h",
 		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/cout.sublime-snippet",
@@ -726,7 +844,7 @@
 	],
 	"find":
 	{
-		"height": 38.4
+		"height": 28.0
 	},
 	"find_in_files":
 	{
@@ -741,6 +859,31 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"calcu",
+			"colors",
+			"dpi",
+			"scrolla",
+			"offset_y",
+			"clicked",
+			"counter",
+			"mx",
+			"scroll",
+			"cout",
+			"7",
+			"txt1",
+			"checkbo",
+			".create",
+			"cur_result",
+			"can_close",
+			"vi",
+			"visi",
+			"min",
+			"once",
+			"createte",
+			"radio",
+			"force",
+			"activ",
+			"acti",
 			"i + 1",
 			"%",
 			"init",
@@ -807,6 +950,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"old_result",
+			"has_close_button",
 			"col_scrollbar_thumb",
 			"col_button_click",
 			"col_window_bg",
@@ -827,7 +972,7 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -836,15 +981,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2189,
+						"buffer_size": 2556,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1042,
-								1042
+								798,
+								798
 							]
 						],
 						"settings":
@@ -854,146 +999,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 836.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "sdlui_helpers.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 11599,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								10334,
-								10338
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 7164.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "sdlui_structs.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6848,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								970,
-								987
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 6044.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "sdlui_create.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7736,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7041,
-								7041
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4359.2,
+						"translation.y": 676.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "sdlui_usage.cpp",
+					"buffer": 1,
+					"file": "sdlui_event.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12232,
+						"buffer_size": 533,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11634,
-								11634
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 8380.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "sdlui_render.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15485,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								219,
-								219
+								296,
+								296
 							]
 						],
 						"settings":
@@ -1006,24 +1032,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "sdlui_demo_controls_create.cpp",
+					"buffer": 2,
+					"file": "sdlui_demo_calc.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4740,
+						"buffer_size": 2054,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3662,
-								3662
+								1549,
+								1549
 							]
 						],
 						"settings":
@@ -1032,19 +1058,227 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1034.4,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "sdlui_helpers.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12038,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								267,
+								267
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2147.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/D/dev/ed/input.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26376,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5753,
+								5740
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2698.4,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "sdlui_structs.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7778,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1193,
+								1193
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 816.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "sdlui_create.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8440,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8283,
+								8283
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5840.8,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "sdlui_usage.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15188,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15158,
+								15158
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 11560.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "sdlui_render.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16331,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11141,
+								11141
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7144.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
+					"file": "sdlui_demo_controls_creation.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9319,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								580,
+								580
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
 					"file": "sdlui_demo_controls_usage.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3771,
+						"buffer_size": 5908,
 						"regions":
 						{
 							"mark":
@@ -1054,8 +1288,8 @@
 								"regions":
 								[
 									[
-										383,
-										383
+										852,
+										852
 									]
 								],
 								"scope": "mark"
@@ -1064,19 +1298,20 @@
 						"selection":
 						[
 							[
-								613,
-								613
+								345,
+								345
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage"
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 38.4,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
@@ -1088,7 +1323,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 38.4
 	},
 	"layout":
 	{
@@ -1138,6 +1373,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"slui",
+				"sdlui.h"
+			],
 			[
 				"enu",
 				"sdlui_enums.cpp"

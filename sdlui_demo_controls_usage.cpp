@@ -1,9 +1,13 @@
+// We call each controls' usage function. Most of them return a boolean representing user interaction.
+// (a click of a button, a slider's change in value, etc.)
+
 SDLUI_Window(wnd1);
 SDLUI_Window(wnd2);
 SDLUI_Window(wnd3);
 SDLUI_Window(wnd4);
 
 if(SDLUI_Button(btn1)) {std::cout << "btn1" << std::endl;}
+if(SDLUI_TextBox(tbx1)) {std::cout << "tbx1" << std::endl;}
 if(SDLUI_SliderInt(si1)) {std::cout << si1->value << std::endl;}
 if(SDLUI_SliderInt(si2)) {std::cout << si2->value << std::endl;}
 
@@ -23,7 +27,6 @@ if(SDLUI_CheckBox(chk1)) {std::cout << "chk1" << std::endl;}
 
 if(SDLUI_Button(btn2)) {std::cout << "btn2" << std::endl;}
 if(SDLUI_CheckBox(chk2)) {std::cout << "chk2" << std::endl;}
-SDLUI_Text(txt1);
 if(SDLUI_ScrollArea(sa2)) {;}
 
 if(SDLUI_RadioButton(rb1)) {std::cout << "rb1" << std::endl;}
@@ -37,6 +40,8 @@ if(SDLUI_ToggleButton(tb1)) {std::cout << "tb1" << std::endl;}
 if(SDLUI_Button(btn3)) {std::cout << "btn3" << std::endl;}
 SDLUI_TabContainer(tbc1);
 
+// Copy the current theme in clipboard. This can be used to create an instance of an SDLUI_Theme struct
+// for a custom color theme definition.
 if(SDLUI_Button(btn_copy))
 {
 	SDLUI_Control_SliderInt *cur;
@@ -69,7 +74,7 @@ if(SDLUI_Button(btn_copy))
 	SDL_SetClipboardText(cb.c_str());
 }
 
-SDLUI_Control_SliderInt * col_slider;
+SDLUI_Control_SliderInt *col_slider;
 
 SDLUI_Text(txt01);
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[0];
@@ -105,7 +110,7 @@ if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.b = col_slider->
 
 
 /////////////////////////////
-enum op{op_digit, op_eq, op_add, op_sub, op_mul, op_div};
+
 static double result = 0.0f;
 
 SDLUI_Window(calc);
@@ -117,21 +122,21 @@ if(SDLUI_Button(calc_btnc)) {;}
 
 if(SDLUI_Button(calc_btn7)) {calculator(op_digit, 7, result, display->text);}
 if(SDLUI_Button(calc_btn8)) {calculator(op_digit, 8, result, display->text);}
-SDLUI_Button(calc_btn9);
-SDLUI_Button(calc_btndiv);
+if(SDLUI_Button(calc_btn9)) {calculator(op_digit, 9, result, display->text);}
+if(SDLUI_Button(calc_btndiv)) {calculator(op_div, 0, result, display->text);}
 
-SDLUI_Button(calc_btn4);
-SDLUI_Button(calc_btn5);
-SDLUI_Button(calc_btn6);
-SDLUI_Button(calc_btnmul);
+if(SDLUI_Button(calc_btn4)) {calculator(op_digit, 4, result, display->text);}
+if(SDLUI_Button(calc_btn5)) {calculator(op_digit, 5, result, display->text);}
+if(SDLUI_Button(calc_btn6)) {calculator(op_digit, 6, result, display->text);}
+if(SDLUI_Button(calc_btnmul)) {calculator(op_mul, 0, result, display->text);}
 
-SDLUI_Button(calc_btn1);
-SDLUI_Button(calc_btn2);
-SDLUI_Button(calc_btn3);
-SDLUI_Button(calc_btnsub);
+if(SDLUI_Button(calc_btn1)) {calculator(op_digit, 1, result, display->text);}
+if(SDLUI_Button(calc_btn2)) {calculator(op_digit, 2, result, display->text);}
+if(SDLUI_Button(calc_btn3)) {calculator(op_digit, 3, result, display->text);}
+if(SDLUI_Button(calc_btnsub)) {calculator(op_sub, 0, result, display->text);}
 
-SDLUI_Button(calc_btn0);
-SDLUI_Button(calc_btnfp);
-SDLUI_Button(calc_btneq);
-SDLUI_Button(calc_btnadd);
+if(SDLUI_Button(calc_btn0)) {calculator(op_digit, 0, result, display->text);}
+if(SDLUI_Button(calc_btndot)) {calculator(op_dot, 0, result, display->text);}
+if(SDLUI_Button(calc_btneq)) {calculator(op_eq, 0, result, display->text);}
+if(SDLUI_Button(calc_btnadd)) {calculator(op_add, 0, result, display->text);}
 

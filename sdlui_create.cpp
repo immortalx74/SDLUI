@@ -11,7 +11,9 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 	wnd->w = w;
 	wnd->h = h;
 	wnd->is_resized = false;
-	wnd->do_process = false;;
+	wnd->do_process = false;
+	wnd->has_close_button = true;
+	wnd->can_be_resized = true;
 
 	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,wnd->title.data, SDLUI_Core.theme.col_white);
 	wnd->tex_title = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
@@ -21,7 +23,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 
 	wnd->children.create();
 	SDLUI_Window_Collection.push(wnd);
-	SDLUI_SetActiveWindow(wnd);
+	//SDLUI_SetActiveWindow(wnd);
 	return wnd;
 }
 
@@ -79,7 +81,7 @@ SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(SDLUI_Control_Window *wnd, i32 x,
 	return si;
 }
 
-SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i32 y, bool checked)
+SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i32 y, char *text, bool checked)
 {
 	SDLUI_Control_CheckBox *chk = (SDLUI_Control_CheckBox*)malloc(sizeof(SDLUI_Control_CheckBox));
 
@@ -91,6 +93,18 @@ SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i
 	chk->h = 16;
 	chk->checked = checked;
 	chk->parent = wnd;
+
+	if(strlen(text) > 0)
+	{
+		chk->text.create(text);
+		SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, SDLUI_Core.theme.col_white);
+		chk->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
+		SDL_FreeSurface(s);
+	}
+	else
+	{
+		chk->tex_text = NULL;
+	}
 
 	wnd->children.push(chk);
 	return chk;
@@ -117,7 +131,7 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
 	return txt;
 }
 
-SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, i32 x, i32 y, bool checked)
+SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, i32 x, i32 y, char *text, bool checked)
 {
 	SDLUI_Control_ToggleButton *tb = (SDLUI_Control_ToggleButton*)malloc(sizeof(SDLUI_Control_ToggleButton));
 
@@ -129,6 +143,18 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
 	tb->h = 16;
 	tb->checked = checked;
 	tb->parent = wnd;
+
+	if(strlen(text) > 0)
+	{
+		tb->text.create(text);
+		SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, SDLUI_Core.theme.col_white);
+		tb->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
+		SDL_FreeSurface(s);
+	}
+	else
+	{
+		tb->tex_text = NULL;
+	}
 
 	wnd->children.push(tb);
 
@@ -142,7 +168,7 @@ SDLUI_ArrayOfControls SDLUI_CreateRadioButtonGroup()
 	return rb_group;
 }
 
-SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SDLUI_ArrayOfControls &group, i32 x, i32 y, bool checked)
+SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SDLUI_ArrayOfControls &group, i32 x, i32 y, char *text, bool checked)
 {
 	SDLUI_Control_RadioButton *rb = (SDLUI_Control_RadioButton*)malloc(sizeof(SDLUI_Control_RadioButton));
 
@@ -156,6 +182,18 @@ SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SD
 	rb->group = &group;
 	rb->group->push(rb);
 	rb->parent = wnd;
+
+	if(strlen(text) > 0)
+	{
+		rb->text.create(text);
+		SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle, text, SDLUI_Core.theme.col_white);
+		rb->tex_text = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, s);
+		SDL_FreeSurface(s);
+	}
+	else
+	{
+		rb->tex_text = NULL;
+	}
 
 	wnd->children.push(rb);
 
@@ -262,7 +300,37 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 		sa->client_height = sa->h;
 	}
 
-	lst->parent = wnd;
-	wnd->children.push(lst);
+	// lst->parent = wnd;
+	// wnd->children.push(lst);
 	return lst;
+}
+
+SDLUI_Control_TextBox *SDLUI_CreateTextBox(SDLUI_Control_Window *wnd, i32 x, i32 y, i32 w)
+{
+	SDLUI_Control_TextBox *tbx = (SDLUI_Control_TextBox*)malloc(sizeof(SDLUI_Control_TextBox));
+
+	tbx->do_process = false;
+
+	tbx->type = SDLUI_CONTROL_TYPE_TEXTBOX;
+	tbx->do_process = false;
+	tbx->x = wnd->x + x;
+	tbx->y = wnd->y + y;
+	tbx->w = w;
+	tbx->h = 30;
+	tbx->text.create("");
+	tbx->select_start = 0;
+	tbx->select_end = 0;
+	tbx->cursor_pos = 0;
+	tbx->cursor_blink_rate = 120;
+	tbx->focused = false;
+
+	i32 tw = SDLUI_Font.width * 100;
+	i32 th = SDLUI_Font.height;
+	tbx->tex_text = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, tw, th);
+
+	tbx->parent = wnd;
+
+	wnd->children.push(tbx);
+
+	return tbx;
 }

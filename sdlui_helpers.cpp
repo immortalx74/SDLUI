@@ -24,7 +24,7 @@ bool SDLUI_PointInRect(SDL_Rect rect, i32 x, i32 y)
 void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 {
 	#ifdef _WIN32
-		SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
+	SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
 	#endif
 
 	IMG_Init(IMG_INIT_PNG);
@@ -337,26 +337,29 @@ void SDLUI_WindowHandler()
 	SDLUI_Control_Window *aw = SDLUI_Core.active_window;
 	static SDLUI_RESIZE_DIRECTION res_dir = SDLUI_RESIZE_NONE;
 
-	if(!aw->is_resized)
+	if(aw != NULL)
 	{
-		res_dir = SDLUI_SetWindowResizeCursor(aw, mx, my);
-
-		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
+		if(!aw->is_resized && aw->can_be_resized)
 		{
-			aw->is_resized = true;
-		}
-	}
+			res_dir = SDLUI_SetWindowResizeCursor(aw, mx, my);
 
-	if(aw->is_resized && !aw->is_dragged)
-	{
-		SDLUI_ResizeWindow(aw, res_dir, mx, my);
-		SDL_DestroyTexture(aw->tex_rect);
-		aw->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, aw->w, aw->h);
-	}
-	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && aw->is_resized)
-	{
-		aw->is_resized = false;
-		SDL_SetCursor(SDLUI_Core.cursor_arrow);
+			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_HELD)
+			{
+				aw->is_resized = true;
+			}
+		}
+
+		if(aw->is_resized && !aw->is_dragged)
+		{
+			SDLUI_ResizeWindow(aw, res_dir, mx, my);
+			SDL_DestroyTexture(aw->tex_rect);
+			aw->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, aw->w, aw->h);
+		}
+		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_RELEASED && aw->is_resized)
+		{
+			aw->is_resized = false;
+			SDL_SetCursor(SDLUI_Core.cursor_arrow);
+		}
 	}
 
 	if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED && SDL_GetCursor() == SDLUI_Core.cursor_arrow)
@@ -384,6 +387,10 @@ void SDLUI_WindowHandler()
 		if(SDLUI_Window_Collection.data[index] != SDLUI_Core.active_window && hovers_window)
 		{
 			SDLUI_SetActiveWindow((SDLUI_Control_Window*)SDLUI_Window_Collection.data[index]);
+		}
+		else if(!hovers_window)
+		{
+			SDLUI_Core.active_window = NULL;
 		}
 	}
 }

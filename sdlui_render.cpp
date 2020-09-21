@@ -139,6 +139,14 @@ void SDLUI_Render_CheckBox(SDLUI_Control_CheckBox *chk)
 		{
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_tick, NULL, &r);
 		}
+
+		if(chk->tex_text != NULL)
+		{
+			i32 tex_w, tex_h;
+			SDL_QueryTexture(chk->tex_text, NULL, NULL, &tex_w, &tex_h);
+			r = {xx + chk->w + SDLUI_MARGIN, yy+2, tex_w, tex_h};
+			SDL_RenderCopy(SDLUI_Core.renderer, chk->tex_text, NULL, &r);
+		}
 	}
 }
 
@@ -189,6 +197,14 @@ void SDLUI_Render_ToggleButton(SDLUI_Control_ToggleButton *tb)
 		}
 
 		SDLUI_Colorize(SDLUI_Core.tex_circle_fill_2, SDLUI_Core.theme.col_white);
+
+		if(tb->tex_text != NULL)
+		{
+			i32 tex_w, tex_h;
+			SDL_QueryTexture(tb->tex_text, NULL, NULL, &tex_w, &tex_h);
+			r = {xx + tb->w + SDLUI_MARGIN, yy+2, tex_w, tex_h};
+			SDL_RenderCopy(SDLUI_Core.renderer, tb->tex_text, NULL, &r);
+		}
 	}
 }
 
@@ -206,6 +222,14 @@ void SDLUI_Render_RadioButton(SDLUI_Control_RadioButton *rb)
 		if(rb->checked)
 		{
 			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_circle_fill_2, NULL, &r);
+		}
+
+		if(rb->tex_text != NULL)
+		{
+			i32 tex_w, tex_h;
+			SDL_QueryTexture(rb->tex_text, NULL, NULL, &tex_w, &tex_h);
+			r = {xx + rb->w + SDLUI_MARGIN, yy+2, tex_w, tex_h};
+			SDL_RenderCopy(SDLUI_Core.renderer, rb->tex_text, NULL, &r);
 		}
 	}
 }
@@ -358,12 +382,35 @@ void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 	}
 }
 
-void SDLUI_Render_List(SDLUI_Control_List *lst)
+void SDLUI_Render_TextBox(SDLUI_Control_TextBox *tbx)
 {
-	if(lst->visible)
+	if(tbx->visible)
 	{
-		i32 xx = lst->scroll_area->x - lst->scroll_area->parent->x;
-		i32 yy = lst->scroll_area->y - lst->scroll_area->parent->y;
+		static i32 frame_count;
+		i32 xx = tbx->x - tbx->parent->x;
+		i32 yy = tbx->y - tbx->parent->y;
+
+		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
+
+		SDL_Rect r = {xx, yy, tbx->w, tbx->h};
+		SDL_RenderDrawRect(SDLUI_Core.renderer, &r);
+
+		SDL_Rect src = {0, 0, SDLUI_Font.width * tbx->text.length, SDLUI_Font.height};
+		SDL_Rect dst = {xx + SDLUI_MARGIN, yy + SDLUI_MARGIN, src.w, src.h};
+		SDL_RenderCopy(SDLUI_Core.renderer, tbx->tex_text, &src, &dst);
+
+		if(frame_count >= tbx->cursor_blink_rate)
+		{
+			r = {xx + SDLUI_MARGIN + (tbx->cursor_pos * SDLUI_Font.width), yy + 6, 2, tbx->h - 12};
+			SDLUI_SetColor(SDLUI_Core.theme.col_white);
+			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+		}
+		frame_count ++;
+		if(frame_count > 2 * tbx->cursor_blink_rate)
+		{
+			frame_count = 0;
+		}
+
 	}
 }
 
@@ -419,9 +466,9 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
 		}
 		break;
 
-		case SDLUI_CONTROL_TYPE_LIST:
+		case SDLUI_CONTROL_TYPE_TEXTBOX:
 		{
-			SDLUI_Render_List((SDLUI_Control_List*)ctrl);
+			SDLUI_Render_TextBox((SDLUI_Control_TextBox*)ctrl);
 		}
 		break;
 	}
@@ -478,21 +525,24 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 			SDL_GetMouseState(&mx, &my);
 			r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
 
-			if(SDLUI_PointInRect(r, mx, my) && !wnd->is_resized)
+			if(wnd->has_close_button)
 			{
-				SDLUI_SetColor(SDLUI_Core.theme.col_red);
-				r = {wnd->w - 29, 1, 28, 28};
-				SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-			}
-			else
-			{
-				SDLUI_SetColor(SDLUI_Core.theme.col_active_window_bar);
-				r = {wnd->w - 29, 1, 28, 28};
-				SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-			}
+				if(SDLUI_PointInRect(r, mx, my) && !wnd->is_resized)
+				{
+					SDLUI_SetColor(SDLUI_Core.theme.col_red);
+					r = {wnd->w - 29, 1, 28, 28};
+					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+				}
+				else
+				{
+					SDLUI_SetColor(SDLUI_Core.theme.col_active_window_bar);
+					r = {wnd->w - 29, 1, 28, 28};
+					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+				}
 
-			r = {0 + wnd->w - 30, 0, 30, 30};
-			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_close, NULL, &r);
+				r = {0 + wnd->w - 30, 0, 30, 30};
+				SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_close, NULL, &r);
+			}
 
 			SDLUI_CONTROL_TYPE type;
 			SDLUI_Control *ctrl;
@@ -531,8 +581,11 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 			r = {SDLUI_MARGIN, SDLUI_MARGIN, tex_w, tex_h};
 			SDL_RenderCopy(SDLUI_Core.renderer, wnd->tex_title, NULL, &r);
 
-			r = {0 + wnd->w - 30, 0, 30, 30};
-			SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_close, NULL, &r);
+			if(wnd->has_close_button)
+			{
+				r = {0 + wnd->w - 30, 0, 30, 30};
+				SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_close, NULL, &r);
+			}
 
 			SDLUI_SetColor(SDLUI_Core.theme.col_grey);
 			r = {0, 0, wnd->w, wnd->h};

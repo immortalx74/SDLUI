@@ -1,14 +1,15 @@
 // First create some windows.
-SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(10, 10, 350, 400, "Window1");
-SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(380, 10, 450, 350, "Window2");
-SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(250, 300, 550, 400, "Window3");
-SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 400, 820, 170, "Colors");
+SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(20, 100, 350, 400, "Window1");
+SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(390, 10, 450, 350, "Window2");
+SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(410, 380, 370, 250, "Window3");
+SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 650, 820, 170, "Colors");
 
-// Add some common controls. Simple controls such as these should be easy to grasp.
+// Add some common controls. Simple controls such as these do not need much explaining.
 SDLUI_Control_Button *btn1 = SDLUI_CreateButton(wnd1, 10, 40, "PushButton");
+SDLUI_Control_TextBox *tbx1 = SDLUI_CreateTextBox(wnd1, 160, 40, 150);
 SDLUI_Control_SliderInt *si1 = SDLUI_CreateSliderInt(wnd1, 10, 90, 0, 100, 20);
 SDLUI_Control_SliderInt *si2 = SDLUI_CreateSliderInt(wnd1, 140, 90, 0, 100, 60, SDLUI_ORIENTATION_VERTICAL);
-SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, false);
+SDLUI_Control_CheckBox *chk1 = SDLUI_CreateCheckBox(wnd1, 10, 130, "Checkbox", false);
 
 // A ScrollArea is a dual purpose control. It can either host an image (in the form of an SDL_Texture),
 // or a list, where it effectively replicates the functionality of a listbox.
@@ -29,21 +30,20 @@ for (int i = 0; i < 100; ++i)
 }
 
 // We can now create a list and bind it to the ScrollArea above.
-// If the size of the container isn't known at compile time we can simply pass zero to the last function parameter.
+// If the size of the data container isn't known at compile time we can simply pass zero to the last function parameter.
 // In this case we pass the size of the list_items vector.
 SDLUI_Control_List *lst1 = SDLUI_CreateList(wnd1, sa1, list_items.size());
 
 // Some more controls...
 SDLUI_Control_Button *btn2 = SDLUI_CreateButton(wnd2, 10, 40, "ClickMe");
-SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, false);
-SDLUI_Control_Text *txt1 = SDLUI_CreateText(wnd2, 50, 90, "Some text here!");
+SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, "Another checkbox", true);
 
 // Here's another ScrollArea. This time it hosts an image. If the image texture isn't availlable at compile time,
 // we can pass NULL as the last parameter. Here we first create a texture and pass it on to the ScrollArea.
 SDL_Surface *surf = IMG_Load("res/test1.png");
 SDL_Texture *tex = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, surf);
 SDL_FreeSurface(surf);
-SDLUI_Control_ScrollArea *sa2 = SDLUI_CreateScrollArea(wnd2, 10, 120, 400, 100, tex);
+SDLUI_Control_ScrollArea *sa2 = SDLUI_CreateScrollArea(wnd2, 10, 120, 430, 220, tex);
 
 // RadioButtons are handled in groups. A special kind of array(SDLUI_ArrayOfControls) is used
 // to store pointers to RadioButtons which belong in the same group. The SDLUI_CreateRadioButtonGroup() function
@@ -52,30 +52,39 @@ SDLUI_ArrayOfControls rb_group1 = SDLUI_CreateRadioButtonGroup();
 SDLUI_ArrayOfControls rb_group2 = SDLUI_CreateRadioButtonGroup();
 
 // Create a bunch of RadioButtons, assigning them to their respective group.
-SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 40, true);
-SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 70, false);
-SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(wnd3, rb_group1, 10, 100, false);
+SDLUI_Control_RadioButton *rb1 = SDLUI_CreateRadioButton(wnd3, rb_group1, 30, 80, "RadioButton1", true);
+SDLUI_Control_RadioButton *rb2 = SDLUI_CreateRadioButton(wnd3, rb_group1, 30, 110, "RadioButton2", false);
+SDLUI_Control_RadioButton *rb3 = SDLUI_CreateRadioButton(wnd3, rb_group1, 30, 140, "RadioButton3", false);
 
-SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 40, false);
-SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 70, true);
-SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 70, 100, false);
+SDLUI_Control_RadioButton *rb4 = SDLUI_CreateRadioButton(wnd3, rb_group2, 220, 80, "RadioButton4", false);
+SDLUI_Control_RadioButton *rb5 = SDLUI_CreateRadioButton(wnd3, rb_group2, 220, 110, "RadioButton5", true);
+SDLUI_Control_RadioButton *rb6 = SDLUI_CreateRadioButton(wnd3, rb_group2, 220, 140, "RadioButton6", false);
 
 // More controls...
-SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 140, 140, true);
-SDLUI_Control_Button *btn3 = SDLUI_CreateButton(wnd3, 140, 180, "Test");
+SDLUI_Control_ToggleButton *tb1 = SDLUI_CreateToggleButton(wnd3, 30, 80, "Toggle Button", true);
+SDLUI_Control_Button *btn3 = SDLUI_CreateButton(wnd3, 30, 110, "Test");
 
 // A TabContainer is a container for child controls, and all it does is manage their visibility.
 // It can be created with either a horizontal (default) or vertical strip of tabs.
 // It's a 3-step proccess: Create a TabContainer, add some tabs, and finally add previously created controls to each tab.
-// Note that positioning of controls is relative to the window and not to the position of the TabContainer.
-SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 100, 40, 350, 200);
+// Note that positioning of controls is relative to the window and not to the position of the TabContainer inside the window.
+SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 10, 40, 350, 200);
 
 tbc1->add_tab("First");
 tbc1->add_tab("Second");
 tbc1->add_tab("Third");
 
-tbc1->add_child(0, tb1);
-tbc1->add_child(0, btn3);
+tbc1->set_active_tab(0);
+
+tbc1->add_child(0, rb1);
+tbc1->add_child(0, rb2);
+tbc1->add_child(0, rb3);
+tbc1->add_child(0, rb4);
+tbc1->add_child(0, rb5);
+tbc1->add_child(0, rb6);
+
+tbc1->add_child(1, tb1);
+tbc1->add_child(1, btn3);
 
 // Yet more controls...
 SDLUI_Control_Button *btn_copy = SDLUI_CreateButton(wnd4, 680, 40, "Copy");
@@ -124,8 +133,9 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[9]; col_slider->value 
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10]; col_slider->value = SDLUI_Core.theme.col_highlight.g;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11]; col_slider->value = SDLUI_Core.theme.col_highlight.b;
 
-////////////////////////////
-SDLUI_Control_Window *calc = SDLUI_CreateWindow(400, 300, 170, 280, "Calc");
+// A tiny calculator app in a window
+SDLUI_Control_Window *calc = SDLUI_CreateWindow(860, 300, 170, 280, "Calc");
+calc->can_be_resized = false;
 SDLUI_Control_Text *display = SDLUI_CreateText(calc, 150, 50, "0");
 
 SDLUI_Control_Button *calc_btnc = SDLUI_CreateButton(calc, 130, 80, "C"); calc_btnc->w = 30;
@@ -146,6 +156,6 @@ SDLUI_Control_Button *calc_btn3 = SDLUI_CreateButton(calc, 90, 200, "3"); calc_b
 SDLUI_Control_Button *calc_btnsub = SDLUI_CreateButton(calc, 130, 200, "-"); calc_btnsub->w = 30;
 
 SDLUI_Control_Button *calc_btn0 = SDLUI_CreateButton(calc, 10, 240, "0"); calc_btn0->w = 30;
-SDLUI_Control_Button *calc_btnfp = SDLUI_CreateButton(calc, 50, 240, "."); calc_btnfp->w = 30;
+SDLUI_Control_Button *calc_btndot = SDLUI_CreateButton(calc, 50, 240, "."); calc_btndot->w = 30;
 SDLUI_Control_Button *calc_btneq = SDLUI_CreateButton(calc, 90, 240, "="); calc_btneq->w = 30;
 SDLUI_Control_Button *calc_btnadd = SDLUI_CreateButton(calc, 130, 240, "+"); calc_btnadd->w = 30;

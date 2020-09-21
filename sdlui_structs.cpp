@@ -42,6 +42,41 @@ struct SDLUI_String
 
 		modified = true;
 	}
+
+	bool insert_char(char c, i32 pos)
+	{
+		if(pos < 0 || pos > length)
+		{
+			return false;
+		}
+
+		i32 new_length = length + 1;
+		if(new_length > capacity)
+		{
+			capacity = ((new_length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
+			data = (char*)realloc(data, capacity);
+		}
+
+		if(pos == 0)
+		{
+			memmove(data + 1, data, length);
+			memset(data, c, 1);
+		}
+		else if(pos == length)
+		{
+			memset(data + length, c, 1);
+		}
+		else
+		{
+			memmove(data + pos + 1, data + pos, length - pos);
+			memset(data + pos, c, 1);
+		}
+
+		length = new_length;
+		memset(data + length, 0, 1);
+		modified = true;
+		return true;
+	}
 };
 
 struct SDLUI_Theme
@@ -161,6 +196,8 @@ struct SDLUI_Control_Window : SDLUI_Control
 	SDL_Texture *tex_title;
 	SDL_Texture *tex_rect;
 	bool active;
+	bool has_close_button;
+	bool can_be_resized;
 	SDLUI_ArrayOfControls children;
 };
 
@@ -185,11 +222,15 @@ struct SDLUI_Control_SliderInt : SDLUI_Control
 struct SDLUI_Control_CheckBox : SDLUI_Control
 {
 	bool checked;
+	SDLUI_String text;
+	SDL_Texture *tex_text;
 };
 
 struct SDLUI_Control_ToggleButton : SDLUI_Control
 {
 	bool checked;
+	SDLUI_String text;
+	SDL_Texture *tex_text;
 };
 
 struct SDLUI_Control_RadioButton : SDLUI_Control
@@ -197,6 +238,8 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
 	SDLUI_ArrayOfControls *group;
 	bool checked;
 	bool checked_changed;
+	SDLUI_String text;
+	SDL_Texture *tex_text;
 };
 
 struct __SDLUI_Core
@@ -265,6 +308,16 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
 
 	}
 
+	void set_active_tab(i32 index)
+	{
+		if(index < 0 || index > this->tabs.size - 1)
+		{
+			return;
+		}
+
+		this->active_tab = (SDLUI_Control_Tab*)this->tabs.data[index];
+	}
+
 	void add_child(i32 tab_index, SDLUI_Control *ctrl)
 	{
 		SDLUI_Control_Window *wnd = (SDLUI_Control_Window*)this->parent;
@@ -331,4 +384,15 @@ struct SDLUI_Control_List : SDLUI_Control
 	i32 selected_index;
 	i32 max_string_width;
 	const char *cur_item;
+};
+
+struct SDLUI_Control_TextBox : SDLUI_Control
+{
+	SDLUI_String text;
+	SDL_Texture *tex_text;
+	i32 select_start;
+	i32 select_end;
+	i32 cursor_pos;
+	i32 cursor_blink_rate;
+	bool focused;
 };
