@@ -77,6 +77,29 @@ struct SDLUI_String
 		modified = true;
 		return true;
 	}
+
+	bool delete_char(i32 pos)
+	{
+		if(pos < 0 || pos > length - 1)
+		{
+			return false;
+		}
+
+		if(pos == length - 1)
+		{
+			memset(data + length - 1, 0, 1);
+		}
+		else
+		{
+			//abcde
+			memmove(data + pos, data + pos + 1, length - pos - 1);
+			memset(data + length - 1, 0, 1);
+		}
+
+		length--;
+		modified = true;
+		return true;
+	}
 };
 
 struct SDLUI_Theme
@@ -95,7 +118,8 @@ struct SDLUI_Theme
 	SDL_Color col_grey = {58, 58, 58, 255};
 	SDL_Color col_red = {222, 17, 35, 255};
 	SDL_Color col_black = {0, 0, 0, 255};
-	SDL_Color col_list_background = {32, 32, 32, 255};
+	SDL_Color col_list_bg = {32, 32, 32, 255};
+	SDL_Color col_textbox_bg = {22, 22, 22, 255};
 };
 
 struct SDLUI_Control
@@ -242,6 +266,18 @@ struct SDLUI_Control_RadioButton : SDLUI_Control
 	SDL_Texture *tex_text;
 };
 
+struct SDLUI_Control_TextBox : SDLUI_Control
+{
+	SDLUI_String text;
+	SDL_Texture *tex_text;
+	i32 select_start;
+	i32 select_end;
+	i32 cursor_pos;
+	i32 max_chars;
+	i32 scroll;
+	bool focused;
+};
+
 struct __SDLUI_Core
 {
 	SDL_Window *window;
@@ -258,6 +294,7 @@ struct __SDLUI_Core
 	SDL_Event e;
 
 	SDL_Cursor *cursor_arrow;
+	SDL_Cursor *cursor_ibeam;
 	SDL_Cursor *cursor_size_we;
 	SDL_Cursor *cursor_size_ns;
 
@@ -384,15 +421,4 @@ struct SDLUI_Control_List : SDLUI_Control
 	i32 selected_index;
 	i32 max_string_width;
 	const char *cur_item;
-};
-
-struct SDLUI_Control_TextBox : SDLUI_Control
-{
-	SDLUI_String text;
-	SDL_Texture *tex_text;
-	i32 select_start;
-	i32 select_end;
-	i32 cursor_pos;
-	i32 cursor_blink_rate;
-	bool focused;
 };

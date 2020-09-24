@@ -30,7 +30,6 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 	IMG_Init(IMG_INIT_PNG);
 	TTF_Init();
 
-	// SDLUI_Font.handle = TTF_OpenFont("liberation-mono.ttf", SDLUI_Font.size);
 	SDL_RWops *rw;
 	rw = SDL_RWFromMem((void*)sdlui_font_data, sizeof(sdlui_font_data));
 	SDLUI_Font.handle = TTF_OpenFontRW(rw, 1, SDLUI_Font.size);
@@ -45,6 +44,8 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 	SDLUI_Window_Collection.create();
 
 	SDLUI_Core.cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+	SDLUI_Core.cursor_ibeam = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
+
 	SDLUI_Core.cursor_size_we = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
 	SDLUI_Core.cursor_size_ns = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
 
@@ -228,6 +229,7 @@ SDLUI_RESIZE_DIRECTION SDLUI_SetWindowResizeCursor(SDLUI_Control_Window *wnd, i3
 	}
 
 	SDL_SetCursor(SDLUI_Core.cursor_arrow);
+
 	return SDLUI_RESIZE_NONE;
 }
 

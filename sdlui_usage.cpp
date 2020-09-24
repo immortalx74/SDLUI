@@ -525,7 +525,7 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 
 	if(counter == 0)
 	{
-		SDLUI_SetColor(SDLUI_Core.theme.col_list_background);
+		SDLUI_SetColor(SDLUI_Core.theme.col_list_bg);
 		SDL_Rect r = {0, 0, lst->scroll_area->content_width, lst->scroll_area->content_height};
 		SDL_SetRenderTarget(SDLUI_Core.renderer, lst->scroll_area->tex_rect);
 		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -598,26 +598,113 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 
 		if(SDLUI_PointInRect(r, mx, my))
 		{
-			if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+			SDL_SetCursor(SDLUI_Core.cursor_ibeam);
+		}
+		else
+		{
+			SDL_SetCursor(SDLUI_Core.cursor_arrow);
+		}
+
+
+		if(SDLUI_MouseButton(SDL_BUTTON_LEFT) == SDLUI_MOUSEBUTTON_PRESSED)
+		{
+			if(SDLUI_PointInRect(r, mx, my))
 			{
 				tbx->focused = true;
 				return true;
 			}
+			else
+			{
+				tbx->focused = false;
+			}
 		}
+	}
 
-		if(tbx->focused && SDLUI_Core.e.type == SDL_TEXTINPUT)
+	if(tbx->focused && tbx->parent == SDLUI_Core.active_window)
+	{
+		if(SDLUI_Core.e.type == SDL_TEXTINPUT)
 		{
 			tbx->text.insert_char(SDLUI_Core.e.text.text[0], tbx->cursor_pos);
 			tbx->cursor_pos++;
-			std::cout << tbx->text.data << std::endl;
+
+			if(tbx->cursor_pos > tbx->max_chars)
+			{
+				tbx->scroll++;
+			}
 
 			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-			SDL_Rect r = {0, 0, SDLUI_Font.width * tbx->text.length, SDLUI_Font.height};
-			SDLUI_SetColor(SDLUI_Core.theme.col_window_bg);
+			SDL_Rect r = {0, 0, tbx->w, tbx->h};
+			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+
 			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-			SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
+
+			if(tbx->text.length <= tbx->max_chars)
+			{
+				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
+			}
+			else
+			{
+				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
+			}
+		}
+
+		if(SDLUI_Core.e.type == SDL_KEYDOWN)
+		{
+			if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_LEFT)
+			{
+				if(tbx->cursor_pos > 0)
+				{
+					tbx->cursor_pos--;
+
+					if(tbx->cursor_pos < tbx->scroll)
+					{
+						tbx->scroll--;
+						//0123456789-----15
+						//asdfghjkl1234567
+						//          |    |
+					}
+				}
+			}
+			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+			{
+				if(tbx->cursor_pos < tbx->text.length)
+				{
+					tbx->cursor_pos++;
+
+					if(tbx->cursor_pos > tbx->max_chars)
+					{
+						tbx->scroll++;
+					}
+				}
+			}
+			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
+			{
+				if(tbx->cursor_pos > 0)
+				{
+					tbx->text.delete_char(tbx->cursor_pos - 1);
+					tbx->cursor_pos--;
+
+
+					SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
+					SDL_Rect r = {0, 0, tbx->w, tbx->h};
+					SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
+					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+					SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+
+					SDLUI_SetColor(SDLUI_Core.theme.col_white);
+
+					if(tbx->text.length <= tbx->max_chars)
+					{
+						SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
+					}
+					else
+					{
+						SDLUI_DrawTextRange(0, 0, tbx->text.data, 0, 3, tbx->tex_text);
+					}
+				}
+			}
 		}
 	}
 

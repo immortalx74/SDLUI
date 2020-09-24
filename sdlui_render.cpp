@@ -19,6 +19,25 @@ void SDLUI_DrawText(i32 x, i32 y, const char *text, SDL_Texture *dst)
 	SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
 }
 
+void SDLUI_DrawTextRange(i32 x, i32 y, const char *text, i32 start, i32 length, SDL_Texture *dst)
+{
+	SDL_SetRenderTarget(SDLUI_Core.renderer, dst);
+	i32 cur_char;
+	SDL_Rect glyph_rect;
+	SDL_Rect pos = {x, y, SDLUI_Font.width, SDLUI_Font.height};
+
+	for (int i = start; i < start + length; ++i)
+	{
+		cur_char = (i32)text[i];
+		glyph_rect = {(cur_char - 32) * SDLUI_Font.width, 0, SDLUI_Font.width, SDLUI_Font.height};
+
+		SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Font.tex_font, &glyph_rect, &pos);
+		pos.x += SDLUI_Font.width;
+	}
+
+	SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+}
+
 void SDLUI_Render_Button(SDLUI_Control_Button *btn)
 {
 	if(btn->visible)
@@ -386,31 +405,31 @@ void SDLUI_Render_TextBox(SDLUI_Control_TextBox *tbx)
 {
 	if(tbx->visible)
 	{
-		static i32 frame_count;
 		i32 xx = tbx->x - tbx->parent->x;
 		i32 yy = tbx->y - tbx->parent->y;
 
-		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
-
+		SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
 		SDL_Rect r = {xx, yy, tbx->w, tbx->h};
+		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+
+		SDLUI_SetColor(SDLUI_Core.theme.col_grey);
 		SDL_RenderDrawRect(SDLUI_Core.renderer, &r);
 
-		SDL_Rect src = {0, 0, SDLUI_Font.width * tbx->text.length, SDLUI_Font.height};
-		SDL_Rect dst = {xx + SDLUI_MARGIN, yy + SDLUI_MARGIN, src.w, src.h};
-		SDL_RenderCopy(SDLUI_Core.renderer, tbx->tex_text, &src, &dst);
-
-		if(frame_count >= tbx->cursor_blink_rate)
+		if(tbx->text.length > 0)
 		{
-			r = {xx + SDLUI_MARGIN + (tbx->cursor_pos * SDLUI_Font.width), yy + 6, 2, tbx->h - 12};
+			i32 tex_w, tex_h;
+			SDL_QueryTexture(tbx->tex_text, NULL, NULL, &tex_w, &tex_h);
+			SDL_Rect src = {0, 0, tex_w, tex_h};
+			SDL_Rect dst = {xx + SDLUI_MARGIN, yy + SDLUI_MARGIN, src.w, src.h};
+			SDL_RenderCopy(SDLUI_Core.renderer, tbx->tex_text, &src, &dst);
+		}
+
+		if(tbx->focused && tbx->parent == SDLUI_Core.active_window && SDLUI_Core.active_window != NULL)
+		{
+			r = {xx + SDLUI_MARGIN + ((tbx->cursor_pos - tbx->scroll) * SDLUI_Font.width), yy + 6, 2, tbx->h - 12};
 			SDLUI_SetColor(SDLUI_Core.theme.col_white);
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 		}
-		frame_count ++;
-		if(frame_count > 2 * tbx->cursor_blink_rate)
-		{
-			frame_count = 0;
-		}
-
 	}
 }
 
