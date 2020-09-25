@@ -91,7 +91,6 @@ struct SDLUI_String
 		}
 		else
 		{
-			//abcde
 			memmove(data + pos, data + pos + 1, length - pos - 1);
 			memset(data + length - 1, 0, 1);
 		}

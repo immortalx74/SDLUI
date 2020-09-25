@@ -1,5 +1,3 @@
-// Enums ----------------------------------------------
-
 enum SDLUI_BUTTON_STATE
 {
 	SDLUI_BUTTON_STATE_NORMAL,

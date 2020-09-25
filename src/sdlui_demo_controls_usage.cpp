@@ -109,34 +109,31 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11];
 if(SDLUI_SliderInt(col_slider)) {SDLUI_Core.theme.col_highlight.b = col_slider->value; SDLUI_ForceReDraw();}
 
 
-/////////////////////////////
-
-static double result = 0.0f;
+// TODO: Make a tiny calc app
 
 SDLUI_Window(calc);
 
-display->x = display->parent->x + display->parent->w - (display->text.length * SDLUI_Font.width) - 10;
 SDLUI_Text(display);
 
 if(SDLUI_Button(calc_btnc)) {;}
 
-if(SDLUI_Button(calc_btn7)) {calculator(op_digit, 7, result, display->text);}
-if(SDLUI_Button(calc_btn8)) {calculator(op_digit, 8, result, display->text);}
-if(SDLUI_Button(calc_btn9)) {calculator(op_digit, 9, result, display->text);}
-if(SDLUI_Button(calc_btndiv)) {calculator(op_div, 0, result, display->text);}
+if(SDLUI_Button(calc_btn7)) {;}
+if(SDLUI_Button(calc_btn8)) {;}
+if(SDLUI_Button(calc_btn9)) {;}
+if(SDLUI_Button(calc_btndiv)) {;}
 
-if(SDLUI_Button(calc_btn4)) {calculator(op_digit, 4, result, display->text);}
-if(SDLUI_Button(calc_btn5)) {calculator(op_digit, 5, result, display->text);}
-if(SDLUI_Button(calc_btn6)) {calculator(op_digit, 6, result, display->text);}
-if(SDLUI_Button(calc_btnmul)) {calculator(op_mul, 0, result, display->text);}
+if(SDLUI_Button(calc_btn4)) {;}
+if(SDLUI_Button(calc_btn5)) {;}
+if(SDLUI_Button(calc_btn6)) {;}
+if(SDLUI_Button(calc_btnmul)) {;}
 
-if(SDLUI_Button(calc_btn1)) {calculator(op_digit, 1, result, display->text);}
-if(SDLUI_Button(calc_btn2)) {calculator(op_digit, 2, result, display->text);}
-if(SDLUI_Button(calc_btn3)) {calculator(op_digit, 3, result, display->text);}
-if(SDLUI_Button(calc_btnsub)) {calculator(op_sub, 0, result, display->text);}
+if(SDLUI_Button(calc_btn1)) {;}
+if(SDLUI_Button(calc_btn2)) {;}
+if(SDLUI_Button(calc_btn3)) {;}
+if(SDLUI_Button(calc_btnsub)) {;}
 
-if(SDLUI_Button(calc_btn0)) {calculator(op_digit, 0, result, display->text);}
-if(SDLUI_Button(calc_btndot)) {calculator(op_dot, 0, result, display->text);}
-if(SDLUI_Button(calc_btneq)) {calculator(op_eq, 0, result, display->text);}
-if(SDLUI_Button(calc_btnadd)) {calculator(op_add, 0, result, display->text);}
+if(SDLUI_Button(calc_btn0)) {;}
+if(SDLUI_Button(calc_btndot)) {;}
+if(SDLUI_Button(calc_btneq)) {;}
+if(SDLUI_Button(calc_btnadd)) {;}
 

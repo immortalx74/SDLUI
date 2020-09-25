@@ -512,10 +512,12 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		lst->num_items = num_items;
 		SDL_DestroyTexture(lst->scroll_area->tex_rect);
 		i32 h = num_items * SDLUI_Font.height;
+
 		if(h < lst->scroll_area->h)
 		{
 			h = lst->scroll_area->h;
 		}
+
 		lst->scroll_area->tex_rect = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, lst->scroll_area->w, h);
 		lst->scroll_area->content_width = lst->scroll_area->w;
 		lst->scroll_area->content_height = h;
@@ -580,7 +582,6 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 			return true;
 		}
 	}
-
 
 	return false;
 }

@@ -1,31 +1,29 @@
-// SDL skeleton application demonstrating how to use SDLUI.
+// --- SDL skeleton application demonstrating how to use SDLUI. ---
 
-// There are 4 function calls that handle initialization, input, window management and rendering:
+// There are 4 functions that handle initialization, input, window management and rendering:
 // SDLUI_Init
 // SDLUI_EventHandler
 // SDLUI_WindowHandler
 // SDLUI_Render
 
 // Control creation and usage is performed with functions of the following convention:
-// Control creation: 	SDLUI_Create< control name >
-// Control usage: 		SDLUI< control name >
+// Control creation: 	SDLUI_Create<control name>
+// Control usage: 		SDLUI<control name>
 
 // The rest of the code is just what one would find in a typical SDL application.
 // NOTE: The in-place includes were done for clarity.
 
 #include "SDL.h"
-#include "sdlui.h"
+#include "src/sdlui.h"
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include "sdlui_demo_calc.cpp"
 
 int main(int argc, char *argv[])
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window *window = SDL_CreateWindow("SDLUI app", 50, 50,
-	                                      1400, 900, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE |
+	                                      1200, 800, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE |
 	                                      SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_ALLOW_HIGHDPI);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
@@ -34,7 +32,7 @@ int main(int argc, char *argv[])
 
 	// Each SDLUI_Create_xxx function returns a pointer to a control. It is used to access its properties,
 	// and is later passed on to its usage function inside tha main application loop.
-	#include "sdlui_demo_controls_creation.cpp"
+	#include "src/sdlui_demo_controls_creation.cpp"
 
 	bool quit = false;
 	SDL_Event e;
@@ -73,14 +71,13 @@ int main(int argc, char *argv[])
 		SDL_RenderClear(renderer);
 
 		// Controls are called just like in immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
-		#include "sdlui_demo_controls_usage.cpp"
+		#include "src/sdlui_demo_controls_usage.cpp"
 
 		// Draws the UI. Regular SDL drawing should take place before this, for the UI to appear on top.
 		SDLUI_Render();
 		SDL_RenderPresent(renderer);
 	}
 
-	TTF_Quit();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

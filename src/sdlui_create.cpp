@@ -23,7 +23,7 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 
 	wnd->children.create();
 	SDLUI_Window_Collection.push(wnd);
-	//SDLUI_SetActiveWindow(wnd);
+
 	return wnd;
 }
 
@@ -325,7 +325,6 @@ SDLUI_Control_TextBox *SDLUI_CreateTextBox(SDLUI_Control_Window *wnd, i32 x, i32
 	tbx->scroll = 0;
 	tbx->max_chars = (w - (2 * SDLUI_MARGIN)) / SDLUI_Font.width;
 
-	// i32 tw = SDLUI_Font.width * 100;
 	i32 tw = w - (2 * SDLUI_MARGIN);
 	i32 th = SDLUI_Font.height;
 	tbx->tex_text = SDL_CreateTexture(SDLUI_Core.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, tw, th);

@@ -348,6 +348,15 @@
 	"buffers":
 	[
 		{
+			"file": "sdlui_demo_calc.cpp",
+			"settings":
+			{
+				"buffer_size": 2054,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "main.cpp",
 			"settings":
 			{
@@ -357,12 +366,20 @@
 			}
 		},
 		{
-			"file": "sdlui_demo_calc.cpp",
+			"file": "/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
 			"settings":
 			{
-				"buffer_size": 2054,
+				"buffer_size": 533,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "sdlui.h",
+			"settings":
+			{
+				"buffer_size": 776,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -416,6 +433,14 @@
 			{
 				"buffer_size": 9319,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "sdlui_event.cpp",
+			"settings":
+			{
+				"buffer_size": 533,
 				"line_ending": "Unix"
 			}
 		},
@@ -786,10 +811,11 @@
 	},
 	"expanded_folders":
 	[
-		"/D/dev/ui"
+		"/D/dev/SDLUI"
 	],
 	"file_history":
 	[
+		"/D/dev/ui/sdlui_embeded.cpp",
 		"/D/dev/ui/sdlui.h",
 		"/D/dev/ui/sdlui_event.cpp",
 		"/D/dev/ui/sdlui_render.cpp",
@@ -804,7 +830,6 @@
 		"/D/dev/ui/include/SDL_render.h",
 		"/D/dev/bb/game.h",
 		"/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
-		"/D/dev/ui/sdlui_embeded.cpp",
 		"/D/dev/ui/sdlui_scratch.cpp",
 		"/D/dev/ui/liberation-mono.c",
 		"/D/dev/ui/build.bat",
@@ -884,6 +909,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"do_proc",
 			"tbx1",
 			"focused",
 			"setcurs",
@@ -1004,41 +1030,11 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "main.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2556,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								644,
-								644
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 38.4,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "sdlui_demo_calc.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1063,11 +1059,98 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2556,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								569,
+								569
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "/C/Users/immortalx/AppData/Roaming/Sublime Text 3/Packages/User/test_build.sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 533,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								428,
+								428
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "sdlui.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 776,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "sdlui_helpers.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1079,8 +1162,8 @@
 						"selection":
 						[
 							[
-								8235,
-								8235
+								8241,
+								8241
 							]
 						],
 						"settings":
@@ -1090,14 +1173,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6980.8,
+						"translation.y": 6157.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 5,
 					"file": "sdlui_structs.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1120,14 +1203,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4790.4,
+						"translation.y": 2223.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "sdlui_create.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1149,14 +1232,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5862.4,
+						"translation.y": 456.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "sdlui_usage.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1168,8 +1251,8 @@
 						"selection":
 						[
 							[
-								16105,
-								16105
+								16235,
+								16235
 							]
 						],
 						"settings":
@@ -1179,14 +1262,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12254.4,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"file": "sdlui_render.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1198,8 +1281,8 @@
 						"selection":
 						[
 							[
-								12372,
-								12372
+								1252,
+								1252
 							]
 						],
 						"settings":
@@ -1209,14 +1292,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7732.8,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
 					"file": "sdlui_demo_controls_creation.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1241,11 +1324,40 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
+					"file": "sdlui_event.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 533,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
 					"file": "sdlui_demo_controls_usage.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1280,7 +1392,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1254.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 8,

@@ -636,7 +636,7 @@ void SDLUI_Render()
 {
 	SDLUI_Control_Window *wnd;
 
-	static bool once;
+	static bool once = false;
 	if(!once)
 	{
 		SDLUI_ForceReDraw();

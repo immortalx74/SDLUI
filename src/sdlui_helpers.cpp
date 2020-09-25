@@ -397,7 +397,7 @@ void SDLUI_WindowHandler()
 	}
 }
 
-
+// Got this from StackOverflow.
 void save_texture(SDL_Renderer *ren, SDL_Texture *tex, const char *filename)
 {
 	SDL_Texture *ren_tex;

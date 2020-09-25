@@ -1,8 +1,8 @@
-// First create some windows.
+// Create some windows.
 SDLUI_Control_Window *wnd1 = SDLUI_CreateWindow(20, 100, 350, 400, "Window1");
-SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(390, 10, 450, 350, "Window2");
-SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(410, 380, 370, 250, "Window3");
-SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 650, 820, 170, "Colors");
+SDLUI_Control_Window *wnd2 = SDLUI_CreateWindow(460, 30, 450, 350, "Window2");
+SDLUI_Control_Window *wnd3 = SDLUI_CreateWindow(410, 400, 370, 200, "Window3");
+SDLUI_Control_Window *wnd4 = SDLUI_CreateWindow(120, 620, 820, 170, "Colors");
 
 // Add some common controls. Simple controls such as these do not need much explaining.
 SDLUI_Control_Button *btn1 = SDLUI_CreateButton(wnd1, 10, 40, "PushButton");
@@ -40,7 +40,7 @@ SDLUI_Control_CheckBox *chk2 = SDLUI_CreateCheckBox(wnd2, 10, 90, "Another check
 
 // Here's another ScrollArea. This time it hosts an image. If the image texture isn't availlable at compile time,
 // we can pass NULL as the last parameter. Here we first create a texture and pass it on to the ScrollArea.
-SDL_Surface *surf = IMG_Load("res/test1.png");
+SDL_Surface *surf = IMG_Load("test_image.png");
 SDL_Texture *tex = SDL_CreateTextureFromSurface(SDLUI_Core.renderer, surf);
 SDL_FreeSurface(surf);
 SDLUI_Control_ScrollArea *sa2 = SDLUI_CreateScrollArea(wnd2, 10, 120, 430, 220, tex);
@@ -68,7 +68,7 @@ SDLUI_Control_Button *btn3 = SDLUI_CreateButton(wnd3, 30, 110, "Test");
 // It can be created with either a horizontal (default) or vertical strip of tabs.
 // It's a 3-step proccess: Create a TabContainer, add some tabs, and finally add previously created controls to each tab.
 // Note that positioning of controls is relative to the window and not to the position of the TabContainer inside the window.
-SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 10, 40, 350, 200);
+SDLUI_Control_TabContainer *tbc1 = SDLUI_CreateTabContainer(wnd3, 10, 40, 350, 140);
 
 tbc1->add_tab("First");
 tbc1->add_tab("Second");
@@ -133,8 +133,8 @@ col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[9]; col_slider->value 
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[10]; col_slider->value = SDLUI_Core.theme.col_highlight.g;
 col_slider = (SDLUI_Control_SliderInt*)color_sliders.data[11]; col_slider->value = SDLUI_Core.theme.col_highlight.b;
 
-// A tiny calculator app in a window
-SDLUI_Control_Window *calc = SDLUI_CreateWindow(860, 300, 170, 280, "Calc");
+
+SDLUI_Control_Window *calc = SDLUI_CreateWindow(980, 280, 170, 280, "Calc");
 calc->can_be_resized = false;
 SDLUI_Control_Text *display = SDLUI_CreateText(calc, 150, 50, "0");
 
