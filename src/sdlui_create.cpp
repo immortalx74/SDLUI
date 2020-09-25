@@ -10,6 +10,8 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 	wnd->drag_y = 0;
 	wnd->w = w;
 	wnd->h = h;
+	wnd->visible = true;
+	wnd->enabled = true;
 	wnd->is_resized = false;
 	wnd->do_process = false;
 	wnd->has_close_button = true;
@@ -38,6 +40,9 @@ SDLUI_Control_Button *SDLUI_CreateButton(SDLUI_Control_Window *wnd, i32 x, i32 y
 	btn->y = wnd->y + y;
 	btn->w = 100;
 	btn->h = 30;
+	btn->visible = true;
+	btn->enabled = true;
+	btn->owned_by_window = true;
 	btn->align = SDLUI_ALIGN_CENTER;
 	btn->state = SDLUI_BUTTON_STATE_NORMAL;
 	btn->parent = wnd;
@@ -58,6 +63,9 @@ SDLUI_Control_SliderInt *SDLUI_CreateSliderInt(SDLUI_Control_Window *wnd, i32 x,
 	si->do_process = false;
 	si->x = wnd->x + x;
 	si->y = wnd->y + y;
+	si->visible = true;
+	si->enabled = true;
+	si->owned_by_window = true;
 	si->min = min;
 	si->max = max;
 	si->value = value;
@@ -91,6 +99,9 @@ SDLUI_Control_CheckBox *SDLUI_CreateCheckBox(SDLUI_Control_Window *wnd, i32 x, i
 	chk->y = wnd->y + y;
 	chk->w = 16;
 	chk->h = 16;
+	chk->visible = true;
+	chk->enabled = true;
+	chk->owned_by_window = true;
 	chk->checked = checked;
 	chk->parent = wnd;
 
@@ -121,6 +132,9 @@ SDLUI_Control_Text *SDLUI_CreateText(SDLUI_Control_Window *wnd, i32 x, i32 y, ch
 	txt->y = wnd->y + y;
 	txt->w = (txt->text.length) * SDLUI_Font.width;
 	txt->h = SDLUI_Font.height;
+	txt->visible = true;
+	txt->enabled = true;
+	txt->owned_by_window = true;
 	txt->parent = wnd;
 
 	SDL_Surface *s = TTF_RenderText_Blended(SDLUI_Font.handle,txt->text.data, SDLUI_Core.theme.col_white);
@@ -141,6 +155,9 @@ SDLUI_Control_ToggleButton *SDLUI_CreateToggleButton(SDLUI_Control_Window *wnd, 
 	tb->y = wnd->y + y;
 	tb->w = 32;
 	tb->h = 16;
+	tb->visible = true;
+	tb->enabled = true;
+	tb->owned_by_window = true;
 	tb->checked = checked;
 	tb->parent = wnd;
 
@@ -178,6 +195,9 @@ SDLUI_Control_RadioButton *SDLUI_CreateRadioButton(SDLUI_Control_Window *wnd, SD
 	rb->y = wnd->y + y;
 	rb->w = 16;
 	rb->h = 16;
+	rb->visible = true;
+	rb->enabled = true;
+	rb->owned_by_window = true;
 	rb->checked = checked;
 	rb->group = &group;
 	rb->group->push(rb);
@@ -211,6 +231,9 @@ SDLUI_Control_TabContainer *SDLUI_CreateTabContainer(SDLUI_Control_Window *wnd, 
 	tbc->y = wnd->y + y;
 	tbc->w = w;
 	tbc->h = h;
+	tbc->visible = true;
+	tbc->enabled = true;
+	tbc->owned_by_window = true;
 	tbc->bar_height = 30;
 	tbc->active_tab = NULL;
 	tbc->parent = wnd;
@@ -230,6 +253,9 @@ SDLUI_Control_ScrollArea *SDLUI_CreateScrollArea(SDLUI_Control_Window *wnd, i32 
 	sa->y = wnd->y + y;
 	sa->w = w;
 	sa->h = h;
+	sa->visible = true;
+	sa->enabled = true;
+	sa->owned_by_window = true;
 	sa->scrollbar_thickness = 12;
 	sa->track_size_h = sa->w - sa->scrollbar_thickness;
 	sa->track_size_v = sa->h - sa->scrollbar_thickness;
@@ -300,8 +326,6 @@ SDLUI_Control_List *SDLUI_CreateList(SDLUI_Control_Window *wnd, SDLUI_Control_Sc
 		sa->client_height = sa->h;
 	}
 
-	// lst->parent = wnd;
-	// wnd->children.push(lst);
 	return lst;
 }
 
@@ -317,6 +341,9 @@ SDLUI_Control_TextBox *SDLUI_CreateTextBox(SDLUI_Control_Window *wnd, i32 x, i32
 	tbx->y = wnd->y + y;
 	tbx->w = w;
 	tbx->h = 30;
+	tbx->visible = true;
+	tbx->enabled = true;
+	tbx->owned_by_window = true;
 	tbx->text.create("");
 	tbx->select_start = 0;
 	tbx->select_end = 0;

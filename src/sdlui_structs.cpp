@@ -375,7 +375,6 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
 						ctrl->visible = false;
 						tab->children.push(ctrl);
 						ctrl->owned_by_window = false;
-						//wnd->children.pop(ctrl);
 					}
 				}
 			}
