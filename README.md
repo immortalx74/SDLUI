@@ -8,7 +8,7 @@ Its purpose is to have a convenient way to build small apps, utilities and tools
 
 ## How to use
 
-Include sdlui.h in your project. See the example skeleton SDL app (main.cpp).
+Include ```sdlui.h``` in your project. See the example skeleton SDL app (main.cpp).
 
 The boilerplate are 4 functions:
 * SDLUI_Init
@@ -22,9 +22,9 @@ yet there are no callbacks, and using a control is similar to the immediate mode
 ```c++
 // Create a button in previously created window "my_window1"
 SDLUI_Control_Button *btn1 = SDLUI_CreateButton(my_window1, 10, 40, "PushButton");
-//...
-//...
-//...
+...
+...
+...
 // In main application loop
 if(SDLUI_Button(btn1))
 {
@@ -54,4 +54,4 @@ Every control resides in a window, and its placement is relative to its parent w
 * Windows changes in scaling are not detected. Everything is currently drawn in the same size.
 * Apart from the included skeleton application everything is completely untested!
 
-![screenshot](https://raw.githubusercontent.com/immortalx74/SDLUI/master/screenshot.jpg?token=AHCRLEFNZSENFBWS437PCH27NYGQS)
+![screenshot](https://github.com/immortalx74/SDLUI/blob/master/screenshot.jpg)
