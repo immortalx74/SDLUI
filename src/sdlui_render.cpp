@@ -316,16 +316,6 @@ void SDLUI_Render_Tabcontainer(SDLUI_Control_TabContainer *tbc)
 	}
 }
 
-void SDLUI_Render_Label(SDLUI_Control_Label *lbl)
-{
-	if(lbl->visible)
-	{
-		SDLUI_SetColor(SDLUI_Core.theme.col_white);
-		SDL_Rect r = {lbl->x, lbl->y, lbl->w, lbl->h};
-		SDL_RenderCopy(SDLUI_Core.renderer, lbl->tex_text, NULL, &r);
-	}
-}
-
 void SDLUI_Render_ScrollArea(SDLUI_Control_ScrollArea *sa)
 {
 	if(sa->visible)
