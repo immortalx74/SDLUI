@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
 	// Each SDLUI_Create_xxx function returns a pointer to a control. It is used to access its properties,
 	// and is later passed on to its usage function inside tha main application loop.
-	#include "src/sdlui_demo_controls_creation.cpp"
+	#include "sdlui_demo_controls_creation.cpp"
 
 	bool quit = false;
 	SDL_Event e;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		SDL_RenderClear(renderer);
 
 		// Controls are called just like in immediate mode GUIs. Example: if(SDLUI_Button(btn1)) {// do something}
-		#include "src/sdlui_demo_controls_usage.cpp"
+		#include "sdlui_demo_controls_usage.cpp"
 
 		// Draws the UI. Regular SDL drawing should take place before this, for the UI to appear on top.
 		SDLUI_Render();

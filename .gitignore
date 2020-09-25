@@ -3,6 +3,8 @@ build
 include
 lib
 res
+ui.sublime-project
+ui.sublime-workspace
 *.pdb
 *.dll
 *.ttf
