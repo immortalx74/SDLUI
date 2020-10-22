@@ -405,7 +405,7 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 			}
 		}
 
-		if (sa->content_width > sa->w)
+		if(sa->content_width > sa->w)
 		{
 			if(SDLUI_PointInRect(r, mx, my))
 			{
@@ -758,7 +758,7 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
         				}
 
 					int now_cursor_pos = tbx->cursor_pos;
-        				while (start_to_reverse > now_cursor_pos)
+        				while(start_to_reverse > now_cursor_pos)
         				{
             					tbx->text.delete_char(start_to_reverse - 1);
             					start_to_reverse--;
@@ -788,6 +788,12 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 				{
 					SDLUI_DrawTextRange(0, 0, tbx->text.data, 0, 3, tbx->tex_text);
 				}
+			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_HOME)
+			{
+    				tbx->cursor_pos = 0;
+			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_END)
+			{
+    				tbx->cursor_pos = tbx->text.length;
 			}
 		}
 	}
