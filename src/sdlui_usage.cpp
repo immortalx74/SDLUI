@@ -655,55 +655,138 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 		{
 			if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_LEFT)
 			{
-				if(tbx->cursor_pos > 0)
-				{
-					tbx->cursor_pos--;
+    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+    				{
+        				while(tbx->cursor_pos > 0)
+        				{
+            					tbx->cursor_pos--;
+            					if(tbx->text.data[tbx->cursor_pos] != ' ')
+            					{
+                					break;
+           					}
+        				}
 
-					if(tbx->cursor_pos < tbx->scroll)
-					{
-						tbx->scroll--;
-						//0123456789-----15
-						//asdfghjkl1234567
-						//          |    |
-					}
-				}
+        				while(tbx->cursor_pos > 0)
+        				{
+            					int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
+            					if(tbx->text.data[index] == ' ')
+            					{
+                					break;
+            					}
+
+          					tbx->cursor_pos--;
+        				}
+    				}
+    				else
+    				{
+        				if(tbx->cursor_pos > 0)
+        				{
+        					tbx->cursor_pos--;
+
+        					if(tbx->cursor_pos < tbx->scroll)
+        					{
+        						tbx->scroll--;
+        						//0123456789-----15
+        						//asdfghjkl1234567
+        						//          |    |
+        					}
+        				}
+    				}
 			}
 			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 			{
-				if(tbx->cursor_pos < tbx->text.length)
-				{
-					tbx->cursor_pos++;
+    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+    				{
+        				if(tbx->text.data[tbx->cursor_pos] == ' ')
+        				{
+                				while(tbx->cursor_pos < tbx->text.length)
+                				{
+                    					tbx->cursor_pos++;
+                    					if(tbx->text.data[tbx->cursor_pos] != ' ')
+                    					{
+                        					break;
+                   					}
+                				}
+        				}
 
-					if(tbx->cursor_pos > tbx->max_chars)
-					{
-						tbx->scroll++;
-					}
-				}
+        				while(tbx->cursor_pos < tbx->text.length)
+        				{
+            					if(tbx->text.data[tbx->cursor_pos] == ' ')
+            					{
+                					break;
+            					}
+
+          					tbx->cursor_pos++;
+        				}
+    				}
+    				else
+    				{
+        				if(tbx->cursor_pos < tbx->text.length)
+        				{
+        					tbx->cursor_pos++;
+
+        					if(tbx->cursor_pos > tbx->max_chars)
+        					{
+        						tbx->scroll++;
+        					}
+        				}
+    				}
 			}
 			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
 			{
-				if(tbx->cursor_pos > 0)
+    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+    				{
+        				int start_to_reverse = tbx->cursor_pos;
+        				while(tbx->cursor_pos > 0)
+        				{
+            					tbx->cursor_pos--;
+            					if(tbx->text.data[tbx->cursor_pos] != ' ')
+            					{
+                					break;
+           					}
+        				}
+
+        				while(tbx->cursor_pos > 0)
+        				{
+            					int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
+            					if(tbx->text.data[index] == ' ')
+            					{
+                					break;
+            					}
+
+          					tbx->cursor_pos--;
+        				}
+
+					int now_cursor_pos = tbx->cursor_pos;
+        				while (start_to_reverse > now_cursor_pos)
+        				{
+            					tbx->text.delete_char(start_to_reverse - 1);
+            					start_to_reverse--;
+        				}
+    				} else
+    				{
+        				if(tbx->cursor_pos > 0)
+        				{
+        					tbx->text.delete_char(tbx->cursor_pos - 1);
+        					tbx->cursor_pos--;
+        				}
+    				}
+
+				SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
+				SDL_Rect r = {0, 0, tbx->w, tbx->h};
+				SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
+				SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+				SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
+
+				SDLUI_SetColor(SDLUI_Core.theme.col_white);
+
+				if(tbx->text.length <= tbx->max_chars)
 				{
-					tbx->text.delete_char(tbx->cursor_pos - 1);
-					tbx->cursor_pos--;
-
-
-					SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-					SDL_Rect r = {0, 0, tbx->w, tbx->h};
-					SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-					SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-					SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-					if(tbx->text.length <= tbx->max_chars)
-					{
-						SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-					}
-					else
-					{
-						SDLUI_DrawTextRange(0, 0, tbx->text.data, 0, 3, tbx->tex_text);
-					}
+					SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
+				}
+				else
+				{
+					SDLUI_DrawTextRange(0, 0, tbx->text.data, 0, 3, tbx->tex_text);
 				}
 			}
 		}
