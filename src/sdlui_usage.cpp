@@ -36,6 +36,7 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 			{
 				wnd->visible = false;
 				SDLUI_Core.active_window = NULL;
+				SDL_SetCursor(SDLUI_Core.cursor_arrow);
 			}
 		}
 
