@@ -11,7 +11,9 @@ SDLUI_Control_Window *SDLUI_CreateWindow(i32 x, i32 y, i32 w, i32 h, char *title
 	wnd->w = w;
 	wnd->h = h;
 	wnd->visible = true;
+	wnd->visible_last_frame = false;
 	wnd->enabled = true;
+	wnd->enabled_last_frame = false;
 	wnd->is_resized = false;
 	wnd->do_process = false;
 	wnd->has_close_button = true;
