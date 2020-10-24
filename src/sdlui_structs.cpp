@@ -51,7 +51,7 @@ struct SDLUI_String
 		}
 
 		i32 new_length = length + 1;
-		if(new_length > capacity)
+		if(new_length >= capacity)
 		{
 			capacity = ((new_length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
 			data = (char*)realloc(data, capacity);
