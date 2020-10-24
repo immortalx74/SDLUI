@@ -848,6 +848,10 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 			{
     				tbx->cursor_pos = tbx->text.length;
     				tbx->scroll = tbx->text.length - tbx->max_chars;
+    				if(tbx->scroll < 0)
+    				{
+                                         tbx->scroll = 0;
+    				}
 
         			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
         			SDL_Rect r = {0, 0, tbx->w, tbx->h};
