@@ -5,7 +5,7 @@ struct SDLUI_String
 	bool modified = false;
 	char *data;
 
-	void create(char *str)
+	void create(char const *str)
 	{
 		length = strlen(str);
 		capacity = ((length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
@@ -51,7 +51,7 @@ struct SDLUI_String
 		}
 
 		i32 new_length = length + 1;
-		if(new_length > capacity)
+		if(new_length >= capacity)
 		{
 			capacity = ((new_length / SDLUI_STRING_CAPACITY) + 1) * SDLUI_STRING_CAPACITY;
 			data = (char*)realloc(data, capacity);
@@ -323,7 +323,7 @@ struct SDLUI_Control_TabContainer : SDLUI_Control
 	SDLUI_Control_Tab *active_tab;
 	SDLUI_ORIENTATION orientation;
 
-	void add_tab(char *text)
+	void add_tab(char const *text)
 	{
 		SDLUI_Control_Tab *tab = (SDLUI_Control_Tab*)malloc(sizeof(SDLUI_Control_Tab));
 
