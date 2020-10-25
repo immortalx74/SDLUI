@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <stdlib.h>
+
 #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#pragma comment(lib, "Shcore.lib")
@@ -8,10 +11,15 @@
 	#include <comdef.h>
 #endif
 
-#include <iostream>
-#include "SDL_ttf.h"
-#include "SDL_image.h"
-#include <stdlib.h>
+#ifdef __APPLE__
+    #include <SDL2/SDL.h>
+    #include <SDL2_image/SDL_image.h>
+    #include <SDL2_ttf/SDL_ttf.h>
+#else
+    #include "SDL.h"
+    #include "SDL_ttf.h"
+    #include "SDL_image.h"
+#endif
 
 typedef uint8_t u8;
 typedef uint16_t u16;

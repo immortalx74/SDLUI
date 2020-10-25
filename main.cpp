@@ -13,11 +13,19 @@
 // The rest of the code is just what one would find in a typical SDL application.
 // NOTE: The in-place includes were done for clarity.
 
-#include "SDL.h"
-#include "src/sdlui.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
+
+#ifdef __APPLE__
+    #include <SDL2/SDL.h>
+#else
+    #include "SDL.h"
+#endif
+
+
+#include "src/sdlui.h"
 
 int main(int argc, char *argv[])
 {
