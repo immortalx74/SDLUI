@@ -549,6 +549,11 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 
 			i32 mx, my;
 			SDL_GetMouseState(&mx, &my);
+            #ifdef __APPLE__
+            mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+            my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+            #endif
+            
 			r = {wnd->x + wnd->w - 30, wnd->y, 30, 30};
 
 			if(wnd->has_close_button)
