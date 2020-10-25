@@ -763,7 +763,10 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 			{
     				tbx->cursor_pos = tbx->text.length;
     				tbx->scroll = tbx->text.length - tbx->max_chars;
-
+    				if(tbx->scroll < 0)
+    				{
+        				tbx->scroll = 0;
+    				}
 			}
 		}
 	}
