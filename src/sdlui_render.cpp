@@ -480,6 +480,9 @@ void SDLUI_RenderChild(SDLUI_CONTROL_TYPE type, SDLUI_Control *ctrl)
 			SDLUI_Render_TextBox((SDLUI_Control_TextBox*)ctrl);
 		}
 		break;
+
+		default:
+    		break;
 	}
 }
 
