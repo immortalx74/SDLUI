@@ -633,23 +633,6 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 			{
 				tbx->scroll++;
 			}
-
-			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-			SDL_Rect r = {0, 0, tbx->w, tbx->h};
-			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-			if(tbx->text.length <= tbx->max_chars)
-			{
-				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-			}
-			else
-			{
-				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
-			}
 		}
 
 		if(SDLUI_Core.e.type == SDL_KEYDOWN)
@@ -690,23 +673,6 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
         						//0123456789-----15
         						//asdfghjkl1234567
         						//          |    |
-
-                                			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-                                			SDL_Rect r = {0, 0, tbx->w, tbx->h};
-                                			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-                                			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-                                			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-                                			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-                                			if(tbx->text.length <= tbx->max_chars)
-                                			{
-                                				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-                                			}
-                                			else
-                                			{
-                                				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
-                                			}
         					}
         				}
     				}
@@ -746,23 +712,6 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
         					if(tbx->cursor_pos > tbx->max_chars)
         					{
         						tbx->scroll++;
-
-                                			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-                                			SDL_Rect r = {0, 0, tbx->w, tbx->h};
-                                			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-                                			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-                                			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-                                			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-                                			if(tbx->text.length <= tbx->max_chars)
-                                			{
-                                				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-                                			}
-                                			else
-                                			{
-                                				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
-                                			}
         					}
         				}
     				}
@@ -806,65 +755,14 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
         					tbx->cursor_pos--;
         				}
     				}
-
-				SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-				SDL_Rect r = {0, 0, tbx->w, tbx->h};
-				SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-				SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-				SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-				SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-				if(tbx->text.length <= tbx->max_chars)
-				{
-					SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-				}
-				else
-				{
-					SDLUI_DrawTextRange(0, 0, tbx->text.data, 0, 3, tbx->tex_text);
-				}
 			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_HOME)
 			{
     				tbx->cursor_pos = 0;
     				tbx->scroll = 0;
-
-        			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-        			SDL_Rect r = {0, 0, tbx->w, tbx->h};
-        			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-        			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-        			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-        			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-        			if(tbx->text.length <= tbx->max_chars)
-        			{
-        				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-        			}
-        			else
-        			{
-        				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
-        			}
 			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_END)
 			{
     				tbx->cursor_pos = tbx->text.length;
     				tbx->scroll = tbx->text.length - tbx->max_chars;
-
-        			SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
-        			SDL_Rect r = {0, 0, tbx->w, tbx->h};
-        			SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
-        			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
-        			SDL_SetRenderTarget(SDLUI_Core.renderer, NULL);
-
-        			SDLUI_SetColor(SDLUI_Core.theme.col_white);
-
-        			if(tbx->text.length <= tbx->max_chars)
-        			{
-        				SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
-        			}
-        			else
-        			{
-        				SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
-        			}
 			}
 		}
 	}

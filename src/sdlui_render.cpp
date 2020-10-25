@@ -420,6 +420,21 @@ void SDLUI_Render_TextBox(SDLUI_Control_TextBox *tbx)
 			SDLUI_SetColor(SDLUI_Core.theme.col_white);
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 		}
+
+		SDL_SetRenderTarget(SDLUI_Core.renderer, tbx->tex_text);
+		r = {0, 0, tbx->w, tbx->h};
+		SDLUI_SetColor(SDLUI_Core.theme.col_textbox_bg);
+		SDL_RenderFillRect(SDLUI_Core.renderer, &r);
+
+		SDLUI_SetColor(SDLUI_Core.theme.col_white);
+		if(tbx->text.length <= tbx->max_chars)
+		{
+			SDLUI_DrawText(0, 0, tbx->text.data, tbx->tex_text);
+		}
+		else
+		{
+			SDLUI_DrawTextRange(0, 0, tbx->text.data, tbx->scroll, tbx->max_chars, tbx->tex_text);
+		}
 	}
 }
 
@@ -515,7 +530,6 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 		if(wnd == SDLUI_Core.active_window)
 		{
 			SDL_SetRenderTarget(SDLUI_Core.renderer, wnd->tex_rect);
-
 			SDLUI_SetColor(SDLUI_Core.theme.col_active_window_bar);
 			SDL_Rect r = {0, 0, wnd->w, 30};
 			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
@@ -540,16 +554,15 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 				{
 					SDLUI_SetColor(SDLUI_Core.theme.col_red);
 					r = {wnd->w - 29, 1, 28, 28};
-					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 				}
 				else
 				{
 					SDLUI_SetColor(SDLUI_Core.theme.col_active_window_bar);
 					r = {wnd->w - 29, 1, 28, 28};
-					SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 				}
 
 				r = {0 + wnd->w - 30, 0, 30, 30};
+        			SDL_RenderFillRect(SDLUI_Core.renderer, &r);
 				SDL_RenderCopy(SDLUI_Core.renderer, SDLUI_Core.tex_close, NULL, &r);
 			}
 
@@ -568,6 +581,10 @@ void SDLUI_Render_Window(SDLUI_Control_Window *wnd)
 						SDLUI_RenderChild(type, ctrl);
 					}
 				}
+
+				/* Make sure to reset the render target back to the window's
+                                 * because the child might have changed it */
+				SDL_SetRenderTarget(SDLUI_Core.renderer, wnd->tex_rect);
 			}
 
 			SDLUI_SetColor(SDLUI_Core.theme.col_grey);
