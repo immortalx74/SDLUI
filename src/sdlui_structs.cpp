@@ -283,6 +283,9 @@ struct __SDLUI_Core
 	SDL_Renderer *renderer;
 	i32 window_width;
 	i32 window_height;
+    float texture_window_hdpi_ratio_x;
+    float texture_window_hdpi_ratio_y;
+    
 	u8 mouse_current_frame[5] = {0};
 	u8 mouse_last_frame[5] = {0};
 	i32 mouse_wheel_y;

@@ -16,6 +16,10 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		SDL_Rect r = {wnd->x, wnd->y, wnd->w, wnd->h};
 
@@ -81,7 +85,11 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
-
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
+        
 		SDL_Rect r = {btn->x,btn->y,btn->w,btn->h};
 		if(SDLUI_PointInRect(r, mx, my))
 		{
@@ -118,6 +126,10 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		SDL_Rect r = {si->x,si->y,si->w,si->h};
 		if(SDLUI_PointInRect(r, mx, my))
@@ -175,6 +187,10 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		i32 tex_w, tex_h;
 		SDL_QueryTexture(chk->tex_text, NULL, NULL, &tex_w, &tex_h);
@@ -205,6 +221,10 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		i32 tex_w, tex_h;
 		SDL_QueryTexture(tb->tex_text, NULL, NULL, &tex_w, &tex_h);
@@ -237,6 +257,10 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		i32 tex_w, tex_h;
 		SDL_QueryTexture(rb->tex_text, NULL, NULL, &tex_w, &tex_h);
@@ -289,6 +313,11 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
+        
 		SDL_Rect r = {tbc->x,tbc->y,tbc->w,tbc->bar_height};
 		SDL_Rect tab_r;
 		i32 offset = 0;
@@ -329,6 +358,11 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
+        
 		SDL_Rect r, rv, rh;
 
 		r = {sa->x, sa->y, sa->w, sa->h};
@@ -494,6 +528,11 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
+        
 		SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
 
 		if(SDLUI_PointInRect(r, mx, my) && cur_index == 0)
@@ -595,6 +634,10 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
+        #ifdef __APPLE__
+        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+        #endif
 
 		SDL_Rect r = {tbx->x,tbx->y,tbx->w,tbx->h};
 

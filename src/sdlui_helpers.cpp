@@ -40,7 +40,13 @@ void SDLUI_Init(SDL_Renderer *r, SDL_Window *w)
 	SDLUI_Core.renderer = r;
 	SDLUI_Core.window = w;
 	SDL_GetWindowSize(SDLUI_Core.window, &SDLUI_Core.window_width, &SDLUI_Core.window_height);
-
+    
+    // Managing High DPI texture to window ratio (MacOS)
+    i32 renderer_width, renderer_height;
+    SDL_GetRendererOutputSize(SDLUI_Core.renderer, &renderer_width, &renderer_height);
+    SDLUI_Core.texture_window_hdpi_ratio_x=(float)renderer_width/SDLUI_Core.window_width;
+    SDLUI_Core.texture_window_hdpi_ratio_y=(float)renderer_height/SDLUI_Core.window_height;
+    
 	SDLUI_Window_Collection.create();
 
 	SDLUI_Core.cursor_arrow = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
@@ -336,6 +342,11 @@ void SDLUI_WindowHandler()
 {
 	i32 mx, my, index = 0;
 	SDL_GetMouseState(&mx, &my);
+    #ifdef __APPLE__
+    mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+    my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+    #endif
+    
 	SDLUI_Control_Window *aw = SDLUI_Core.active_window;
 	static SDLUI_RESIZE_DIRECTION res_dir = SDLUI_RESIZE_NONE;
 
