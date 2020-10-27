@@ -17,8 +17,8 @@ bool SDLUI_Window(SDLUI_Control_Window *wnd)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		SDL_Rect r = {wnd->x, wnd->y, wnd->w, wnd->h};
@@ -86,10 +86,10 @@ bool SDLUI_Button(SDLUI_Control_Button *btn)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
-        
+
 		SDL_Rect r = {btn->x,btn->y,btn->w,btn->h};
 		if(SDLUI_PointInRect(r, mx, my))
 		{
@@ -127,8 +127,8 @@ bool SDLUI_SliderInt(SDLUI_Control_SliderInt *si)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		SDL_Rect r = {si->x,si->y,si->w,si->h};
@@ -188,8 +188,8 @@ bool SDLUI_CheckBox(SDLUI_Control_CheckBox *chk)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		i32 tex_w, tex_h;
@@ -222,8 +222,8 @@ bool SDLUI_ToggleButton(SDLUI_Control_ToggleButton *tb)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		i32 tex_w, tex_h;
@@ -258,8 +258,8 @@ bool SDLUI_RadioButton(SDLUI_Control_RadioButton *rb)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		i32 tex_w, tex_h;
@@ -314,10 +314,10 @@ bool SDLUI_TabContainer(SDLUI_Control_TabContainer *tbc)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
-        
+
 		SDL_Rect r = {tbc->x,tbc->y,tbc->w,tbc->bar_height};
 		SDL_Rect tab_r;
 		i32 offset = 0;
@@ -359,10 +359,10 @@ bool SDLUI_ScrollArea(SDLUI_Control_ScrollArea *sa)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
-        
+
 		SDL_Rect r, rv, rh;
 
 		r = {sa->x, sa->y, sa->w, sa->h};
@@ -529,10 +529,10 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
-        
+
 		SDL_Rect r = {lst->scroll_area->x, lst->scroll_area->y, lst->scroll_area->client_width, lst->scroll_area->client_height};
 
 		if(SDLUI_PointInRect(r, mx, my) && cur_index == 0)
@@ -635,8 +635,8 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
         #ifdef __APPLE__
-        mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
-        my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
+		mx=mx*SDLUI_Core.texture_window_hdpi_ratio_x;
+		my=my*SDLUI_Core.texture_window_hdpi_ratio_y;
         #endif
 
 		SDL_Rect r = {tbx->x,tbx->y,tbx->w,tbx->h};
@@ -682,134 +682,139 @@ bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
 		{
 			if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_LEFT)
 			{
-    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
-    				{
-        				while(tbx->cursor_pos > 0)
-        				{
-            					tbx->cursor_pos--;
-            					if(tbx->text.data[tbx->cursor_pos] != ' ')
-            					{
-                					break;
-           					}
-        				}
+				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+				{
+					while(tbx->cursor_pos > 0)
+					{
+						tbx->cursor_pos--;
+						if(tbx->text.data[tbx->cursor_pos] != ' ')
+						{
+							break;
+						}
+					}
 
-        				while(tbx->cursor_pos > 0)
-        				{
-            					int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
-            					if(tbx->text.data[index] == ' ')
-            					{
-                					break;
-            					}
+					while(tbx->cursor_pos > 0)
+					{
+						int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
+						if(tbx->text.data[index] == ' ')
+						{
+							break;
+						}
 
-          					tbx->cursor_pos--;
-        				}
-    				}
-    				else
-    				{
-        				if(tbx->cursor_pos > 0)
-        				{
-        					tbx->cursor_pos--;
+						tbx->cursor_pos--;
+					}
+				}
+				else
+				{
+					if(tbx->cursor_pos > 0)
+					{
+						tbx->cursor_pos--;
 
-        					if(tbx->cursor_pos < tbx->scroll)
-        					{
-        						tbx->scroll--;
+						if(tbx->cursor_pos < tbx->scroll)
+						{
+							tbx->scroll--;
         						//0123456789-----15
         						//asdfghjkl1234567
         						//          |    |
-        					}
-        				}
-    				}
+						}
+					}
+				}
 			}
 			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 			{
-    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
-    				{
-        				if(tbx->text.data[tbx->cursor_pos] == ' ')
-        				{
-                				while(tbx->cursor_pos < tbx->text.length)
-                				{
-                    					tbx->cursor_pos++;
-                    					if(tbx->text.data[tbx->cursor_pos] != ' ')
-                    					{
-                        					break;
-                   					}
-                				}
-        				}
+				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+				{
+					if(tbx->text.data[tbx->cursor_pos] == ' ')
+					{
+						while(tbx->cursor_pos < tbx->text.length)
+						{
+							tbx->cursor_pos++;
+							if(tbx->text.data[tbx->cursor_pos] != ' ')
+							{
+								break;
+							}
+						}
+					}
 
-        				while(tbx->cursor_pos < tbx->text.length)
-        				{
-            					if(tbx->text.data[tbx->cursor_pos] == ' ')
-            					{
-                					break;
-            					}
+					while(tbx->cursor_pos < tbx->text.length)
+					{
+						if(tbx->text.data[tbx->cursor_pos] == ' ')
+						{
+							break;
+						}
 
-          					tbx->cursor_pos++;
-        				}
-    				}
-    				else
-    				{
-        				if(tbx->cursor_pos < tbx->text.length)
-        				{
-        					tbx->cursor_pos++;
+						tbx->cursor_pos++;
+					}
+				}
+				else
+				{
+					if(tbx->cursor_pos < tbx->text.length)
+					{
+						tbx->cursor_pos++;
 
-        					if(tbx->cursor_pos > tbx->max_chars)
-        					{
-        						tbx->scroll++;
-        					}
-        				}
-    				}
+						if(tbx->cursor_pos > tbx->max_chars)
+						{
+							tbx->scroll++;
+						}
+					}
+				}
 			}
 			else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE)
 			{
-    				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
-    				{
-        				int start_to_reverse = tbx->cursor_pos;
-        				while(tbx->cursor_pos > 0)
-        				{
-            					tbx->cursor_pos--;
-            					if(tbx->text.data[tbx->cursor_pos] != ' ')
-            					{
-                					break;
-           					}
-        				}
+				if(SDLUI_Core.e.key.keysym.mod == KMOD_LCTRL)
+				{
+					int start_to_reverse = tbx->cursor_pos;
+					while(tbx->cursor_pos > 0)
+					{
+						tbx->cursor_pos--;
+						if(tbx->text.data[tbx->cursor_pos] != ' ')
+						{
+							break;
+						}
+					}
 
-        				while(tbx->cursor_pos > 0)
-        				{
-            					int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
-            					if(tbx->text.data[index] == ' ')
-            					{
-                					break;
-            					}
+					while(tbx->cursor_pos > 0)
+					{
+						int index = tbx->cursor_pos > 0 ? tbx->cursor_pos - 1 : 0;
+						if(tbx->text.data[index] == ' ')
+						{
+							break;
+						}
 
-          					tbx->cursor_pos--;
-        				}
+						tbx->cursor_pos--;
+					}
 
 					int now_cursor_pos = tbx->cursor_pos;
-        				while(start_to_reverse > now_cursor_pos)
-        				{
-            					tbx->text.delete_char(start_to_reverse - 1);
-            					start_to_reverse--;
-        				}
-    				} else
-    				{
-        				if(tbx->cursor_pos > 0)
-        				{
-        					tbx->text.delete_char(tbx->cursor_pos - 1);
-        					tbx->cursor_pos--;
-        				}
-    				}
+					while(start_to_reverse > now_cursor_pos)
+					{
+						tbx->text.delete_char(start_to_reverse - 1);
+						start_to_reverse--;
+					}
+				} else
+				{
+					if(tbx->cursor_pos > 0)
+					{
+						tbx->text.delete_char(tbx->cursor_pos - 1);
+						tbx->cursor_pos--;
+
+						if(tbx->text.length > tbx->max_chars - 1)
+						{
+							tbx->scroll--;
+						}
+					}
+				}
 			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_HOME)
 			{
-    				tbx->cursor_pos = 0;
-    				tbx->scroll = 0;
+				tbx->cursor_pos = 0;
+				tbx->scroll = 0;
 			} else if(SDLUI_Core.e.key.keysym.scancode == SDL_SCANCODE_END)
 			{
-    				tbx->cursor_pos = tbx->text.length;
-    				tbx->scroll = tbx->text.length - tbx->max_chars;
-    				if(tbx->scroll < 0)
-    				{
-        				tbx->scroll = 0;
-    				}
+				tbx->cursor_pos = tbx->text.length;
+				tbx->scroll = tbx->text.length - tbx->max_chars;
+				if(tbx->scroll < 0)
+				{
+					tbx->scroll = 0;
+				}
 			}
 		}
 	}
