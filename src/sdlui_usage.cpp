@@ -542,6 +542,7 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 				float ratio = (float)lst->scroll_area->content_height / (float)lst->scroll_area->client_height;
 				float oy = my - lst->scroll_area->y + ((float)lst->scroll_area->scroll_y * ratio);
 				lst->selected_index = oy / SDLUI_Font.height;
+				lst->selected_index = SDLUI_Clamp(lst->selected_index, 0, lst->num_items - 1);
 				clicked = true;
 			}
 		}
