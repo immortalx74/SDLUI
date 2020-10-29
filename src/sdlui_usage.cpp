@@ -522,9 +522,9 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 {
 	lst->do_process = true;
 
-	static i32 clicked;
+	i32 clicked = false;
 
-	if(lst->scroll_area->visible && lst->scroll_area->parent == SDLUI_Core.active_window && SDLUI_Core.active_window->is_hovered)
+	if(lst->scroll_area->visible && lst->scroll_area->parent == SDLUI_Core.active_window)
 	{
 		i32 mx, my;
 		SDL_GetMouseState(&mx, &my);
@@ -616,15 +616,10 @@ bool SDLUI_List(SDLUI_Control_List *lst, const char *cur_item, i32 num_items, i3
 	{
 		offset_y = 0;
 		counter = 0;
-
-		if(clicked)
-		{
-			clicked = false;
-			return true;
-		}
+        clicked = false;
 	}
 
-	return false;
+	return clicked;
 }
 
 bool SDLUI_TextBox(SDLUI_Control_TextBox *tbx)
