@@ -48,10 +48,10 @@ Every control resides in a window, and its placement is relative to its parent w
 
 ## Known issues/incomplete features
 * TextBox not fully implemented. Need to handle scrolling past the textbox capacity, selection, copy/paste, etc.
-* Clicking on bottom of List sets an index out of bounds.
 * More work needed on scrollbars and detection of TextArea's client rect.
 * Enable/disable of controls not implemented yet. This should resemble Windows' greyed-out appearance.
 * Windows changes in scaling are not detected. Everything is currently drawn in the same size.
+* Doesn't probably handle scaling when dragging the main window between monitors (currently untested)
 * Apart from the included skeleton application everything is completely untested!
 
 ![screenshot](https://github.com/immortalx74/SDLUI/blob/master/screenshot.jpg)
